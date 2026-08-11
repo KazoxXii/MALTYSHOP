@@ -4,7 +4,7 @@
  * <script src="auth-guard.js"></script>
  */
 (function() {
-  var publicPages = ['login.html', 'signup.html', 'index.html', 'admin.html', 'ou-acheter.html'];
+  var publicPages = ['login.html', 'signup.html', 'index.html', 'admin.html', 'ou-acheter.html', 'brief.html', 'support.html'];
   var currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
   // Skip auth guard for admin.html (has its own auth)
