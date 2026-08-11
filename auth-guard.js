@@ -10,6 +10,9 @@
   // Skip auth guard for admin.html (has its own auth)
   if (currentPage === 'admin.html') return;
 
+  // Public pages: always accessible without login
+  if (publicPages.indexOf(currentPage) !== -1) return;
+
   var token = localStorage.getItem('malty_token');
   var userEmail = localStorage.getItem('malty_email');
   var guestMode = localStorage.getItem('malty_guest');
@@ -25,7 +28,7 @@
   // Pages that require a real account (no guest access)
   var authRequired = ['espace-client.html', 'abonnement.html', 'maintenance.html'];
 
-  // Guest mode: allow browsing on index/brief/support, block on sensitive pages
+  // Guest mode: allow browsing, block on sensitive pages
   if (guestMode) {
     window.maltyIsGuest = true;
     if (authRequired.indexOf(currentPage) !== -1) {
