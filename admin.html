@@ -314,7 +314,8 @@ tr:hover{background:var(--accent-10)}
         <div class="card card-hover">
           <div class="card-header">
             <span class="card-title">👥 Tous les utilisateurs</span>
-            <div style="display:flex;gap:8px">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-sm btn-primary" onclick="exportClients()">📥 Exporter le carnet (.txt)</button>
               <button class="btn btn-sm btn-danger" onclick="deleteAllUsers()">🗑️ Tout supprimer</button>
               <button class="btn btn-sm btn-outline" onclick="loadUsers()">🔄 Actualiser</button>
             </div>
@@ -704,7 +705,7 @@ async function loadUsers() {
           '<td>' + (u.phone ? '<a href="tel:' + u.phone + '" style="color:var(--fg)">' + u.phone + '</a>' : '<span style="color:var(--muted)">—</span>') + '</td>' +
           '<td>' + (u.plan ? '<span class="badge badge-info">' + u.plan + '</span>' : '<span style="color:var(--muted)">Aucun</span>') + '</td>' +
           '<td>' + (u.createdAt !== 'N/A' ? new Date(u.createdAt).toLocaleDateString('fr-FR') : '—') + '</td>' +
-          '<td><button class="btn btn-sm btn-danger" onclick="deleteUser(\'' + u.email + '\')">🗑️</button></td>' +
+          '<td><div style="display:flex;gap:6px"><button class="btn btn-sm btn-outline" onclick="resetPassword(\'' + u.email + '\')">🔑 Mdp</button><button class="btn btn-sm btn-danger" onclick="deleteUser(\'' + u.email + '\')">🗑️</button></div></td>' +
         '</tr>';
       }).join('') +
       '</table></div>';
@@ -731,6 +732,76 @@ async function deleteAllUsers() {
     const result = await apiCall('deleteAllUsers', 'POST');
     showToast(result.deleted + ' utilisateurs supprimés');
     loadUsers();
+  } catch (err) {
+    showToast('Erreur: ' + err.message, 'error');
+  }
+}
+
+// ---------- CARNET CLIENTS (export .txt) ----------
+async function exportClients() {
+  try {
+    const data = await apiCall('users');
+    const users = data.users || [];
+    const lines = [];
+    lines.push('============================================');
+    lines.push('  CARNET CLIENTS - MALTY');
+    lines.push('  Genere le ' + new Date().toLocaleDateString('fr-FR') + ' a ' + new Date().toLocaleTimeString('fr-FR'));
+    lines.push('  Total : ' + users.length + ' client(s)');
+    lines.push('============================================');
+    lines.push('');
+    users.forEach(function(u, i) {
+      lines.push('--------------------------------------------');
+      lines.push('Client #' + (i + 1));
+      lines.push('  Nom         : ' + (u.nom || 'N/A'));
+      lines.push('  Identifiant : ' + u.email);
+      lines.push('  Telephone   : ' + (u.phone || 'N/A'));
+      lines.push('  Plan        : ' + (u.plan || 'Aucun'));
+      lines.push('  Inscrit le  : ' + (u.createdAt !== 'N/A' ? new Date(u.createdAt).toLocaleDateString('fr-FR') : 'N/A'));
+      lines.push('  Sites       : ' + ((u.sites && u.sites.length) ? u.sites.join(', ') : '-'));
+      lines.push('');
+    });
+    lines.push('============================================');
+    lines.push('  FIN DU CARNET - ' + users.length + ' client(s)');
+    const content = '\ufeff' + lines.join('\r\n');
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'carnet-clients.txt';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast('Carnet telecharge (' + users.length + ' clients)');
+  } catch (err) {
+    showToast('Erreur: ' + err.message, 'error');
+  }
+}
+
+// ---------- RESET PASSWORD (admin only) ----------
+function genPassword() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  var s = '';
+  for (var i = 0; i < 10; i++) s += chars.charAt(Math.floor(Math.random() * chars.length));
+  return s;
+}
+
+async function resetPassword(email) {
+  var input = prompt('Nouveau mot de passe pour ' + email + '\n(laisser vide = genere automatiquement, minimum 6 caracteres) :');
+  if (input === null) return;
+  var newPassword = input.trim() || genPassword();
+  if (newPassword.length < 6) {
+    showToast('Minimum 6 caracteres', 'error');
+    return;
+  }
+  if (!confirm('Reinitialiser le mot de passe de ' + email + ' ?\nLe nouveau mot de passe sera envoye par email au client.')) return;
+  try {
+    const r = await apiCall('resetPassword', 'POST', { email: email, newPassword: newPassword });
+    if (r.ok) {
+      if (r.emailSent === false) {
+        showToast('Mot de passe modifie mais EMAIL NON ENVOYE au client !', 'error');
+      } else {
+        showToast('Mot de passe reinitialise et envoye a ' + email);
+      }
+    }
   } catch (err) {
     showToast('Erreur: ' + err.message, 'error');
   }

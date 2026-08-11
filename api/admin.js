@@ -464,6 +464,28 @@ module.exports = async (req, res) => {
       return res.status(200).json({ ok: true, deleted: emailList.length });
     }
 
+    // RESET CLIENT PASSWORD — sets a new password and emails it to the client
+    if (req.method === 'POST' && action === 'resetPassword') {
+      const { email: targetEmail, newPassword } = req.body || {};
+      if (!targetEmail) return res.status(400).json({ error: 'Email requis' });
+      const em = targetEmail.toLowerCase();
+      const u = await redisGet('user:' + em);
+      if (!u) return res.status(404).json({ error: 'Client introuvable' });
+      const pw = (newPassword && newPassword.length >= 6) ? newPassword : genPassword();
+      u.password = hashPw(pw);
+      await redisSet('user:' + em, u);
+
+      let emailOk = false;
+      try {
+        const emailRes = await sendEmail(em, '[MALTY] Votre nouveau mot de passe 🔑', resetPasswordEmailHtml(u.nom, pw));
+        emailOk = emailRes && emailRes.id;
+      } catch(e) { console.error('Reset password email error:', e.message); }
+
+      await sendTelegram(`🔑 MOT DE PASSE RÉINITIALISÉ (ADMIN)\n\nClient: ${u.nom}\nEmail: ${em}\nDate: ${new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'})}\nEmail: ${emailOk ? 'Envoyé' : 'ÉCHOUÉ'}`);
+
+      return res.status(200).json({ ok: true, emailSent: emailOk });
+    }
+
     // LIST ALL SUPPORT REQUESTS
     if (req.method === 'GET' && action === 'requests') {
       const idsRaw = await redisGet('request:ids');
@@ -541,6 +563,45 @@ async function sendEmail(to, subject, html) {
   } catch (err) {
     console.error('Email error:', err.message);
   }
+}
+
+function hashPw(pw) {
+  return crypto.createHash('sha256').update(pw).digest('hex');
+}
+
+function genPassword() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  let s = '';
+  for (let i = 0; i < 10; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+}
+
+function resetPasswordEmailHtml(clientName, newPassword) {
+  return `
+  <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;background:#0a0f1a;color:#e0e8f0;padding:0;border-radius:16px;overflow:hidden;border:1px solid #1a2a4a;">
+    <div style="background:linear-gradient(135deg,#0066ff,#0044cc);padding:32px 40px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:8px;">🔑</div>
+      <h1 style="color:#ffffff;font-size:24px;margin:0;font-weight:700;">Nouveau mot de passe</h1>
+    </div>
+    <div style="padding:32px 40px;text-align:center;">
+      <p style="font-size:16px;margin:0 0 24px;">Bonjour <strong style="color:#ffffff;">${clientName || 'Client'}</strong>,</p>
+      <p style="font-size:15px;color:#b0c4de;margin:0 0 24px;line-height:1.6;">Notre équipe a réinitialisé le mot de passe de votre espace client. Voici votre nouvel identifiant de connexion :</p>
+      <div style="background:#111f35;border:2px dashed #0066ff;border-radius:16px;padding:24px;margin-bottom:24px;">
+        <p style="font-size:13px;color:#6a8cba;margin:0 0 8px;">Identifiant (email)</p>
+        <p style="font-size:18px;font-weight:700;color:#fff;margin:0 0 20px;">Votre email de connexion</p>
+        <p style="font-size:13px;color:#6a8cba;margin:0 0 8px;">Nouveau mot de passe</p>
+        <p style="font-size:28px;font-weight:900;color:#0066ff;letter-spacing:3px;margin:0;font-family:monospace;">${newPassword}</p>
+      </div>
+      <div style="text-align:center;margin:32px 0;">
+        <a href="https://maltyshop.vercel.app/login.html" style="display:inline-block;background:#0066ff;color:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:600;font-size:15px;">Se connecter →</a>
+      </div>
+      <p style="font-size:14px;color:#6a8cba;text-align:center;line-height:1.5;">Pensez à changer ce mot de passe une fois connecté, depuis votre espace client.</p>
+    </div>
+    <div style="background:#0d1525;padding:20px 40px;text-align:center;border-top:1px solid #1a2a4a;">
+      <p style="margin:0;font-size:13px;color:#4a6a8a;">— L'équipe MALTY</p>
+      <p style="margin:4px 0 0;font-size:11px;color:#3a5a7a;">maltyshop.vercel.app</p>
+    </div>
+  </div>`;
 }
 
 function responseEmailHtml(clientName, responseType, requestType, message) {
