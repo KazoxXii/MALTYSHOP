@@ -291,6 +291,42 @@ module.exports = async (req, res) => {
       return res.status(200).json({ success: true, message: 'Demande acceptée, email envoyé au client' });
     }
 
+    if (req.method === 'POST' && action === 'setStatus') {
+      const { requestId, status } = req.body || {};
+      const allowed = ['pending', 'accepted', 'in_progress', 'completed', 'rejected'];
+      if (!requestId || allowed.indexOf(status) === -1) {
+        return res.status(400).json({ error: 'requestId et statut requis' });
+      }
+
+      const r = await redisGet('request:' + requestId);
+      if (!r) return res.status(404).json({ error: 'Demande introuvable' });
+
+      r.status = status;
+      r.respondedAt = new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' });
+      await redisSet('request:' + requestId, r);
+
+      const statusLabels = { pending: 'En attente', accepted: 'Acceptée', in_progress: 'En cours', completed: 'Terminée', rejected: 'Refusée' };
+      try {
+        await sendEmail(r.email, `[MALTY] Votre demande — ${statusLabels[status] || status}`, statusEmailHtml(r.nom, r.type, status));
+      } catch(e) { console.error('Status email error:', e.message); }
+      await sendTelegram(`📝 STATUT MODIFIÉ (MANAGER)\n\nClient: ${r.nom}\nEmail: ${r.email}\nStatut: ${statusLabels[status] || status}\nDate: ${r.respondedAt}`);
+
+      return res.status(200).json({ success: true, message: 'Statut mis à jour' });
+    }
+
+    if (req.method === 'POST' && action === 'deleteRequest') {
+      const { requestId } = req.body || {};
+      if (!requestId) return res.status(400).json({ error: 'requestId requis' });
+
+      await redisDel('request:' + requestId);
+      const idsRaw = await redisGet('request:ids');
+      const ids = Array.isArray(idsRaw) ? idsRaw : [];
+      await redisSet('request:ids', ids.filter(id => id !== requestId));
+      await sendTelegram(`🗑️ DEMANDE SUPPRIMÉE (MANAGER)\n\nID: ${requestId}\nDate: ${new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}`);
+
+      return res.status(200).json({ success: true });
+    }
+
     return res.status(400).json({ error: 'Action invalide' });
 
   } catch (error) {
@@ -377,6 +413,37 @@ function acceptEmailHtml(clientName, requestType, originalMessage) {
         <a href="https://maltyshop.vercel.app/espace-client.html" style="display:inline-block;background:#0066ff;color:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:600;font-size:15px;">Mon espace client →</a>
       </div>
       <p style="font-size:14px;color:#6a8cba;text-align:center;line-height:1.5;">Merci pour votre confiance. Nous reviendrons vers vous très vite !</p>
+    </div>
+    <div style="background:#0d1525;padding:20px 40px;text-align:center;border-top:1px solid #1a2a4a;">
+      <p style="margin:0;font-size:13px;color:#4a6a8a;">— L'équipe MALTY</p>
+      <p style="margin:4px 0 0;font-size:11px;color:#3a5a7a;">maltyshop.vercel.app</p>
+    </div>
+  </div>`;
+}
+
+function statusEmailHtml(clientName, requestType, status) {
+  const labels = { pending: 'En attente', accepted: 'Acceptée', in_progress: 'En cours', completed: 'Terminée', rejected: 'Refusée' };
+  const colors = { pending: '#f59e0b', accepted: '#22c55e', in_progress: '#3b82f6', completed: '#22c55e', rejected: '#ef4444' };
+  const color = colors[status] || '#3b82f6';
+  const label = labels[status] || status;
+  return `
+  <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;background:#0a0f1a;color:#e0e8f0;padding:0;border-radius:16px;overflow:hidden;border:1px solid #1a2a4a;">
+    <div style="background:linear-gradient(135deg,#0066ff,#1a2a4a);padding:32px 40px;text-align:center;">
+      <div style="font-size:44px;margin-bottom:8px;">📌</div>
+      <h1 style="color:#ffffff;font-size:22px;margin:0;font-weight:700;">Statut de votre demande</h1>
+    </div>
+    <div style="padding:32px 40px;">
+      <p style="font-size:16px;margin:0 0 20px;">Bonjour <strong style="color:#ffffff;">${clientName || 'Client'}</strong>,</p>
+      <p style="font-size:15px;color:#b0c4de;margin:0 0 24px;line-height:1.7;">Nous vous informons que le statut de votre demande (<strong style="color:#8ab4f8;">${requestType || 'Demande'}</strong>) a évolué :</p>
+      <div style="text-align:center;margin:24px 0;">
+        <span style="background:${color};color:#fff;padding:10px 28px;border-radius:30px;font-size:16px;font-weight:700;">${label}</span>
+      </div>
+      <div style="background:#111f35;border:1px solid #1a2a4a;border-radius:12px;padding:20px;margin-top:24px;">
+        <p style="margin:0;font-size:14px;color:#b0c4de;line-height:1.6;">Un membre de notre équipe travaille sur votre demande et vous répondra dès que possible. N'hésitez pas à consulter votre espace client pour suivre l'avancement.</p>
+      </div>
+      <div style="text-align:center;margin:32px 0;">
+        <a href="https://maltyshop.vercel.app/espace-client.html" style="display:inline-block;background:#0066ff;color:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;font-weight:600;font-size:15px;">Mon espace client →</a>
+      </div>
     </div>
     <div style="background:#0d1525;padding:20px 40px;text-align:center;border-top:1px solid #1a2a4a;">
       <p style="margin:0;font-size:13px;color:#4a6a8a;">— L'équipe MALTY</p>

@@ -80,6 +80,37 @@ a{color:inherit}
 .badge-warning{background:rgba(245,158,11,0.15);color:var(--warning)}
 .badge-danger{background:rgba(239,68,68,0.15);color:var(--danger)}
 .badge-info{background:var(--accent-10);color:var(--accent-light)}
+  .nav-badge{background:var(--danger);color:#fff;font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:10px;min-width:18px;text-align:center;line-height:1.2;animation:pulse 1.5s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+  /* ---------- FILTER BAR ---------- */
+  .filter-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+  .filter-btn{padding:6px 14px;border-radius:20px;font-size:.75rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+  .filter-btn:hover{border-color:var(--accent-50);color:var(--fg);background:var(--accent-10)}
+  .filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .filter-search{flex:1;min-width:180px;padding:8px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg);font:inherit;font-size:.85rem;outline:none}
+  .filter-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10)}
+
+  /* ---------- MESSAGE EXPAND ---------- */
+  .msg-expand{cursor:pointer;color:var(--accent);font-size:.75rem;font-weight:600;margin-top:4px;display:inline-flex;align-items:center;gap:4px;transition:color .2s}
+  .msg-expand:hover{color:var(--accent-light)}
+  .msg-full{display:none}
+  .msg-full.visible{display:block}
+
+  /* ---------- STATUS BUTTONS ---------- */
+  .status-btn{padding:6px 12px;border-radius:8px;font-size:.7rem;font-weight:600;border:1px solid;cursor:pointer;transition:all .2s;white-space:nowrap}
+  .status-btn-accept{border-color:#22c55e;color:#22c55e;background:rgba(34,197,94,.1)}
+  .status-btn-accept:hover{background:#22c55e;color:#fff}
+  .status-btn-progress{border-color:#3b82f6;color:#3b82f6;background:rgba(59,130,246,.1)}
+  .status-btn-progress:hover{background:#3b82f6;color:#fff}
+  .status-btn-complete{border-color:#16a34a;color:#16a34a;background:rgba(22,163,74,.1)}
+  .status-btn-complete:hover{background:#16a34a;color:#fff}
+  .status-btn-reject{border-color:#ef4444;color:#ef4444;background:rgba(239,68,68,.1)}
+  .status-btn-reject:hover{background:#ef4444;color:#fff}
+  .status-btn-reopen{border-color:#6b7280;color:#6b7280;background:rgba(107,114,128,.1)}
+  .status-btn-reopen:hover{background:#6b7280;color:#fff}
+  .btn-delete{background:transparent;border:1px solid var(--danger);color:var(--danger)}
+  .btn-delete:hover{background:var(--danger);color:#fff}
 
 /* ---------- TABLE ---------- */
 .table-wrap{overflow-x:auto}
@@ -172,7 +203,7 @@ tr:hover{background:var(--accent-10)}
     </div>
     <nav class="sidebar-nav" id="sidebarNav">
       <a class="nav-item active" data-tab="overview"><span>📊</span> Vue d'ensemble</a>
-      <a class="nav-item" data-tab="requests"><span>📝</span> Demandes</a>
+      <a class="nav-item" data-tab="requests"><span>📝</span> Demandes <span class="nav-badge" id="badgePending" style="display:none">0</span></a>
       <a class="nav-item" data-tab="customers"><span>👤</span> Clients</a>
     </nav>
     <div class="sidebar-footer">
@@ -278,6 +309,18 @@ tr:hover{background:var(--accent-10)}
             <span class="card-title">📋 Demandes reçues</span>
             <button class="btn btn-sm btn-outline" onclick="loadRequests()">🔄 Actualiser</button>
           </div>
+
+          <!-- Filter Bar -->
+          <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">Toutes</button>
+            <button class="filter-btn" data-filter="pending" onclick="setFilter('pending')">⏳ En attente</button>
+            <button class="filter-btn" data-filter="accepted" onclick="setFilter('accepted')">✅ Acceptée</button>
+            <button class="filter-btn" data-filter="in_progress" onclick="setFilter('in_progress')">🔄 En cours</button>
+            <button class="filter-btn" data-filter="completed" onclick="setFilter('completed')">✅ Terminée</button>
+            <button class="filter-btn" data-filter="rejected" onclick="setFilter('rejected')">❌ Refusée</button>
+            <input type="search" class="filter-search" id="requestSearch" placeholder="🔍 Rechercher (nom, email, type...)" oninput="debouncedSearch(this.value)">
+          </div>
+
           <div id="requestsList"><div class="loading">Chargement...</div></div>
         </div>
       </section>
@@ -304,6 +347,43 @@ const TABS = {
   overview: { title: 'Vue d\'ensemble', subtitle: 'Le suivi du support et de la clientèle.' },
   requests: { title: 'Demandes', subtitle: 'Répondez aux demandes des clients.' },
   customers: { title: 'Clients', subtitle: 'La liste des clients.' }
+};
+
+// ---------- STATE ----------
+var allRequestsCache = [];
+var currentFilter = 'all';
+var currentSearch = '';
+var lastPendingCount = 0;
+var lastRequestIds = new Set();
+var autoRefreshInterval = null;
+var searchDebounceTimer = null;
+
+const STATUS_COLORS = { pending: '#f59e0b', accepted: '#22c55e', in_progress: '#f59e0b', completed: '#3d6bff', rejected: '#ef4444' };
+const STATUS_LABELS = { pending: '⏳ En attente', accepted: '✅ Acceptée', in_progress: '🔄 En cours', completed: '✅ Terminée', rejected: '❌ Refusée' };
+const STATUS_BUTTONS = {
+  pending: [
+    { status: 'accepted', label: '✅ Accepter', class: 'status-btn-accept' },
+    { status: 'in_progress', label: '🔄 En cours', class: 'status-btn-progress' },
+    { status: 'completed', label: '✅ Terminer', class: 'status-btn-complete' },
+    { status: 'rejected', label: '❌ Refuser', class: 'status-btn-reject' }
+  ],
+  accepted: [
+    { status: 'in_progress', label: '🔄 En cours', class: 'status-btn-progress' },
+    { status: 'completed', label: '✅ Terminer', class: 'status-btn-complete' },
+    { status: 'rejected', label: '❌ Refuser', class: 'status-btn-reject' },
+    { status: 'pending', label: '🔄 Rouvrir', class: 'status-btn-reopen' }
+  ],
+  in_progress: [
+    { status: 'completed', label: '✅ Terminer', class: 'status-btn-complete' },
+    { status: 'rejected', label: '❌ Refuser', class: 'status-btn-reject' },
+    { status: 'pending', label: '🔄 Rouvrir', class: 'status-btn-reopen' }
+  ],
+  completed: [
+    { status: 'pending', label: '🔄 Rouvrir', class: 'status-btn-reopen' }
+  ],
+  rejected: [
+    { status: 'pending', label: '🔄 Rouvrir', class: 'status-btn-reopen' }
+  ]
 };
 
 // ---------- LOGIN ----------
@@ -374,12 +454,14 @@ async function login() {
 function showDashboard() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('dashboard').classList.add('active');
+  startAutoRefresh();
 }
 
 async function logout() {
   try {
     await fetch(API_BASE + '?action=logout', { method: 'POST', credentials: 'include' });
   } catch (e) {}
+  stopAutoRefresh();
   document.getElementById('dashboard').classList.remove('active');
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('username').value = '';
@@ -518,97 +600,189 @@ async function acceptRequest(requestId) {
   }
 }
 
-async function loadRequests() {
+async function setStatusReq(requestId, newStatus) {
+  var statusLabel = STATUS_LABELS[newStatus] || newStatus;
+  if (!confirm('Changer le statut vers "' + statusLabel + '" ? Un email automatique sera envoyé au client.')) return;
   try {
-    var data = await apiCall('requests');
-    var list = data.requests || [];
-    var container = document.getElementById('requestsList');
-    if (list.length === 0) {
-      container.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:16px;">Aucune demande pour le moment.</p>';
-      return;
-    }
-    var statusColors = { pending: '#f59e0b', accepted: '#22c55e', in_progress: '#f59e0b', completed: '#3d6bff', rejected: '#ef4444' };
-    var statusLabels = { pending: '⏳ En attente', accepted: '✅ Acceptée', in_progress: '🔄 En cours', completed: '✅ Terminée', rejected: '❌ Refusée' };
-    var html = '';
-    list.forEach(function(r) {
-      var color = statusColors[r.status] || '#f59e0b';
-      var label = statusLabels[r.status] || r.status;
-      html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;">';
-      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">';
-      html += '<div><strong style="color:#fff;">' + (r.nom || 'N/A') + '</strong> <span style="color:var(--muted);font-size:13px;">' + (r.email || '') + '</span></div>';
-      html += '<span style="background:' + color + ';color:#fff;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;">' + label + '</span>';
-      html += '</div>';
-      html += '<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">';
-      html += '<span style="background:var(--accent-10);padding:3px 10px;border-radius:8px;font-size:12px;color:var(--accent-light);">' + (r.type || 'N/A') + '</span>';
-      if (r.site) html += '<span style="background:var(--accent-10);padding:3px 10px;border-radius:8px;font-size:12px;color:var(--accent-light);">' + r.site + '</span>';
-      html += '<span style="color:var(--muted);font-size:12px;">📅 ' + (r.date || '') + '</span>';
-      html += '</div>';
-      html += '<p style="color:var(--muted);font-size:14px;margin:0 0 12px;line-height:1.5;">' + (r.message || '').substring(0, 200) + ((r.message || '').length > 200 ? '...' : '') + '</p>';
-      if (r.response) {
-        html += '<div style="background:var(--surface);border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-bottom:12px;">';
-        html += '<p style="margin:0;font-size:13px;color:var(--accent-light);">📝 Réponse envoyée :</p>';
-        html += '<p style="margin:4px 0 0;font-size:13px;color:var(--muted);">' + r.response.substring(0, 200) + '</p>';
-        html += '</div>';
-      }
-      html += '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
-      if (r.status === 'pending') {
-        html += '<button class="btn btn-sm btn-success" onclick="acceptRequest(\'' + r.id + '\')">✅ Accepter</button>';
-      }
-      html += '<button class="btn btn-sm btn-outline" onclick=\'replyToRequest(' + JSON.stringify(r).replace(/'/g, "&#39;") + ')\'>💬 Répondre</button>';
-      html += '</div>';
-      html += '</div>';
-    });
-    container.innerHTML = html;
-  } catch (err) {
-    document.getElementById('requestsList').innerHTML = '<p style="color:#ef4444;font-size:.9rem;">Erreur de chargement</p>';
-  }
-}
-
-async function sendResponse() {
-  var email = document.getElementById('respEmail').value;
-  var name = document.getElementById('respName').value;
-  var type = document.getElementById('respType').value;
-  var message = document.getElementById('respMessage').value;
-  var requestId = document.getElementById('respRequestId').value;
-  var requestType = document.getElementById('respRequestType').value;
-
-  if (!email || !message) {
-    showToast('Remplis tous les champs', 'error');
-    return;
-  }
-
-  try {
-    await apiCall('respond', 'POST', { clientEmail: email, clientName: name, responseType: type, message: message, requestId: requestId, requestType: requestType });
-    showToast('Réponse envoyée ! Email envoyé à ' + email);
-    document.getElementById('respMessage').value = '';
-    document.getElementById('respRequestId').value = '';
+    await apiCall('setStatus', 'POST', { requestId: requestId, status: newStatus });
+    showToast('Statut mis à jour : ' + statusLabel);
     loadRequests();
+    loadStats();
   } catch (err) {
     showToast('Erreur: ' + err.message, 'error');
   }
 }
 
-// ---------- TOAST ----------
-function showToast(msg, type) {
-  if (!type) type = 'success';
-  var div = document.createElement('div');
-  div.className = 'toast toast-' + type;
-  div.textContent = msg;
-  document.body.appendChild(div);
-  setTimeout(function() { div.remove(); }, 3000);
+async function deleteRequest(requestId) {
+  if (!confirm('Supprimer définitivement cette demande ? Cette action est irréversible.')) return;
+  try {
+    await apiCall('deleteRequest', 'POST', { requestId: requestId });
+    showToast('Demande supprimée');
+    loadRequests();
+    loadStats();
+  } catch (err) {
+    showToast('Erreur: ' + err.message, 'error');
+  }
 }
 
-// ---------- TIME ----------
-function updateTime() {
-  var now = new Date();
-  var str = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-  var el1 = document.getElementById('managerTime');
-  var el2 = document.getElementById('managerTime2');
-  if (el1) el1.textContent = str;
-  if (el2) el2.textContent = str;
+async function loadRequests() {
+  try {
+    var data = await apiCall('requests');
+    var list = data.requests || [];
+    allRequestsCache = list;
+
+    // Update badge & detect new pending
+    var pendingCount = list.filter(function(r) { return r.status === 'pending'; }).length;
+    updatePendingBadge(pendingCount);
+    checkNewRequests(list);
+
+    // Apply filter + search
+    var filtered = applyFilterAndSearch(list);
+    renderRequests(filtered);
+  } catch (err) {
+    document.getElementById('requestsList').innerHTML = '<p style="color:#ef4444;font-size:.9rem;">Erreur de chargement</p>';
+  }
 }
-updateTime();
-setInterval(updateTime, 60000);
+
+function applyFilterAndSearch(list) {
+  var filtered = list;
+  if (currentFilter !== 'all') {
+    filtered = filtered.filter(function(r) { return r.status === currentFilter; });
+  }
+  if (currentSearch.trim()) {
+    var q = currentSearch.trim().toLowerCase();
+    filtered = filtered.filter(function(r) {
+      return (r.nom || '').toLowerCase().includes(q) ||
+             (r.email || '').toLowerCase().includes(q) ||
+             (r.type || '').toLowerCase().includes(q) ||
+             (r.message || '').toLowerCase().includes(q) ||
+             (r.id || '').toLowerCase().includes(q);
+    });
+  }
+  return filtered;
+}
+
+function renderRequests(list) {
+  var container = document.getElementById('requestsList');
+  if (list.length === 0) {
+    container.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:16px;text-align:center;">' +
+      (allRequestsCache.length === 0 ? 'Aucune demande pour le moment.' : 'Aucune demande ne correspond aux filtres.') + '</p>';
+    return;
+  }
+  var html = '';
+  list.forEach(function(r) {
+    var color = STATUS_COLORS[r.status] || '#f59e0b';
+    var label = STATUS_LABELS[r.status] || r.status;
+    var message = r.message || '';
+    var showMore = message.length > 300;
+    var shortMsg = showMore ? message.substring(0, 300) : message;
+    var remainingMsg = showMore ? message.substring(300) : '';
+    var buttons = STATUS_BUTTONS[r.status] || [];
+    html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">';
+    html += '<div><strong style="color:#fff;">' + (r.nom || 'N/A') + '</strong> <span style="color:var(--muted);font-size:13px;">' + (r.email || '') + '</span></div>';
+    html += '<span style="background:' + color + ';color:#fff;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;">' + label + '</span>';
+    html += '</div>';
+    html += '<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">';
+    html += '<span style="background:var(--accent-10);padding:3px 10px;border-radius:8px;font-size:12px;color:var(--accent-light);">' + (r.type || 'N/A') + '</span>';
+    if (r.site) html += '<span style="background:var(--accent-10);padding:3px 10px;border-radius:8px;font-size:12px;color:var(--accent-light);">' + r.site + '</span>';
+    if (r.priority) html += '<span style="background:var(--warning);color:#000;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600;">' + r.priority + '</span>';
+    html += '<span style="color:var(--muted);font-size:12px;">📅 ' + (r.date || '') + '</span>';
+    html += '</div>';
+    html += '<div>';
+    html += '<p style="color:var(--muted);font-size:14px;margin:0 0 4px;line-height:1.5;">' + shortMsg + '</p>';
+    if (showMore) {
+      html += '<span class="msg-full" id="msgFull-' + r.id + '" style="display:none;color:var(--muted);font-size:14px;line-height:1.5;">' + remainingMsg + '</span>';
+      html += '<span class="msg-expand" onclick="toggleMessage(\'' + r.id + '\', this)" id="msgToggle-' + r.id + '">▼ Voir plus</span>';
+    }
+    html += '</div>';
+    if (r.response) {
+      html += '<div style="background:var(--surface);border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:12px 0;">';
+      html += '<p style="margin:0;font-size:13px;color:var(--accent-light);">📝 Réponse envoyée :</p>';
+      html += '<p style="margin:4px 0 0;font-size:13px;color:var(--muted);">' + (r.response || '').substring(0, 300) + '</p>';
+      html += '</div>';
+    }
+    html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">';
+    buttons.forEach(function(btn) {
+      html += '<button class="status-btn ' + btn.class + '" onclick="setStatusReq(\'' + r.id + '\', \'' + btn.status + '\')">' + btn.label + '</button>';
+    });
+    html += '<button class="btn btn-sm btn-outline" onclick=\'replyToRequest(' + JSON.stringify(r).replace(/'/g, "'") + ')\'>💬 Répondre</button>';
+    html += '<button class="btn btn-sm btn-delete" onclick="deleteRequest(\'' + r.id + '\')">🗑️ Supprimer</button>';
+    html += '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function toggleMessage(requestId, el) {
+  var fullEl = document.getElementById('msgFull-' + requestId);
+  if (fullEl.style.display === 'none') {
+    fullEl.style.display = 'inline';
+    el.textContent = '▲ Voir moins';
+  } else {
+    fullEl.style.display = 'none';
+    el.textContent = '▼ Voir plus';
+  }
+}
+
+function setFilter(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.filter === filter);
+  });
+  var filtered = applyFilterAndSearch(allRequestsCache);
+  renderRequests(filtered);
+}
+
+function debouncedSearch(query) {
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(function() {
+    currentSearch = query;
+    var filtered = applyFilterAndSearch(allRequestsCache);
+    renderRequests(filtered);
+  }, 200);
+}
+
+function updatePendingBadge(count) {
+  var badge = document.getElementById('badgePending');
+  if (count > 0) {
+    badge.textContent = count > 99 ? '99+' : count;
+    badge.style.display = 'inline-flex';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function checkNewRequests(list) {
+  var currentIds = new Set(list.map(function(r) { return r.id; }));
+  var newPending = list.filter(function(r) {
+    return r.status === 'pending' && !lastRequestIds.has(r.id);
+  });
+  if (newPending.length > 0 && lastRequestIds.size > 0) {
+    showToast('🔔 ' + newPending.length + ' nouvelle(s) demande(s) en attente !', 'success');
+  }
+  lastRequestIds = currentIds;
+  lastPendingCount = list.filter(function(r) { return r.status === 'pending'; }).length;
+}
+
+function startAutoRefresh() {
+  if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+  autoRefreshInterval = setInterval(function() {
+    if (document.getElementById('requests').classList.contains('active')) {
+      loadRequests();
+    } else {
+      // Just refresh stats/badge when not on requests tab
+      loadStats();
+    }
+  }, 30000);
+}
+
+function stopAutoRefresh() {
+  if (autoRefreshInterval) {
+    clearInterval(autoRefreshInterval);
+    autoRefreshInterval = null;
+  }
+}
 </script>
 </body>
 </html>
