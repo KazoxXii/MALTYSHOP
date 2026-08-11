@@ -804,29 +804,6 @@
       var link = document.getElementById('nav-auth-link');
       if (!link) return;
 
-      var session = { client: false, admin: false, manager: false };
-      var logoutBtn = null;
-
-      function makeLogoutBtn() {
-        if (logoutBtn) return;
-        logoutBtn = document.createElement('a');
-        logoutBtn.id = 'nav-auth-logout';
-        logoutBtn.href = '#';
-        logoutBtn.textContent = 'Se déconnecter';
-        logoutBtn.className = 'btn btn-outline nav-cta';
-        logoutBtn.style.marginLeft = '8px';
-        logoutBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          doLogout();
-        });
-        link.parentNode.appendChild(logoutBtn);
-      }
-
-      function refresh() {
-        makeLogoutBtn();
-        logoutBtn.style.display = (session.client || session.admin || session.manager) ? '' : 'none';
-      }
-
       function doLogout() {
         Promise.all([
           fetch('/api/admin?action=logout', { method: 'POST', credentials: 'include' }).catch(function(){}),
@@ -853,7 +830,6 @@
       var avatar = localStorage.getItem('malty_avatar');
 
       if (userName) {
-        session.client = true;
         var initials = userName.charAt(0).toUpperCase();
         if (userName.includes(' ')) initials = userName.split(' ').map(function(w){return w.charAt(0)}).join('').toUpperCase().substring(0,2);
         if (avatar) {
@@ -872,19 +848,6 @@
         link.textContent = 'Mon compte';
         link.href = 'login.html';
       }
-
-      refresh();
-
-      // Admin / Manager sessions (async)
-      fetch('/api/admin?action=check', { credentials: 'include' })
-        .then(function(r) { return r.json(); })
-        .then(function(d) { if (d.authenticated) { session.admin = true; refresh(); } })
-        .catch(function(){});
-
-      fetch('/api/manager?action=check', { credentials: 'include' })
-        .then(function(r) { return r.json(); })
-        .then(function(d) { if (d.authenticated) { session.manager = true; refresh(); } })
-        .catch(function(){});
     })();
 
     function getClientUser() { try { return JSON.parse(localStorage.getItem('malty_user')); } catch(e) { return null; } }
