@@ -785,6 +785,7 @@
   </div>
 
   <script src="knowledge.js"></script>
+  <script src="updates.js"></script>
   <script src="auth-guard.js"></script>
     <script src="tracker.js"></script>
     <script>
@@ -840,6 +841,24 @@
         link.href = '#';
         link.className = 'btn btn-outline nav-cta nav-logged';
         link.addEventListener('click', function(e) { e.preventDefault(); openProfileModal(); });
+
+        // Validate session server-side (forces logout after a global logout)
+        var chkEmail = (user && user.email) || localStorage.getItem('malty_email');
+        var chkToken = localStorage.getItem('malty_token');
+        if (chkEmail && chkToken) {
+          fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'check', email: chkEmail, token: chkToken })
+          }).then(function(r) { return r.json(); }).then(function(d) {
+            if (!d.ok) {
+              localStorage.removeItem('malty_token');
+              localStorage.removeItem('malty_email');
+              localStorage.removeItem('malty_user');
+              window.location.reload();
+            }
+          }).catch(function(){});
+        }
       } else if (guest) {
         link.textContent = 'Se connecter';
         link.href = 'login.html';

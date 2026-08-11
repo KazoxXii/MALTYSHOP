@@ -67,7 +67,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'malty-admin-secret-2026-secure';
 const TOKEN_EXPIRY = 24 * 60 * 60 * 1000;
 
 // Actions réservées à l'administrateur — jamais autorisées pour le manager
-const ADMIN_ONLY_ACTIONS = ['subscriptions', 'invoices', 'users', 'deleteUser', 'deleteAllUsers', 'testRedis', 'setupWebhook', 'track-visit', 'ai-reply', 'accept'];
+const ADMIN_ONLY_ACTIONS = ['subscriptions', 'invoices', 'users', 'deleteUser', 'deleteAllUsers', 'logoutAllClients', 'testRedis', 'setupWebhook', 'track-visit', 'ai-reply', 'accept'];
 
 function safeEqual(a, b) {
   const bufA = Buffer.from(String(a));

@@ -316,6 +316,7 @@ tr:hover{background:var(--accent-10)}
             <span class="card-title">👥 Tous les utilisateurs</span>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <button class="btn btn-sm btn-primary" onclick="exportClients()">📥 Exporter le carnet (.txt)</button>
+              <button class="btn btn-sm btn-danger" onclick="logoutAllClients()">🔒 Déconnecter tous les clients</button>
               <button class="btn btn-sm btn-danger" onclick="deleteAllUsers()">🗑️ Tout supprimer</button>
               <button class="btn btn-sm btn-outline" onclick="loadUsers()">🔄 Actualiser</button>
             </div>
@@ -732,6 +733,16 @@ async function deleteAllUsers() {
     const result = await apiCall('deleteAllUsers', 'POST');
     showToast(result.deleted + ' utilisateurs supprimés');
     loadUsers();
+  } catch (err) {
+    showToast('Erreur: ' + err.message, 'error');
+  }
+}
+
+async function logoutAllClients() {
+  if (!confirm('Déconnecter TOUS les clients ? Ils devront se reconnecter.')) return;
+  try {
+    const result = await apiCall('logoutAllClients', 'POST');
+    showToast(result.loggedOut + ' compte(s) client déconnecté(s)');
   } catch (err) {
     showToast('Erreur: ' + err.message, 'error');
   }

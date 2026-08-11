@@ -464,6 +464,23 @@ module.exports = async (req, res) => {
       return res.status(200).json({ ok: true, deleted: emailList.length });
     }
 
+    // LOGOUT ALL CLIENTS
+    if (req.method === 'POST' && action === 'logoutAllClients') {
+      const emailListRaw = await redisGet('user:emails');
+      const emailList = Array.isArray(emailListRaw) ? emailListRaw : [];
+      let loggedOut = 0;
+      for (const email of emailList) {
+        const u = await redisGet(`user:${email}`);
+        if (u && u.token) {
+          u.token = null;
+          await redisSet(`user:${email}`, u);
+          loggedOut++;
+        }
+      }
+      await sendTelegram(`🔓 DÉCONNEXION GÉNÉRALE DES CLIENTS\n\n${loggedOut} compte(s) déconnecté(s).\nDate: ${new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'})}`);
+      return res.status(200).json({ ok: true, loggedOut });
+    }
+
     // RESET CLIENT PASSWORD — sets a new password and emails it to the client
     if (req.method === 'POST' && action === 'resetPassword') {
       const { email: targetEmail, newPassword } = req.body || {};
