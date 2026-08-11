@@ -196,6 +196,19 @@
     .nav-logged { display:flex; align-items:center; gap:8px; }
     .nav-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#38bdf8,#0066ff); display:inline-flex; align-items:center; justify-content:center; font-weight:700; color:#fff; font-size:.75rem; flex-shrink:0; overflow:hidden; border:2px solid rgba(56,189,248,0.4); }
     .nav-avatar img { width:100%; height:100%; object-fit:cover; }
+    .profile-modal { position:fixed; inset:0; background:rgba(0,0,0,.65); backdrop-filter:blur(6px); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; }
+    .profile-modal.open { display:flex; }
+    .profile-modal-card { width:100%; max-width:500px; max-height:90vh; overflow-y:auto; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:32px; position:relative; box-shadow:0 24px 80px rgba(0,0,0,.5); }
+    .profile-modal-close { position:absolute; top:14px; right:18px; background:none; border:none; color:var(--muted); font-size:1.7rem; cursor:pointer; line-height:1; }
+    .profile-modal-close:hover { color:var(--fg); }
+    .profile-modal-header { display:flex; align-items:center; gap:16px; margin-bottom:24px; }
+    .profile-modal-avatar { width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#38bdf8,#0066ff); display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:1.3rem; flex-shrink:0; }
+    .profile-modal-header h3 { margin:0; font-size:1.15rem; color:var(--fg); }
+    .profile-modal-header p { margin:2px 0 0; color:var(--muted); font-size:.82rem; word-break:break-all; }
+    .profile-modal-divider { border:none; border-top:1px solid var(--border); margin:24px 0; }
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); padding:12px 22px; border-radius:12px; font-size:.88rem; font-weight:600; z-index:2000; box-shadow:0 8px 30px rgba(0,0,0,.4); }
+    .toast-success { background:#00cc66; color:#fff; }
+    .toast-error { background:#ff5555; color:#fff; }
     .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
     .hamburger span { display:block; width:24px; height:2px; background:var(--fg); border-radius:2px; transition:all .3s var(--ease); }
     .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
@@ -737,6 +750,40 @@
     <a href="#" class="btn btn-primary" onclick="nav('devis');return false">Commander mon pack — dès 99€</a>
   </div>
 
+  <div class="profile-modal" id="profileModal">
+    <div class="profile-modal-card">
+      <button class="profile-modal-close" onclick="closeProfileModal()" aria-label="Fermer">&times;</button>
+      <div class="profile-modal-header">
+        <div class="profile-modal-avatar" id="profileModalAvatar">M</div>
+        <div>
+          <h3>Mon compte</h3>
+          <p id="profileModalEmail"></p>
+        </div>
+      </div>
+      <form id="profileForm">
+        <div class="form-row">
+          <div class="form-group"><label>Prénom</label><input type="text" id="pPrenom" placeholder="Votre prénom"></div>
+          <div class="form-group"><label>Nom</label><input type="text" id="pNom" placeholder="Votre nom" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email</label><input type="email" id="pEmail" placeholder="votre@email.com" required></div>
+          <div class="form-group"><label>Téléphone</label><input type="tel" id="pPhone" placeholder="06 XX XX XX XX"></div>
+        </div>
+        <div class="form-group"><label>Nom d'entreprise / activité</label><input type="text" id="pEntreprise" placeholder="Nom de votre entreprise"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%">Enregistrer les modifications</button>
+      </form>
+      <hr class="profile-modal-divider">
+      <form id="profilePwdForm">
+        <div class="form-row">
+          <div class="form-group"><label>Mot de passe actuel</label><input type="password" id="pOldPwd" placeholder="••••••••"></div>
+          <div class="form-group"><label>Nouveau mot de passe</label><input type="password" id="pNewPwd" placeholder="Min. 6 caractères"></div>
+        </div>
+        <button type="submit" class="btn btn-outline" style="width:100%">Changer mon mot de passe</button>
+      </form>
+      <button type="button" class="btn btn-outline" style="width:100%;margin-top:16px;color:#ff5555;border-color:rgba(255,85,85,.35)" onclick="doLogout()">Se déconnecter</button>
+    </div>
+  </div>
+
   <script src="knowledge.js"></script>
   <script src="auth-guard.js"></script>
     <script src="tracker.js"></script>
@@ -797,6 +844,7 @@
           window.location.href = 'login.html';
         });
       }
+      window.doLogout = doLogout;
 
       var user = null;
       try { user = JSON.parse(localStorage.getItem('malty_user')); } catch(e) {}
@@ -813,8 +861,9 @@
         } else {
           link.innerHTML = '<span class="nav-avatar">' + initials + '</span>';
         }
-        link.href = 'espace-client.html';
+        link.href = '#';
         link.className = 'btn btn-outline nav-cta nav-logged';
+        link.addEventListener('click', function(e) { e.preventDefault(); openProfileModal(); });
       } else if (guest) {
         link.textContent = 'Se connecter';
         link.href = 'login.html';
@@ -837,6 +886,128 @@
         .then(function(d) { if (d.authenticated) { session.manager = true; refresh(); } })
         .catch(function(){});
     })();
+
+    function getClientUser() { try { return JSON.parse(localStorage.getItem('malty_user')); } catch(e) { return null; } }
+
+    function toast(msg, ok) {
+      var d = document.createElement('div');
+      d.className = 'toast ' + (ok !== false ? 'toast-success' : 'toast-error');
+      d.textContent = msg;
+      document.body.appendChild(d);
+      setTimeout(function(){ d.remove(); }, 3200);
+    }
+
+    function openProfileModal() {
+      var u = getClientUser();
+      if (!u || !u.email) { window.location.href = 'login.html'; return; }
+      var n = u.nom || u.name || '';
+      document.getElementById('pPrenom').value = u.prenom || '';
+      document.getElementById('pNom').value = n;
+      document.getElementById('pEmail').value = u.email || '';
+      document.getElementById('pPhone').value = u.phone || '';
+      document.getElementById('pEntreprise').value = u.entreprise || '';
+      document.getElementById('pOldPwd').value = '';
+      document.getElementById('pNewPwd').value = '';
+      document.getElementById('profileModalEmail').textContent = u.email || '';
+      var av = document.getElementById('profileModalAvatar');
+      var initials = n ? n.charAt(0).toUpperCase() : 'M';
+      if (n.includes(' ')) initials = n.split(' ').map(function(w){return w.charAt(0)}).join('').toUpperCase().substring(0,2);
+      av.textContent = initials;
+      document.getElementById('profileModal').classList.add('open');
+    }
+
+    function closeProfileModal() { document.getElementById('profileModal').classList.remove('open'); }
+
+    function refreshClientNav() {
+      var link = document.getElementById('nav-auth-link');
+      if (!link) return;
+      var u = getClientUser();
+      var n = (u && (u.nom || u.name)) || '';
+      if (!n) return;
+      var initials = n.charAt(0).toUpperCase();
+      if (n.includes(' ')) initials = n.split(' ').map(function(w){return w.charAt(0)}).join('').toUpperCase().substring(0,2);
+      var avatar = localStorage.getItem('malty_avatar');
+      if (avatar) link.innerHTML = '<span class="nav-avatar"><img src="' + avatar + '" alt="' + n + '"></span>';
+      else link.innerHTML = '<span class="nav-avatar">' + initials + '</span>';
+      link.href = '#';
+    }
+
+    var profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+      profileForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var u = getClientUser();
+        if (!u || !u.email) { window.location.href = 'login.html'; return; }
+        var token = localStorage.getItem('malty_token');
+        var payload = {
+          action: 'updateProfile',
+          email: u.email,
+          token: token,
+          newPrenom: document.getElementById('pPrenom').value.trim(),
+          newNom: document.getElementById('pNom').value.trim(),
+          newEmail: document.getElementById('pEmail').value.trim().toLowerCase(),
+          newPhone: document.getElementById('pPhone').value.trim(),
+          newEntreprise: document.getElementById('pEntreprise').value.trim()
+        };
+        if (!payload.newNom || !payload.newEmail) { toast('Nom et email requis', false); return; }
+        var btn = profileForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(function(r) { return r.json(); }).then(function(d) {
+          if (d.ok) {
+            var nu = { prenom: d.user.prenom || '', nom: d.user.nom, email: d.user.email, phone: d.user.phone || '', entreprise: d.user.entreprise || '', plan: u.plan };
+            localStorage.setItem('malty_user', JSON.stringify(nu));
+            localStorage.setItem('malty_email', d.user.email);
+            if (d.token) localStorage.setItem('malty_token', d.token);
+            refreshClientNav();
+            closeProfileModal();
+            toast('Profil mis à jour !');
+          } else {
+            toast(d.error || 'Erreur', false);
+          }
+        }).catch(function() {
+          toast('Erreur réseau. Réessayez.', false);
+        }).finally(function() { btn.disabled = false; });
+      });
+    }
+
+    var profilePwdForm = document.getElementById('profilePwdForm');
+    if (profilePwdForm) {
+      profilePwdForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var u = getClientUser();
+        if (!u || !u.email) { window.location.href = 'login.html'; return; }
+        var oldPwd = document.getElementById('pOldPwd').value;
+        var newPwd = document.getElementById('pNewPwd').value;
+        if (!oldPwd || newPwd.length < 6) { toast('Mot de passe actuel + minimum 6 caractères', false); return; }
+        var token = localStorage.getItem('malty_token');
+        var btn = profilePwdForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'changePassword', email: u.email, token: token, oldPassword: oldPwd, newPassword: newPwd })
+        }).then(function(r) { return r.json(); }).then(function(d) {
+          if (d.ok) {
+            document.getElementById('pOldPwd').value = '';
+            document.getElementById('pNewPwd').value = '';
+            toast('Mot de passe changé !');
+          } else {
+            toast(d.error || 'Erreur', false);
+          }
+        }).catch(function() {
+          toast('Erreur réseau. Réessayez.', false);
+        }).finally(function() { btn.disabled = false; });
+      });
+    }
+
+    document.getElementById('profileModal').addEventListener('click', function(e) {
+      if (e.target === this) closeProfileModal();
+    });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeProfileModal(); });
 
     var observer = new IntersectionObserver(function(entries) { entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.08 });
     var countObserver = new IntersectionObserver(function(entries) { entries.forEach(function(entry) { if (entry.isIntersecting) { var el = entry.target; if (el.dataset.static) { el.textContent = el.dataset.static; return; } var target = parseInt(el.getAttribute('data-count'), 10); if (target >= 0 && !el.dataset.animated) { el.dataset.animated = '1'; animateCount(el, target); } } }); }, { threshold: 0.5 });

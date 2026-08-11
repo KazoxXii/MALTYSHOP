@@ -406,6 +406,10 @@ textarea.form-input{min-height:90px;resize:vertical}
     </div>
     <form id="editProfileForm">
       <div class="form-group">
+        <label class="form-label">Prénom</label>
+        <input class="form-input" type="text" id="ePrenom" placeholder="Votre prénom">
+      </div>
+      <div class="form-group">
         <label class="form-label">Nom complet</label>
         <input class="form-input" type="text" id="eNom" placeholder="Votre nom" required>
       </div>
@@ -417,6 +421,10 @@ textarea.form-input{min-height:90px;resize:vertical}
       <div class="form-group">
         <label class="form-label">Téléphone</label>
         <input class="form-input" type="tel" id="ePhone" placeholder="06 XX XX XX XX">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nom d'entreprise / activité</label>
+        <input class="form-input" type="text" id="eEntreprise" placeholder="Nom de votre entreprise">
       </div>
       <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px">Sauvegarder</button>
     </form>
@@ -476,9 +484,11 @@ function init() {
   document.getElementById('dName').textContent = n;
   document.getElementById('dEmail').textContent = e;
   document.getElementById('dPhone').textContent = p || 'Non renseigné';
+  document.getElementById('ePrenom').value = USER.prenom || '';
   document.getElementById('eNom').value = n;
   document.getElementById('eEmail').value = e;
   document.getElementById('ePhone').value = p;
+  document.getElementById('eEntreprise').value = USER.entreprise || '';
 
   if (USER.createdAt) {
     document.getElementById('sDate').textContent = new Date(USER.createdAt).toLocaleDateString('fr-FR', {day:'numeric',month:'short',year:'numeric'});
@@ -572,9 +582,11 @@ function toast(msg, ok) {
 /* ====== EDIT PROFILE ====== */
 document.getElementById('editProfileForm').addEventListener('submit', function(e) {
   e.preventDefault();
+  var newPrenom = document.getElementById('ePrenom').value.trim();
   var newNom = document.getElementById('eNom').value.trim();
   var newEmail = document.getElementById('eEmail').value.trim().toLowerCase();
   var newPhone = document.getElementById('ePhone').value.trim();
+  var newEntreprise = document.getElementById('eEntreprise').value.trim();
 
   if (!newNom || !newEmail) { toast('Nom et email requis', false); return; }
 
@@ -584,12 +596,14 @@ document.getElementById('editProfileForm').addEventListener('submit', function(e
   fetch('/api/auth', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ action: 'updateProfile', email: oldEmail, token: token, newNom: newNom, newEmail: newEmail, newPhone: newPhone })
+    body: JSON.stringify({ action: 'updateProfile', email: oldEmail, token: token, newPrenom: newPrenom, newNom: newNom, newEmail: newEmail, newPhone: newPhone, newEntreprise: newEntreprise })
   }).then(function(r){return r.json()}).then(function(d) {
     if (d.ok) {
+      USER.prenom = newPrenom;
       USER.nom = newNom;
       USER.email = newEmail;
       USER.phone = newPhone;
+      USER.entreprise = newEntreprise;
       localStorage.setItem('malty_user', JSON.stringify(USER));
       if (newEmail !== oldEmail) {
         localStorage.setItem('malty_email', newEmail);
@@ -602,9 +616,11 @@ document.getElementById('editProfileForm').addEventListener('submit', function(e
     }
   }).catch(function() {
     // Offline fallback — update locally
+    USER.prenom = newPrenom;
     USER.nom = newNom;
     USER.email = newEmail;
     USER.phone = newPhone;
+    USER.entreprise = newEntreprise;
     localStorage.setItem('malty_user', JSON.stringify(USER));
     init();
     closeModal('editProfile');

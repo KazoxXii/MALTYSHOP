@@ -146,7 +146,7 @@ module.exports = async function handler(req, res) {
       return res.status(409).json({ error: 'Un compte existe deja avec cet email' });
     }
     var code = genCode();
-    var pendingUser = { nom: nom, email: em, phone: phone || '', password: hash(password), createdAt: new Date().toISOString() };
+    var pendingUser = { prenom: b.prenom || '', nom: nom, email: em, phone: phone || '', entreprise: b.entreprise || '', password: hash(password), createdAt: new Date().toISOString() };
     await rSetEx('verify:' + em, { code: code, user: pendingUser }, 600);
 
     var emailResult = await sendVerifyEmail(em, code);
@@ -182,7 +182,7 @@ module.exports = async function handler(req, res) {
 
     notify('✅ COMPTE VALIDÉ\n\nNom: ' + u.nom + '\nEmail: ' + em + '\nDate: ' + now);
 
-    return res.status(200).json({ ok: true, token: tk, user: { nom: u.nom, email: u.email, phone: u.phone } });
+    return res.status(200).json({ ok: true, token: tk, user: { prenom: u.prenom, nom: u.nom, email: u.email, phone: u.phone, entreprise: u.entreprise } });
   }
 
   // RESEND CODE
@@ -220,7 +220,7 @@ module.exports = async function handler(req, res) {
 
     notify('🔓 CONNEXION\n\nNom: ' + u.nom + '\nEmail: ' + em + '\nDate: ' + now + '\nIP: ' + ip);
 
-    return res.status(200).json({ ok: true, token: tk, user: { nom: u.nom, email: u.email, phone: u.phone, plan: u.plan } });
+    return res.status(200).json({ ok: true, token: tk, user: { prenom: u.prenom, nom: u.nom, email: u.email, phone: u.phone, entreprise: u.entreprise, plan: u.plan } });
   }
 
   // CHECK
@@ -233,7 +233,7 @@ module.exports = async function handler(req, res) {
     if (!u || u.token !== token) {
       return res.status(401).json({ error: 'Token invalide' });
     }
-    return res.status(200).json({ ok: true, user: { nom: u.nom, email: u.email, phone: u.phone, plan: u.plan } });
+    return res.status(200).json({ ok: true, user: { prenom: u.prenom, nom: u.nom, email: u.email, phone: u.phone, entreprise: u.entreprise, plan: u.plan } });
   }
 
   // LOGOUT
@@ -258,12 +258,14 @@ module.exports = async function handler(req, res) {
     }
     var newEm = b.newEmail.toLowerCase();
     var newNom = b.newNom;
+    var newPrenom = b.newPrenom || '';
     var newPhone = b.newPhone || '';
+    var newEntreprise = b.newEntreprise || '';
 
     if (newEm !== em) {
       var exists = await rGet('user:' + newEm);
       if (exists) return res.status(409).json({ error: 'Cet email est deja utilise' });
-      u.nom = newNom; u.email = newEm; u.phone = newPhone;
+      u.prenom = newPrenom; u.nom = newNom; u.email = newEm; u.phone = newPhone; u.entreprise = newEntreprise;
       await rSet('user:' + newEm, u);
       await rDel('user:' + em);
       var listRaw = await rGet('user:emails');
@@ -274,12 +276,12 @@ module.exports = async function handler(req, res) {
       await rSet('user:emails', list);
       var ntk = genToken(); u.token = ntk;
       await rSet('user:' + newEm, u);
-      return res.status(200).json({ ok: true, token: ntk, user: { nom: newNom, email: newEm, phone: newPhone } });
+      return res.status(200).json({ ok: true, token: ntk, user: { prenom: newPrenom, nom: newNom, email: newEm, phone: newPhone, entreprise: newEntreprise } });
     }
 
-    u.nom = newNom; u.phone = newPhone;
+    u.prenom = newPrenom; u.nom = newNom; u.phone = newPhone; u.entreprise = newEntreprise;
     await rSet('user:' + em, u);
-    return res.status(200).json({ ok: true, user: { nom: newNom, email: em, phone: newPhone } });
+    return res.status(200).json({ ok: true, user: { prenom: newPrenom, nom: newNom, email: em, phone: newPhone, entreprise: newEntreprise } });
   }
 
   // CHANGE PASSWORD
