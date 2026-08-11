@@ -6,8 +6,8 @@
 
 window.MALTY_CONFIG = {
     // --- CONFIGURATION EXTERNE ---
-    // Mets ici l'URL de ton webhook Google Apps Script une fois déployé
-    webhookUrl: 'https://script.google.com/macros/s/AKfycbxQEV9C2XvMGJuStVEEBSP8kqCH8zFWUCvsxS1QBiVAkeY77EdxpgQN35Btjpvi20h4/exec',
+    // Envoi des formulaires via l'API interne (Brevo). Plus fiable que le webhook Google Apps Script.
+    webhookUrl: '/api/devis',
 
     // --- CATALOGUE DE PRODUITS WEB ---
     formules: [
