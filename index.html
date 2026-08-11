@@ -754,15 +754,14 @@
 
     // Update auth button in navbar
     (function updateNavAuth() {
-      var user = JSON.parse(localStorage.getItem('malty_user'));
-      var guest = localStorage.getItem('malty_guest');
       var link = document.getElementById('nav-auth-link');
       if (!link) return;
-      var userName = (user && (user.nom || user.name)) || null;
-      var avatar = localStorage.getItem('malty_avatar');
 
-      var logoutBtn = document.getElementById('nav-auth-logout');
-      if (!logoutBtn) {
+      var session = { client: false, admin: false, manager: false };
+      var logoutBtn = null;
+
+      function makeLogoutBtn() {
+        if (logoutBtn) return;
         logoutBtn = document.createElement('a');
         logoutBtn.id = 'nav-auth-logout';
         logoutBtn.href = '#';
@@ -771,19 +770,42 @@
         logoutBtn.style.marginLeft = '8px';
         logoutBtn.addEventListener('click', function(e) {
           e.preventDefault();
-          if (typeof maltyLogout === 'function') { maltyLogout(); }
-          else {
-            localStorage.removeItem('malty_token');
-            localStorage.removeItem('malty_email');
-            localStorage.removeItem('malty_user');
-            localStorage.removeItem('malty_guest');
-            window.location.href = 'login.html';
-          }
+          doLogout();
         });
         link.parentNode.appendChild(logoutBtn);
       }
 
+      function refresh() {
+        makeLogoutBtn();
+        logoutBtn.style.display = (session.client || session.admin || session.manager) ? '' : 'none';
+      }
+
+      function doLogout() {
+        Promise.all([
+          fetch('/api/admin?action=logout', { method: 'POST', credentials: 'include' }).catch(function(){}),
+          fetch('/api/manager?action=logout', { method: 'POST', credentials: 'include' }).catch(function(){}),
+          fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'logout', email: localStorage.getItem('malty_email') || '' })
+          }).catch(function(){})
+        ]).then(function() {
+          localStorage.removeItem('malty_token');
+          localStorage.removeItem('malty_email');
+          localStorage.removeItem('malty_user');
+          localStorage.removeItem('malty_guest');
+          window.location.href = 'login.html';
+        });
+      }
+
+      var user = null;
+      try { user = JSON.parse(localStorage.getItem('malty_user')); } catch(e) {}
+      var guest = localStorage.getItem('malty_guest');
+      var userName = (user && (user.nom || user.name)) || null;
+      var avatar = localStorage.getItem('malty_avatar');
+
       if (userName) {
+        session.client = true;
         var initials = userName.charAt(0).toUpperCase();
         if (userName.includes(' ')) initials = userName.split(' ').map(function(w){return w.charAt(0)}).join('').toUpperCase().substring(0,2);
         if (avatar) {
@@ -793,18 +815,27 @@
         }
         link.href = 'espace-client.html';
         link.className = 'btn btn-outline nav-cta nav-logged';
-        logoutBtn.style.display = '';
+      } else if (guest) {
+        link.textContent = 'Se connecter';
+        link.href = 'login.html';
+        link.className = 'btn btn-outline nav-cta';
       } else {
-        logoutBtn.style.display = 'none';
-        if (guest) {
-          link.textContent = 'Se connecter';
-          link.href = 'login.html';
-          link.className = 'btn btn-outline nav-cta';
-        } else {
-          link.textContent = 'Mon compte';
-          link.href = 'login.html';
-        }
+        link.textContent = 'Mon compte';
+        link.href = 'login.html';
       }
+
+      refresh();
+
+      // Admin / Manager sessions (async)
+      fetch('/api/admin?action=check', { credentials: 'include' })
+        .then(function(r) { return r.json(); })
+        .then(function(d) { if (d.authenticated) { session.admin = true; refresh(); } })
+        .catch(function(){});
+
+      fetch('/api/manager?action=check', { credentials: 'include' })
+        .then(function(r) { return r.json(); })
+        .then(function(d) { if (d.authenticated) { session.manager = true; refresh(); } })
+        .catch(function(){});
     })();
 
     var observer = new IntersectionObserver(function(entries) { entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.08 });
