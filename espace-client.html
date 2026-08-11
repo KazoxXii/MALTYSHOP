@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mon Compte — MALTY</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06070a;--surface:#0e1016;--surface2:#14161e;--fg:#e8eaf0;--muted:#8b93a3;--accent:#2563eb;--accent2:#1d4ed8;--accent-light:#7ea2ff;--accent-10:rgba(37,99,235,.12);--accent-20:rgba(37,99,235,.2);--accent-50:rgba(37,99,235,.5);--success:#16a34a;--warning:#f59e0b;--danger:#ef4444;--border:#1e2230;--radius:16px;--radius-sm:10px;--ease:cubic-bezier(0.16,1,0.3,1)}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;line-height:1.6;min-height:100vh;padding-bottom:80px}
+
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;text-decoration:none}
+.logo svg{height:40px}
+.header-actions{display:flex;align-items:center;gap:10px}
+.user-pill{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:40px;padding:5px 14px 5px 5px}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.8rem;flex-shrink:0}
+.user-pill-info{display:flex;flex-direction:column;line-height:1.2}
+.user-pill-name{font-weight:700;font-size:.82rem;color:var(--fg)}
+.user-pill-email{font-size:.68rem;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:var(--radius-sm);font-weight:600;font-size:.82rem;cursor:pointer;border:none;text-decoration:none;transition:all .2s;font-family:inherit;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--fg)}
+.btn-outline:hover{border-color:var(--accent-50);background:var(--accent-10)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{opacity:.85}
+.btn-success{background:var(--success);color:#fff}
+.btn-sm{padding:7px 12px;font-size:.75rem}
+.btn-full{width:100%}
+
+/* LAYOUT */
+.container{max-width:960px;margin:0 auto;padding:24px 16px}
+.page-header{margin-bottom:24px}
+.page-title{font-size:1.4rem;font-weight:800;margin-bottom:2px}
+.page-sub{color:var(--muted);font-size:.85rem}
+
+/* TABS */
+.tabs{display:flex;gap:3px;margin-bottom:24px;background:var(--surface);border-radius:var(--radius);padding:3px;border:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab{padding:11px 14px;border-radius:10px;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .2s;color:var(--muted);text-align:center;flex-shrink:0;min-width:0;user-select:none}
+.tab.active{background:var(--accent);color:#fff}
+.tab:hover:not(.active){background:var(--surface2);color:var(--fg)}
+.tab-icon{display:block;font-size:1.1rem;margin-bottom:2px}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px}
+.card-title{font-size:.95rem;font-weight:700}
+.card-title-sm{font-size:.82rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 12px;text-align:center}
+.stat-icon{font-size:1.2rem;margin-bottom:6px}
+.stat-value{font-size:1.3rem;font-weight:800;color:var(--accent);margin-bottom:1px;word-break:break-word}
+.stat-label{font-size:.7rem;color:var(--muted)}
+
+/* FORM */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;color:var(--muted)}
+.form-input{width:100%;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg);font:400 .88rem 'Inter',system-ui,sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10)}
+.form-input::placeholder{color:var(--muted);opacity:.5}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236a8cba'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+textarea.form-input{min-height:90px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-note{font-size:.72rem;color:var(--muted);margin-top:4px}
+
+/* BADGE */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.68rem;font-weight:600;white-space:nowrap}
+.badge-success{background:rgba(0,204,102,.12);color:var(--success)}
+.badge-warning{background:rgba(255,153,0,.12);color:var(--warning)}
+.badge-info{background:var(--accent-10);color:var(--accent)}
+.badge-danger{background:rgba(255,51,51,.12);color:var(--danger)}
+
+/* REQUESTS */
+.req-list{display:flex;flex-direction:column;gap:8px}
+.req-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.req-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px}
+.req-title{font-size:.85rem;font-weight:600}
+.req-desc{font-size:.78rem;color:var(--muted);margin-top:2px}
+.req-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.req-date{font-size:.68rem;color:var(--muted)}
+
+/* MEDIA */
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.media-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center}
+.media-icon{font-size:1.6rem;margin-bottom:5px}
+.media-name{font-size:.75rem;color:var(--fg);font-weight:600;margin-bottom:2px}
+.media-link{font-size:.65rem;color:var(--accent);word-break:break-all;text-decoration:none}
+.media-note{font-size:.65rem;color:var(--muted);margin-top:3px}
+.media-del{margin-top:6px}
+
+/* SUB */
+.sub-card{background:var(--surface2);border:1px solid var(--accent);border-radius:var(--radius);padding:24px 16px;text-align:center;margin-bottom:16px}
+.sub-price{font-size:2.2rem;font-weight:900;color:var(--accent);margin:8px 0 2px}
+.sub-period{font-size:.85rem;color:var(--muted);font-weight:400}
+.sub-features{list-style:none;text-align:left;margin:16px 0}
+.sub-features li{padding:5px 0;font-size:.82rem;display:flex;align-items:center;gap:8px}
+.sub-features li::before{content:'✓';color:var(--success);font-weight:700;flex-shrink:0}
+
+/* SECTION DIVIDER */
+.section-title{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+/* TOAST */
+.toast{position:fixed;top:16px;right:16px;left:16px;padding:14px 18px;border-radius:10px;font-weight:600;font-size:.85rem;z-index:500;animation:toastIn .3s ease;text-align:center}
+.toast-success{background:var(--success);color:#fff}
+.toast-error{background:var(--danger);color:#fff}
+@keyframes toastIn{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:flex-end;justify-content:center}
+.modal-bg.active{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;padding:24px 16px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;animation:modalUp .3s ease}
+.modal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-title{font-size:1rem;font-weight:700}
+.modal-close{background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;padding:4px}
+@keyframes modalUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* DESKTOP */
+@media(min-width:768px){
+  .header{padding:14px 32px}
+  .container{padding:32px 24px}
+  .page-title{font-size:1.6rem}
+  .stats-grid{grid-template-columns:repeat(4,1fr)}
+  .tab{padding:11px 20px;font-size:.82rem}
+  .tab-icon{display:inline;margin-right:4px}
+  .form-row{grid-template-columns:1fr 1fr}
+  .media-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .modal-bg{align-items:center}
+  .modal-box{border-radius:var(--radius);border-bottom:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html" class="logo">
+    <svg viewBox="0 0 100 90" height="40"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#bae6fd"/><stop offset="20%" stop-color="#7dd3fc"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="80%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0284c7"/></linearGradient><linearGradient id="lg2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="20%" stop-color="#0ea5e9"/><stop offset="50%" stop-color="#0284c7"/><stop offset="80%" stop-color="#0369a1"/><stop offset="100%" stop-color="#075985"/></linearGradient><linearGradient id="lg3" x1="50%" y1="0%" x2="50%" y2="100%"><stop offset="0%" stop-color="#0c4a6e"/><stop offset="40%" stop-color="#082f49"/><stop offset="100%" stop-color="#0c1929"/></linearGradient><linearGradient id="lg4" x1="0%" y1="0%" x2="60%" y2="100%"><stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.7"/><stop offset="100%" stop-color="#bae6fd" stop-opacity="0.1"/></linearGradient></defs><polygon points="8,82 8,14 28,6 50,36 28,48 8,58" fill="url(#lg)"/><polygon points="8,14 28,6 33,16 13,24" fill="url(#lg4)"/><polygon points="92,82 92,14 72,6 50,36 72,48 92,58" fill="url(#lg2)"/><polygon points="92,14 72,6 67,16 87,24" fill="url(#lg4)" opacity="0.7"/><polygon points="28,48 50,36 72,48 50,72" fill="url(#lg3)"/><line x1="8" y1="14" x2="28" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.5"/><line x1="92" y1="14" x2="72" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.4"/></svg>
+  </a>
+  <div class="header-actions">
+    <span id="headerAvatar" style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.8rem;flex-shrink:0;overflow:hidden;border:2px solid var(--accent-50);cursor:pointer" onclick="document.getElementById('avatarInput').click()"></span>
+    <a href="index.html" class="btn btn-outline btn-sm">Accueil</a>
+    <button class="btn btn-outline btn-sm" onclick="maltyLogout()">Déconnexion</button>
+  </div>
+</header>
+
+<!-- CONTENT -->
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title" id="pageTitle">Mon Compte</h1>
+    <p class="page-sub">Gérez votre profil, demandes et abonnement.</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" id="tabsBar">
+    <div class="tab active" data-tab="profil"><span class="tab-icon">👤</span>Profil</div>
+    <div class="tab" data-tab="demandes"><span class="tab-icon">📝</span>Demandes</div>
+    <div class="tab" data-tab="liens"><span class="tab-icon">🔗</span>Liens</div>
+    <div class="tab" data-tab="abonnement"><span class="tab-icon">💳</span>Abonnement</div>
+  </div>
+
+  <!-- ==================== PROFIL ==================== -->
+  <div class="tab-content active" id="profil">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👤</div>
+        <div class="stat-value" id="sName">—</div>
+        <div class="stat-label">Nom</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📧</div>
+        <div class="stat-value" id="sEmail">—</div>
+        <div class="stat-label">Email</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📱</div>
+        <div class="stat-value" id="sPhone">—</div>
+        <div class="stat-label">Téléphone</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-value" id="sDate">—</div>
+        <div class="stat-label">Inscrit le</div>
+      </div>
+    </div>
+
+    <!-- Avatar -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Photo de profil</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:24px;padding:8px 0">
+        <div id="avatarPreview" style="width:80px;height:80px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:1.8rem;flex-shrink:0;overflow:hidden;border:3px solid var(--accent-50);cursor:pointer" onclick="document.getElementById('avatarInput').click()">
+        </div>
+        <div style="flex:1">
+          <p style="font-size:.82rem;color:var(--muted);margin:0 0 12px">Cliquez sur la photo pour changer</p>
+          <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('avatarInput').click()">📷 Changer la photo</button>
+          <button class="btn btn-outline btn-sm" onclick="removeAvatar()" style="margin-left:8px" id="removeAvatarBtn" hidden>🗑️ Supprimer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modifier le profil -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Modifier mon profil</span>
+        <button class="btn btn-outline btn-sm" onclick="openModal('editProfile')">✏️ Modifier</button>
+      </div>
+      <div id="profileDisplay">
+        <div class="section-title">Informations personnelles</div>
+        <div style="display:grid;gap:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+            <span style="font-size:.82rem;color:var(--muted)">Nom</span>
+            <span style="font-size:.88rem;font-weight:600" id="dName">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+            <span style="font-size:.82rem;color:var(--muted)">Email</span>
+            <span style="font-size:.88rem;font-weight:600" id="dEmail">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0">
+            <span style="font-size:.82rem;color:var(--muted)">Téléphone</span>
+            <span style="font-size:.88rem;font-weight:600" id="dPhone">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sécurité -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Sécurité</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div>
+          <div style="font-size:.88rem;font-weight:600">Mot de passe</div>
+          <div style="font-size:.75rem;color:var(--muted)" id="dPwd">••••••••</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="openModal('editPassword')">Changer</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0">
+        <div>
+          <div style="font-size:.88rem;font-weight:600">Déconnexion</div>
+          <div style="font-size:.75rem;color:var(--muted)">Se déconnecter de cet appareil</div>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="maltyLogout()">Déconnexion</button>
+      </div>
+    </div>
+
+    <!-- Accès rapides -->
+    <div class="card">
+      <div class="card-title-sm">Accès rapides</div>
+      <div style="display:grid;gap:8px">
+        <a href="brief.html" class="btn btn-outline btn-full" style="justify-content:flex-start">📝 Remplir un brief client</a>
+        <a href="support.html" class="btn btn-outline btn-full" style="justify-content:flex-start">💬 Contacter le support</a>
+        <a href="maintenance.html" class="btn btn-outline btn-full" style="justify-content:flex-start">🛡️ Voir la maintenance</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DEMANDES ==================== -->
+  <div class="tab-content" id="demandes">
+    <div class="card">
+      <div class="card-title-sm">Nouvelle demande</div>
+      <form id="requestForm">
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select class="form-input" name="type" required>
+            <option value="">Sélectionner...</option>
+            <option value="modification">Modification de contenu</option>
+            <option value="bug">Signaler un bug</option>
+            <option value="design">Changement de design</option>
+            <option value="seo">Optimisation SEO</option>
+            <option value="ajout">Ajout de fonctionnalité</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-input" name="description" placeholder="Décrivez votre demande..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priorité</label>
+          <select class="form-input" name="priority">
+            <option value="low">🟢 Normale</option>
+            <option value="medium" selected>🟡 Moyenne</option>
+            <option value="high">🔴 Urgente</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Envoyer la demande</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title-sm" style="margin:0">Mes demandes</span>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-sm btn-outline filter-btn active" data-filter="all">Toutes</button>
+          <button class="btn btn-sm btn-outline filter-btn" data-filter="pending">En attente</button>
+          <button class="btn btn-sm btn-outline filter-btn" data-filter="completed">Terminées</button>
+        </div>
+      </div>
+      <div class="req-list" id="reqList">
+        <p style="color:var(--muted);text-align:center;padding:20px;font-size:.85rem">Aucune demande.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LIENS ==================== -->
+  <div class="tab-content" id="liens">
+    <div class="card">
+      <div class="card-title-sm">Ajouter un lien</div>
+      <form id="mediaForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Plateforme</label>
+            <select class="form-input" name="platform" required>
+              <option value="">Choisir...</option>
+              <option value="instagram">📸 Instagram</option>
+              <option value="facebook">📘 Facebook</option>
+              <option value="tiktok">🎵 TikTok</option>
+              <option value="youtube">📺 YouTube</option>
+              <option value="twitter">🐦 Twitter/X</option>
+              <option value="linkedin">💼 LinkedIn</option>
+              <option value="website">🌐 Site web</option>
+              <option value="google">📍 Google Business</option>
+              <option value="other">🔗 Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom / Pseudo</label>
+            <input class="form-input" type="text" name="name" placeholder="@pseudo" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL</label>
+          <input class="form-input" type="url" name="url" placeholder="https://..." required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Note (optionnel)</label>
+          <input class="form-input" type="text" name="note" placeholder="Ex: Page pro, compte perso...">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Ajouter le lien</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-title-sm">Mes liens</div>
+      <div class="media-grid" id="mediaGrid">
+        <p style="color:var(--muted);text-align:center;padding:20px;font-size:.85rem;grid-column:1/-1">Aucun lien.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ABONNEMENT ==================== -->
+  <div class="tab-content" id="abonnement">
+    <div id="noSub">
+      <div class="sub-card">
+        <div style="font-size:2.5rem">🛡️</div>
+        <h2 style="font-size:1.15rem;margin:10px 0 4px">Aucun abonnement actif</h2>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:18px">Protégez votre site avec un forfait maintenance.</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <a href="abonnement.html" class="btn btn-primary">Voir les offres</a>
+          <a href="mailto:maltyz@outlook.fr" class="btn btn-outline">Contacter MALTY</a>
+        </div>
+      </div>
+    </div>
+    <div id="activeSub" style="display:none">
+      <div class="sub-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span class="badge badge-success">🟢 Actif</span>
+          <span style="font-size:.72rem;color:var(--muted)" id="subDate">—</span>
+        </div>
+        <div style="font-size:2.5rem">🛡️</div>
+        <h2 style="font-size:1.15rem;margin:10px 0 2px" id="subName">—</h2>
+        <div class="sub-price" id="subPrice">—</div>
+        <ul class="sub-features" id="subFeatures"></ul>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+          <a href="abonnement.html" class="btn btn-primary">Changer de formule</a>
+          <button class="btn btn-danger btn-sm" onclick="cancelSub()">Résilier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT PROFILE -->
+<div class="modal-bg" id="modal-editProfile">
+  <div class="modal-box">
+    <div class="modal-top">
+      <span class="modal-title">Modifier le profil</span>
+      <button class="modal-close" onclick="closeModal('editProfile')">&times;</button>
+    </div>
+    <form id="editProfileForm">
+      <div class="form-group">
+        <label class="form-label">Nom complet</label>
+        <input class="form-input" type="text" id="eNom" placeholder="Votre nom" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="eEmail" placeholder="votre@email.com" required>
+        <div class="form-note">Un email de confirmation sera envoyé à la nouvelle adresse.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Téléphone</label>
+        <input class="form-input" type="tel" id="ePhone" placeholder="06 XX XX XX XX">
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px">Sauvegarder</button>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL EDIT PASSWORD -->
+<div class="modal-bg" id="modal-editPassword">
+  <div class="modal-box">
+    <div class="modal-top">
+      <span class="modal-title">Changer le mot de passe</span>
+      <button class="modal-close" onclick="closeModal('editPassword')">&times;</button>
+    </div>
+    <form id="editPasswordForm">
+      <div class="form-group">
+        <label class="form-label">Mot de passe actuel</label>
+        <input class="form-input" type="password" id="eOldPwd" placeholder="••••••••" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nouveau mot de passe</label>
+        <input class="form-input" type="password" id="eNewPwd" placeholder="Minimum 6 caractères" required minlength="6">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirmer</label>
+        <input class="form-input" type="password" id="eConfirmPwd" placeholder="Retapez le mot de passe" required minlength="6">
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px">Mettre à jour</button>
+    </form>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="auth-guard.js"></script>
+<script>
+var USER = null;
+var REQUESTS_KEY = '';
+var MEDIA_KEY = '';
+
+/* ====== AUTH ====== */
+window.addEventListener('malty-auth', function(e) { USER = e.detail; init(); });
+setTimeout(function() {
+  if (!USER && window.maltyGetUser) { USER = window.maltyGetUser(); if (USER) init(); }
+}, 400);
+
+function init() {
+  if (!USER) return;
+  var n = USER.nom || USER.name || 'Client';
+  var e = USER.email || '';
+  var p = USER.phone || '';
+  REQUESTS_KEY = 'malty_req_' + e;
+  MEDIA_KEY = 'malty_media_' + e;
+
+  document.getElementById('pageTitle').textContent = 'Bonjour, ' + n.split(' ')[0];
+  document.getElementById('sName').textContent = n;
+  document.getElementById('sEmail').textContent = e;
+  document.getElementById('sPhone').textContent = p || '—';
+  document.getElementById('dName').textContent = n;
+  document.getElementById('dEmail').textContent = e;
+  document.getElementById('dPhone').textContent = p || 'Non renseigné';
+  document.getElementById('eNom').value = n;
+  document.getElementById('eEmail').value = e;
+  document.getElementById('ePhone').value = p;
+
+  if (USER.createdAt) {
+    document.getElementById('sDate').textContent = new Date(USER.createdAt).toLocaleDateString('fr-FR', {day:'numeric',month:'short',year:'numeric'});
+  }
+  loadRequests();
+  loadMedia();
+  loadSub();
+  loadAvatar();
+}
+
+/* ====== AVATAR ====== */
+function loadAvatar() {
+  var avatar = localStorage.getItem('malty_avatar');
+  var initials = '?';
+  if (USER) {
+    var n = USER.nom || USER.name || '';
+    if (n) {
+      initials = n.charAt(0).toUpperCase();
+      if (n.includes(' ')) initials = n.split(' ').map(function(w){return w.charAt(0)}).join('').toUpperCase().substring(0,2);
+    }
+  }
+  var preview = document.getElementById('avatarPreview');
+  var headerAv = document.getElementById('headerAvatar');
+  var removeBtn = document.getElementById('removeAvatarBtn');
+  if (avatar) {
+    if (preview) preview.innerHTML = '<img src="' + avatar + '" style="width:100%;height:100%;object-fit:cover">';
+    if (headerAv) headerAv.innerHTML = '<img src="' + avatar + '" style="width:100%;height:100%;object-fit:cover">';
+    if (removeBtn) removeBtn.hidden = false;
+  } else {
+    if (preview) preview.innerHTML = initials;
+    if (headerAv) headerAv.innerHTML = initials;
+    if (removeBtn) removeBtn.hidden = true;
+  }
+}
+
+function uploadAvatar(input) {
+  var file = input.files[0];
+  if (!file) return;
+  if (file.size > 500000) { alert('Image trop grande (max 500KB)'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      canvas.width = 200; canvas.height = 200;
+      var ctx = canvas.getContext('2d');
+      var size = Math.min(img.width, img.height);
+      var x = (img.width - size) / 2;
+      var y = (img.height - size) / 2;
+      ctx.drawImage(img, x, y, size, size, 0, 0, 200, 200);
+      var dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      localStorage.setItem('malty_avatar', dataUrl);
+      loadAvatar();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeAvatar() {
+  localStorage.removeItem('malty_avatar');
+  loadAvatar();
+}
+
+/* ====== TABS ====== */
+document.querySelectorAll('.tab').forEach(function(t) {
+  t.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});
+    document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+  });
+});
+
+/* ====== MODAL ====== */
+function openModal(id) { document.getElementById('modal-'+id).classList.add('active'); }
+function closeModal(id) { document.getElementById('modal-'+id).classList.remove('active'); }
+document.querySelectorAll('.modal-bg').forEach(function(m) {
+  m.addEventListener('click', function(ev) { if (ev.target === m) m.classList.remove('active'); });
+});
+
+/* ====== TOAST ====== */
+function toast(msg, ok) {
+  var d = document.createElement('div');
+  d.className = 'toast toast-' + (ok !== false ? 'success' : 'error');
+  d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(function(){d.remove()},3000);
+}
+
+/* ====== EDIT PROFILE ====== */
+document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var newNom = document.getElementById('eNom').value.trim();
+  var newEmail = document.getElementById('eEmail').value.trim().toLowerCase();
+  var newPhone = document.getElementById('ePhone').value.trim();
+
+  if (!newNom || !newEmail) { toast('Nom et email requis', false); return; }
+
+  var token = localStorage.getItem('malty_token');
+  var oldEmail = USER.email;
+
+  fetch('/api/auth', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ action: 'updateProfile', email: oldEmail, token: token, newNom: newNom, newEmail: newEmail, newPhone: newPhone })
+  }).then(function(r){return r.json()}).then(function(d) {
+    if (d.ok) {
+      USER.nom = newNom;
+      USER.email = newEmail;
+      USER.phone = newPhone;
+      localStorage.setItem('malty_user', JSON.stringify(USER));
+      if (newEmail !== oldEmail) {
+        localStorage.setItem('malty_email', newEmail);
+      }
+      init();
+      closeModal('editProfile');
+      toast('Profil mis à jour !');
+    } else {
+      toast(d.error || 'Erreur', false);
+    }
+  }).catch(function() {
+    // Offline fallback — update locally
+    USER.nom = newNom;
+    USER.email = newEmail;
+    USER.phone = newPhone;
+    localStorage.setItem('malty_user', JSON.stringify(USER));
+    init();
+    closeModal('editProfile');
+    toast('Profil mis à jour localement');
+  });
+});
+
+/* ====== EDIT PASSWORD ====== */
+document.getElementById('editPasswordForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var oldPwd = document.getElementById('eOldPwd').value;
+  var newPwd = document.getElementById('eNewPwd').value;
+  var confirmPwd = document.getElementById('eConfirmPwd').value;
+
+  if (newPwd !== confirmPwd) { toast('Les mots de passe ne correspondent pas', false); return; }
+  if (newPwd.length < 6) { toast('Minimum 6 caractères', false); return; }
+
+  var token = localStorage.getItem('malty_token');
+  fetch('/api/auth', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ action: 'changePassword', email: USER.email, token: token, oldPassword: oldPwd, newPassword: newPwd })
+  }).then(function(r){return r.json()}).then(function(d) {
+    if (d.ok) {
+      closeModal('editPassword');
+      document.getElementById('editPasswordForm').reset();
+      toast('Mot de passe changé !');
+    } else {
+      toast(d.error || 'Erreur', false);
+    }
+  }).catch(function() {
+    toast('Erreur réseau', false);
+  });
+});
+
+/* ====== REQUESTS ====== */
+function loadRequests() {
+  var reqs = JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
+  renderReqs(reqs, 'all');
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    b.onclick = function() {
+      document.querySelectorAll('.filter-btn').forEach(function(x){x.classList.remove('active')});
+      b.classList.add('active');
+      renderReqs(reqs, b.dataset.filter);
+    };
+  });
+}
+
+function renderReqs(reqs, f) {
+  var el = document.getElementById('reqList');
+  var list = f === 'all' ? reqs : reqs.filter(function(r){return r.status===f});
+  if (!list.length) { el.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;font-size:.85rem">Aucune demande.</p>'; return; }
+  var tl = {modification:'Modification',bug:'Bug',design:'Design',seo:'SEO',ajout:'Ajout',autre:'Autre'};
+  var pl = {low:'🟢',medium:'🟡',high:'🔴'};
+  el.innerHTML = list.map(function(r) {
+    return '<div class="req-item"><div class="req-top"><span class="req-title">'+(pl[r.priority]||'')+' '+(tl[r.type]||r.type)+'</span><span class="badge '+(r.status==='pending'?'badge-warning':'badge-success')+'">'+(r.status==='pending'?'En attente':'Terminée')+'</span></div><div class="req-desc">'+(r.description||'').substring(0,120)+'</div><div class="req-meta"><span class="req-date">'+new Date(r.date).toLocaleDateString('fr-FR')+'</span></div></div>';
+  }).join('');
+}
+
+document.getElementById('requestForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var fd = new FormData(this);
+  var reqs = JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
+  reqs.unshift({id:Date.now(),type:fd.get('type'),description:fd.get('description'),priority:fd.get('priority'),status:'pending',date:new Date().toISOString()});
+  localStorage.setItem(REQUESTS_KEY, JSON.stringify(reqs));
+  loadRequests(); this.reset(); toast('Demande envoyée !');
+  fetch('/api/maintenance',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({clientName:USER.nom||USER.name,clientEmail:USER.email,type:fd.get('type'),description:fd.get('description'),priority:fd.get('priority')})}).catch(function(){});
+});
+
+/* ====== MEDIA ====== */
+function loadMedia() {
+  var m = JSON.parse(localStorage.getItem(MEDIA_KEY) || '[]');
+  renderMedia(m);
+}
+
+function renderMedia(media) {
+  var el = document.getElementById('mediaGrid');
+  var icons = {instagram:'📸',facebook:'📘',tiktok:'🎵',youtube:'📺',twitter:'🐦',linkedin:'💼',website:'🌐',google:'📍',other:'🔗'};
+  if (!media.length) { el.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;font-size:.85rem;grid-column:1/-1">Aucun lien.</p>'; return; }
+  el.innerHTML = media.map(function(m,i) {
+    return '<div class="media-item"><div class="media-icon">'+(icons[m.platform]||'🔗')+'</div><div class="media-name">'+m.name+'</div><a href="'+m.url+'" target="_blank" class="media-link">'+m.url.substring(0,28)+'...</a>'+(m.note?'<div class="media-note">'+m.note+'</div>':'')+'<div class="media-del"><button class="btn btn-sm btn-outline" onclick="delMedia('+i+')" style="font-size:.68rem;padding:3px 8px">✕ Supprimer</button></div></div>';
+  }).join('');
+}
+
+function delMedia(i) {
+  var media = JSON.parse(localStorage.getItem(MEDIA_KEY) || '[]');
+  media.splice(i,1);
+  localStorage.setItem(MEDIA_KEY, JSON.stringify(media));
+  loadMedia(); toast('Lien supprimé');
+}
+
+document.getElementById('mediaForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var fd = new FormData(this);
+  var media = JSON.parse(localStorage.getItem(MEDIA_KEY) || '[]');
+  media.unshift({id:Date.now(),platform:fd.get('platform'),name:fd.get('name'),url:fd.get('url'),note:fd.get('note'),date:new Date().toISOString()});
+  localStorage.setItem(MEDIA_KEY, JSON.stringify(media));
+  loadMedia(); this.reset(); toast('Lien ajouté !');
+});
+
+/* ====== SUBSCRIPTION ====== */
+function loadSub() {
+  var sub = JSON.parse(localStorage.getItem('malty_subscription') || 'null');
+  var plans = {
+    essentiel:{name:'Maintenance Essentiel',price:'19€',f:['Mises à jour de sécurité mensuelles','Sauvegardes hebdomadaires','SSL renouvelé','Monitoring 24/7','Support email (48h)']},
+    premium:{name:'Maintenance Premium',price:'39€',f:['Tout du pack Essentiel','2 modifications de contenu/mois','Optimisation performance trimestrielle','Rapport mensuel détaillé','Support prioritaire (24h)','Sauvegardes quotidiennes']}
+  };
+  if (!sub||!sub.plan) { document.getElementById('noSub').style.display='block'; document.getElementById('activeSub').style.display='none'; return; }
+  document.getElementById('noSub').style.display='none';
+  document.getElementById('activeSub').style.display='block';
+  var p = plans[sub.plan]||plans.essentiel;
+  document.getElementById('subName').textContent = p.name;
+  document.getElementById('subPrice').innerHTML = p.price+'<span class="sub-period">/mois</span>';
+  document.getElementById('subFeatures').innerHTML = p.f.map(function(x){return '<li>'+x+'</li>'}).join('');
+  if (sub.startDate) document.getElementById('subDate').textContent = 'Depuis le '+new Date(sub.startDate).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+}
+
+function cancelSub() {
+  if (confirm('Résilier votre abonnement ?')) { localStorage.removeItem('malty_subscription'); loadSub(); toast('Abonnement résilié.'); }
+}
+</script>
+</body>
+</html>

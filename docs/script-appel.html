@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Script d'appel — MALTY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a24;
+      --fg: #fff;
+      --muted: #888;
+      --border: rgba(255,255,255,0.06);
+      --accent: #0066ff;
+      --accent-10: rgba(0,102,255,0.1);
+      --green: #00c878;
+      --green-10: rgba(0,200,120,0.1);
+      --red: #ff4444;
+      --red-10: rgba(255,68,68,0.1);
+      --orange: #ff8800;
+      --orange-10: rgba(255,136,0,0.1);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --radius: 16px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; }
+    body { background:var(--bg); color:var(--fg); font:400 15px/1.6 var(--font); }
+    .container { max-width:700px; margin:0 auto; padding:0 20px; }
+
+    .hero { padding:100px 0 40px; text-align:center; }
+    .badge { display:inline-flex; gap:6px; padding:6px 16px; background:var(--accent-10); color:var(--accent); border-radius:100px; font-size:.8rem; font-weight:700; margin-bottom:16px; }
+    .hero h1 { font-size:1.8rem; font-weight:900; letter-spacing:-0.03em; margin-bottom:10px; }
+    .hero p { color:var(--muted); font-size:.9rem; }
+
+    /* SECTION */
+    .section { margin-bottom:32px; }
+    .section-title { font-size:.75rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+
+    /* CARD */
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:12px; }
+    .card-title { font-weight:700; font-size:.95rem; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+
+    /* SCRIPT LINE */
+    .script { padding:14px 18px; background:var(--surface2); border-radius:10px; margin-bottom:8px; font-size:.9rem; line-height:1.7; color:var(--fg); border-left:3px solid var(--accent); }
+    .script.client { border-left-color:var(--green); color:var(--muted); font-style:italic; }
+    .script.warning { border-left-color:var(--orange); background:var(--orange-10); color:var(--orange); font-style:normal; }
+    .script.danger { border-left-color:var(--red); background:var(--red-10); color:var(--red); font-style:normal; }
+    .script strong { color:var(--fg); }
+    .script .label { font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; display:block; }
+    .script .label.tu { color:var(--accent); }
+    .script .label.lui { color:var(--green); }
+
+    /* LIST */
+    .list { list-style:none; }
+    .list li { padding:8px 0; font-size:.88rem; color:var(--muted); display:flex; align-items:flex-start; gap:10px; border-bottom:1px solid var(--border); }
+    .list li:last-child { border-bottom:none; }
+    .list .icon { flex-shrink:0; font-size:1rem; }
+
+    /* PHONE NUMBER */
+    .phone { display:inline-flex; align-items:center; gap:8px; background:var(--green-10); color:var(--green); padding:12px 20px; border-radius:12px; font-weight:700; font-size:1.1rem; text-decoration:none; margin-bottom:20px; }
+    .phone:hover { box-shadow:0 4px 20px var(--green-10); }
+
+    /* TIPS */
+    .tip { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; }
+    .tip .num { min-width:28px; height:28px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.75rem; flex-shrink:0; }
+    .tip .text { font-size:.85rem; color:var(--muted); line-height:1.6; }
+    .tip .text strong { color:var(--fg); }
+
+    /* CHECKLIST */
+    .checklist { list-style:none; }
+    .checklist li { padding:10px 0; font-size:.9rem; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); cursor:pointer; }
+    .checklist li:last-child { border-bottom:none; }
+    .checklist .box { width:22px; height:22px; border:2px solid var(--border); border-radius:6px; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+    .checklist li.done .box { background:var(--green); border-color:var(--green); }
+    .checklist li.done .box::after { content:'✓'; color:#fff; font-size:.7rem; font-weight:700; }
+    .checklist li.done span { color:var(--muted); text-decoration:line-through; }
+
+    footer { padding:32px 0; text-align:center; border-top:1px solid var(--border); margin-top:40px; }
+    footer p { font-size:.78rem; color:var(--muted); }
+    footer a { color:var(--accent); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="container">
+      <div class="badge">📞 Script d'appel</div>
+      <h1>Appelle comme un pro.</h1>
+      <p>Ouvre cette page pendant l'appel. Lis les lignes bleues. Écoute les réponses vertes.</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- PROSPECT -->
+    <div class="section">
+      <div class="section-title">📞 Fleur de sel</div>
+
+      <a href="tel:0474285971" class="phone">📞 04 74 28 59 71</a>
+
+      <div class="card">
+        <div class="card-title">📋 Infos à retenir</div>
+        <ul class="list">
+          <li><span class="icon">📍</span> 6 Rue du Tribunal, Bourgoin-Jallieu</li>
+          <li><span class="icon">⭐</span> 4,7★ — 669 avis Google</li>
+          <li><span class="icon">🍽️</span> Restaurant gastronomique, 40-50€/personne</li>
+          <li><span class="icon">🌐</span> Pas de site web (que Facebook)</li>
+          <li><span class="icon">📱</span> Ils préfèrent le téléphone</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AVANT L'APPEL -->
+    <div class="section">
+      <div class="section-title">✅ Avant d'appeler</div>
+      <ul class="checklist" id="checklist1">
+        <li onclick="this.classList.toggle('done')"><div class="box"></div><span>Téléphone chargé</span></li>
+        <li onclick="this.classList.toggle('done')"><div class="box"></div><span>Endroit calme</span></li>
+        <li onclick="this.classList.toggle('done')"><div class="box"></div><span>Ce script sous les yeux</span></li>
+        <li onclick="this.classList.toggle('done')"><div class="box"></div><span>Appelle AVANT 12h ou APRÈS 14h30</span></li>
+      </ul>
+    </div>
+
+    <!-- SCRIPT PRINCIPAL -->
+    <div class="section">
+      <div class="section-title">🎯 Script principal</div>
+
+      <div class="script">
+        <span class="label toi">toi →</span>
+        Bonjour, je peux parler au responsable s'il vous plaît ?
+      </div>
+
+      <div class="script client">
+        <span class="label lui">lui →</span>
+        C'est moi / Il est occupé / C'est quoi comme appel ?
+      </div>
+
+      <div class="script">
+        <span class="label toi">toi →</span>
+        Bonjour, je m'appelle Malty, je suis développeur web freelance à Lyon. Je vous ai contacté par Instagram tout à l'heure. Je vois que Fleur de sel a 669 avis et 4,7 étoiles — bravo, c'est impressionnant.
+      </div>
+
+      <div class="script">
+        <span class="label toi">toi →</span>
+        Je me suis permis de vous appeler car j'ai remarqué que vous n'avez pas de site web. Sur Google, quand on cherche "restaurant gastronomique Bourgoin", votre fiche Maps ressort mais les clients ne peuvent pas voir votre carte ou réserver en ligne.
+      </div>
+
+      <div class="script">
+        <span class="label toi">toi →</span>
+        Est-ce que vous avez déjà un site web ?
+      </div>
+    </div>
+
+    <!-- SELON LA RÉPONSE -->
+    <div class="section">
+      <div class="section-title">💬 Selon leur réponse</div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--green)">✅ "Non, on n'en a pas"</div>
+        <div class="script">
+          <span class="label toi">toi →</span>
+          Je comprends. Je crée des sites web pour les restaurants — un site avec votre menu, vos photos et la réservation en ligne. Ça vous intéresse qu'on en parle 5 minutes ?
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--orange)">⚠️ "On a déjà un site"</div>
+        <div class="script">
+          <span class="label toi">toi →</span>
+          Ah oui ? Je ne l'ai pas trouvé sur Google. C'est quel lien ?
+        </div>
+        <div class="script client">
+          <span class="label lui">lui →</span>
+          [ils te donnent le lien]
+        </div>
+        <div class="script">
+          <span class="label toi">toi →</span>
+          Je vais y jeter un œur. Si jamais il est lent ou pas optimisé pour Google, je peux vous en faire un meilleur. Vous voulez que je vous envoie un exemple ?
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--orange)">⚠️ "On n'a pas le temps"</div>
+        <div class="script">
+          <span class="label toi">toi →</span>
+          Je comprends, vous êtes occupés. Je vous envoie un email avec un exemple concret de ce que je peux faire pour vous. Vous le regarderez quand vous aurez 5 minutes. C'est quoi votre adresse email ?
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--orange)">⚠️ "C'est combien ?"</div>
+        <div class="script">
+          <span class="label toi">toi →</span>
+          Ça dépend de ce que vous voulez. On commence à 99€ pour une landing page avec votre menu et la réservation. Pour un site complet avec plusieurs pages, c'est 449€. Pas d'abonnement, c'est payé une fois.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--red)">❌ "On n'est pas intéressé"</div>
+        <div class="script">
+          <span class="label toi">toi →</span>
+          Pas de problème. Si jamais vous changez d'avis, vous avez mon numéro. Bonne continuation avec vos 669 avis — c'est vraiment impressionnant.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--green)">✅ "Oui, ça m'intéresse"</div>
+        <div class="script">
+          <span class="label toi">toi →</span>
+          Génial. Je peux vous envoyer un email avec un exemple concret ? Vous me donnez votre adresse et on se fixe un rendez-vous de 10 minutes cette semaine.
+        </div>
+        <div class="script client">
+          <span class="label lui">lui →</span>
+          [ils te donnent leur email]
+        </div>
+        <div class="script">
+          <span class="label toi">toi →</span>
+          Parfait. Je vous envoie ça tout de suite. Merci pour votre temps et à bientôt !
+        </div>
+      </div>
+    </div>
+
+    <!-- APRÈS L'APPEL -->
+    <div class="section">
+      <div class="section-title">📋 Après l'appel</div>
+      <ul class="checklist" id="checklist2">
+        <li onclick="this.classList.toggle('done')"><div class="box"></div><span>Envoyer l'email si demandé</span></li>
+        <li onclick="this.classList.toggle('done')"><div class="box"></div><span>Noter ce qu'ils ont dit</span></li>
+        <li onclick="this.classList.toggle('done')"><div class="box"></div><span>Relancer dans 48h si pas de réponse</span></li>
+      </ul>
+    </div>
+
+    <!-- CONSEILS -->
+    <div class="section">
+      <div class="section-title">💡 Les 5 règles d'or</div>
+
+      <div class="tip">
+        <div class="num">1</div>
+        <div class="text"><strong>Parle lentement.</strong> Quand tu es stressé, tu parles vite. Ralentis. Respire.</div>
+      </div>
+      <div class="tip">
+        <div class="num">2</div>
+        <div class="text"><strong>Souris en parlant.</strong> Ça s'entend au téléphone. Tu paraîs plus sympathique.</div>
+      </div>
+      <div class="tip">
+        <div class="num">3</div>
+        <div class="text"><strong>Écoute plus que tu ne parles.</strong> Le client veut se sentir écouté, pas vendu.</div>
+      </div>
+      <div class="tip">
+        <div class="num">4</div>
+        <div class="text"><strong>Ne sois pas parfait.</strong> "Je suis un peu vert" c'est honnête et ça débloque.</div>
+      </div>
+      <div class="tip">
+        <div class="num">5</div>
+        <div class="text"><strong>Le pire cas, c'est un non.</strong> Et un non, c'est une expérience pour la prochaine fois.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="container">
+      <p><a href="https://maltyshop.vercel.app/">maltyshop.vercel.app</a> · <a href="mailto:maltyz@outlook.fr">maltyz@outlook.fr</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>

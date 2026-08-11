@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rappel renouvellement — MALTY</title>
+</head>
+<body style="margin:0;padding:0;background:#0a0f1a;font-family:'Segoe UI',Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0f1a;padding:40px 20px">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#0d1a2e;border-radius:16px;overflow:hidden;border:1px solid #1a2a4a">
+  
+  <!-- Header -->
+  <tr><td style="padding:32px;text-align:center;border-bottom:1px solid #1a2a4a">
+    <h1 style="margin:0;font-size:24px;color:#e0e8f0">🛡️ MALTY Maintenance</h1>
+    <p style="margin:8px 0 0;font-size:14px;color:#6a8cba">Rappel de renouvellement</p>
+  </td></tr>
+  
+  <!-- Body -->
+  <tr><td style="padding:32px">
+    <p style="color:#e0e8f0;font-size:16px;margin:0 0 16px">Bonjour <strong>{{PRENOM}}</strong>,</p>
+    
+    <p style="color:#b0c4de;font-size:15px;margin:0 0 24px">
+      Votre abonnement <strong style="color:#0066ff">{{FORMULE}}</strong> sera automatiquement renouvelé dans <strong style="color:#ff9900">2 jours</strong>.
+    </p>
+    
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#111f35;border-radius:12px;border:1px solid #1a2a4a;margin-bottom:24px">
+      <tr>
+        <td style="padding:20px;border-right:1px solid #1a2a4a;text-align:center" width="50%">
+          <p style="margin:0;font-size:12px;color:#6a8cba;text-transform:uppercase;letter-spacing:.05em">Formule</p>
+          <p style="margin:8px 0 0;font-size:18px;font-weight:700;color:#e0e8f0">{{FORMULE}}</p>
+        </td>
+        <td style="padding:20px;text-align:center" width="50%">
+          <p style="margin:0;font-size:12px;color:#6a8cba;text-transform:uppercase;letter-spacing:.05em">Montant</p>
+          <p style="margin:8px 0 0;font-size:18px;font-weight:700;color:#0066ff">{{MONTANT}}</p>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding:16px 20px;border-top:1px solid #1a2a4a;text-align:center">
+          <p style="margin:0;font-size:12px;color:#6a8cba">Prochain prélèvement le <strong style="color:#e0e8f0">{{DATE_PRELEVEMENT}}</strong></p>
+        </td>
+      </tr>
+    </table>
+    
+    <p style="color:#b0c4de;font-size:14px;margin:0 0 24px">
+      Le paiement sera effectué automatiquement via votre carte bancaire enregistrée chez Stripe. Aucune action de votre part n'est nécessaire.
+    </p>
+    
+    <p style="color:#b0c4de;font-size:14px;margin:0 0 24px">
+      Si vous souhaitez modifier ou résilier votre abonnement, vous pouvez le faire depuis votre espace client :
+    </p>
+    
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto">
+      <tr><td style="background:#0066ff;border-radius:8px;padding:14px 28px">
+        <a href="https://maltyshop.vercel.app/espace-client.html" style="color:#ffffff;text-decoration:none;font-weight:600;font-size:14px">Mon espace client →</a>
+      </td></tr>
+    </table>
+  </td></tr>
+  
+  <!-- Footer -->
+  <tr><td style="padding:24px 32px;border-top:1px solid #1a2a4a;text-align:center">
+    <p style="margin:0 0 8px;font-size:12px;color:#6a8cba">
+      Questions ? Répondez à cet email ou contactez-nous à <a href="mailto:maltyz@outlook.fr" style="color:#0066ff">maltyz@outlook.fr</a>
+    </p>
+    <p style="margin:0;font-size:11px;color:#3a5a7a">
+      © 2026 MALTY — Maintenance de sites web professionnels
+    </p>
+  </td></tr>
+  
+</table>
+</td></tr>
+</table>
+</body>
+</html>

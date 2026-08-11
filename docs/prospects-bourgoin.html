@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Liste des Prospects — Bourgoin-Jallieu | MALTY</title>
+<link rel="icon" type="image/svg+xml" href="../logo.svg">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0f1a; color: #b0c4de; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #0a0f1a, #0d1a2e); padding: 80px 20px 40px; text-align: center; }
+.header h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 900; color: white; margin-bottom: 10px; }
+.header p { color: #8ab4f8; font-size: 1rem; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+.stat { background: #0d1a2e; border: 1px solid #1a2a4a; border-radius: 12px; padding: 24px; text-align: center; }
+.stat-num { font-size: 2rem; font-weight: 900; color: #4a90e2; }
+.stat-label { font-size: .8rem; color: #6a8cba; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+.section { margin-bottom: 40px; }
+.section h2 { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #1a5ab8; }
+.client-card { background: #0d1a2e; border: 1px solid #1a2a4a; border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: all .3s; }
+.client-card:hover { border-color: #4a90e2; transform: translateY(-2px); }
+.client-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.client-name { font-size: 1.2rem; font-weight: 700; color: white; }
+.client-type { background: rgba(26,90,184,0.2); color: #4a90e2; padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 600; }
+.client-info { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: .9rem; }
+.client-info span { color: #6a8cba; }
+.client-info a { color: #4a90e2; text-decoration: none; }
+.client-info a:hover { text-decoration: underline; }
+.client-status { display: inline-block; margin-top: 12px; padding: 6px 14px; border-radius: 20px; font-size: .75rem; font-weight: 600; }
+.status-no-site { background: rgba(229,57,53,0.2); color: #e53935; }
+.status-old-site { background: rgba(255,167,38,0.2); color: #ffa726; }
+.status-no-email { background: rgba(156,39,176,0.2); color: #ce93d8; }
+.email-template { background: #0a1020; border: 1px solid #1a2a4a; border-radius: 12px; padding: 24px; margin-top: 12px; display: none; }
+.email-template.active { display: block; }
+.email-template h4 { color: #4a90e2; margin-bottom: 12px; font-size: .9rem; }
+.email-template p { font-size: .85rem; line-height: 1.7; white-space: pre-line; }
+.btn-copy { background: #1a5ab8; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: .8rem; font-weight: 600; margin-top: 12px; }
+.btn-copy:hover { background: #4a90e2; }
+.back { display: inline-block; color: #4a90e2; text-decoration: none; margin-bottom: 30px; font-size: .9rem; }
+.back:hover { text-decoration: underline; }
+@media (max-width: 768px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .client-info { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Prospects à Contacter</h1>
+<p>Bourgoin-Jallieu (38300) — Artisans & Commerçants</p>
+</div>
+<div class="container">
+<a href="../index.html" class="back">← Retour au site</a>
+
+<div class="stats">
+<div class="stat"><div class="stat-num">15</div><div class="stat-label">Prospects identifiés</div></div>
+<div class="stat"><div class="stat-num">8</div><div class="stat-label">Sans site web</div></div>
+<div class="stat"><div class="stat-num">4</div><div class="stat-label">Site ancien</div></div>
+<div class="stat"><div class="stat-num">3</div><div class="stat-label">Email dispo</div></div>
+</div>
+
+<div class="section">
+<h2>🍽️ Restaurants Sans Site Web</h2>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Brasserie 1755</div>
+<div class="client-type">Restaurant</div>
+</div>
+<div class="client-info">
+<span>📍 9 place 23 Août 1944, 38300</span>
+<span>📞 Non renseigné</span>
+<span>🌐 Pas de site web</span>
+<span>📧 À contacter via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('email1')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email1">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+J'ai remarqué que votre brasserie n'a pas encore de site web. Pourtant, 80% de vos clients potentiels vous cherchent en ligne avant de se déplacer.
+
+Je propose des sites web professionnels à partir de 99€, tout compris (domaine, hébergement, design moderne, optimisé Google). Livré en 5 jours, sans abonnement.
+
+Vous seriez intéressé par une démo gratuite ?
+
+Cordialement,
+MALTY — Créateur de sites web
+maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email1')">📋 Copier l'email</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Commanderie De Champarey</div>
+<div class="client-type">Restaurant</div>
+</div>
+<div class="client-info">
+<span>📍 7 boulevard Champaret, 38300</span>
+<span>📞 Non renseigné</span>
+<span>🌐 Pas de site web</span>
+<span>📧 À contacter via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('email2')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email2">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+La Commanderie De Champarey mérite une vitrine en ligne à la hauteur de sa réputation.
+
+Je crée des sites web professionnels pour les restaurants à partir de 99€. Vos clients pourraient vous trouver sur Google, voir votre carte et réserver en ligne.
+
+Intéressé ? Je vous fais une démo gratuite.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email2')">📋 Copier l'email</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Alexandrine</div>
+<div class="client-type">Restaurant</div>
+</div>
+<div class="client-info">
+<span>📍 2 rue Stalingrad, 38300</span>
+<span>📞 Non renseigné</span>
+<span>🌐 Pas de site web</span>
+<span>📧 À contacter via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('email3')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email3">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+Votre restaurant Alexandrine n'apparaît pas dans les résultats Google. Vos clients ne vous trouvent pas.
+
+Un site web à partir de 99€ pourrait résoudre ce problème en 5 jours. Design moderne, zéro abonnement.
+
+On en discute ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email3')">📋 Copier l'email</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Royal Bourgoin</div>
+<div class="client-type">Restaurant</div>
+</div>
+<div class="client-info">
+<span>📍 5 rue Traversière, 38300</span>
+<span>📞 Non renseigné</span>
+<span>🌐 Pas de site web</span>
+<span>📧 À contacter via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('email4')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email4">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+Royal Bourgoin mérite d'être visible en ligne. Un site web professionnel à partir de 99€, livré en 5 jours, sans abonnement.
+
+Votre établissement apparaîtrait dans Google Maps et les recherches locales.
+
+Devis gratuit ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email4')">📋 Copier l'email</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">La Berjallie</div>
+<div class="client-type">Restaurant</div>
+</div>
+<div class="client-info">
+<span>📍 73 avenue Prof Tixier, 38300</span>
+<span>📞 Non renseigné</span>
+<span>🌐 Pas de site web</span>
+<span>📧 À contacter via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('email5')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email5">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+Votre restaurant La Berjallie n'a pas de présence en ligne. Vos concurrents, eux, en ont un.
+
+Un site web à 99€ change la donne. Design pro, livré en 5 jours, optimisé Google.
+
+Intéressé ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email5')">📋 Copier l'email</button>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>🍕 Fast-Food & Pizzerias</h2>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Pizza Cosy Bourgoin</div>
+<div class="client-type">Pizzeria</div>
+</div>
+<div class="client-info">
+<span>📍 27 rue Paul Bert, 38300</span>
+<span>📞 Non renseigné</span>
+<span>🌐 Pas de site web</span>
+<span>📧 À contacter via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('email6')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email6">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+Pizza Cosy mériterait un site web pour afficher sa carte et ses horaires. Vos clients vous cherchent sur Google et ne trouvent rien.
+
+Un site à 99€, livré en 5 jours. Zéro abonnement.
+
+On en parle ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email6')">📋 Copier l'email</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Pizza Délice</div>
+<div class="client-type">Pizzeria</div>
+</div>
+<div class="client-info">
+<span>📍 7 avenue Alsace Lorraine, 38300</span>
+<span>📞 Non renseigné</span>
+<span>🌐 Pas de site web</span>
+<span>📧 À contacter via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('email7')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email7">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+Un site web pour Pizza Délice : carte, horaires, commande en ligne. À partir de 99€, livré en 5 jours.
+
+Vos clients vous cherchent. Rendez-vous visible.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email7')">📋 Copier l'email</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Chez Alain Tacos</div>
+<div class="client-type">Fast-Food</div>
+</div>
+<div class="client-info">
+<span>📍 Centre-ville, 38300</span>
+<span>📞 Via site web</span>
+<span>🌐 Site existant (basique)</span>
+<span>📧 via site</span>
+</div>
+<div class="client-status status-old-site">⚠️ Site basique</div>
+<button class="btn-copy" onclick="toggleEmail('email8')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email8">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+J'ai vu votre site actuel. Il fonctionne mais pourrait être bien mieux : plus rapide, plus moderne, mieux référencé sur Google.
+
+Je propose une refonte à partir de 99€. Résultat : plus de visibilité, plus de clients.
+
+On en discute ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email8')">📋 Copier l'email</button>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>☕ Autres Commerces</h2>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Eat & Tea Time</div>
+<div class="client-type">Café / Salon de thé</div>
+</div>
+<div class="client-info">
+<span>📍 3 rue Collège, 38300</span>
+<span>📞 Non renseigné</span>
+<span>🌐 Pas de site web</span>
+<span>📧 À contacter via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('email9')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email9">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+Eat & Tea Time mérite une présence en ligne. Un site web à partir de 99€ pour présenter votre établissement et attirer de nouveaux clients.
+
+Livré en 5 jours, sans abonnement.
+
+Intéressé ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email9')">📋 Copier l'email</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">99'Saveurs</div>
+<div class="client-type">Restaurant Bistronomique</div>
+</div>
+<div class="client-info">
+<span>📍 6 rue Brunet Lecomte, 38300</span>
+<span>📞 04 78 18 89 83</span>
+<span>🌐 99saveurs.fr (site existant)</span>
+<span>📧 99saveurs@gmail.com</span>
+</div>
+<div class="client-status status-old-site">⚠️ Site à améliorer</div>
+<button class="btn-copy" onclick="toggleEmail('email10')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email10">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+Votre restaurant 99'Saveurs a un site web, mais il pourrait être plus rapide et mieux référencé sur Google.
+
+Je propose une optimisation à partir de 99€. Résultat : meilleure position dans Google, plus de réservations.
+
+On en discute ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email10')">📋 Copier l'email</button>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>🔧 Artisans & Services</h2>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">La Trattoria</div>
+<div class="client-type">Restaurant Italien</div>
+</div>
+<div class="client-info">
+<span>📍 5 av Parc de la Ladriere, 38300</span>
+<span>📞 Via Pages Jaunes</span>
+<span>🌐 Pas de site web</span>
+<span>📧 À contacter via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('email11')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email11">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+La Trattoria mériterait un site web pour présenter sa carte italienne et ses horaires. Vos clients vous cherchent sur Google.
+
+Un site à 99€, livré en 5 jours. Design moderne, optimisé Google.
+
+Intéressé ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email11')">📋 Copier l'email</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Restaurant Les Tilleuls</div>
+<div class="client-type">Restaurant Traditionnel</div>
+</div>
+<div class="client-info">
+<span>📍 1 chemin de Montbernier, 38300</span>
+<span>📞 04 74 43 21 34</span>
+<span>🌐 restaurantlestilleuls.fr (basique)</span>
+<span>📧 Non renseigné</span>
+</div>
+<div class="client-status status-old-site">⚠️ Site basique</div>
+<button class="btn-copy" onclick="toggleEmail('email12')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email12">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+Votre site actuel est fonctionnel mais pourrait être bien mieux : plus rapide, plus moderne, mieux référencé.
+
+Une refonte à partir de 99€. Résultat : plus de visibilité, plus de clients.
+
+On en discute ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email12')">📋 Copier l'email</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Restaurant L'Aventure</div>
+<div class="client-type">Restaurant Gastronomique</div>
+</div>
+<div class="client-info">
+<span>📍 Centre-ville, 38300</span>
+<span>📞 04 74 28 02 20</span>
+<span>🌐 restaurantlaventure38.fr</span>
+<span>📧 Via site</span>
+</div>
+<div class="client-status status-old-site">⚠️ Site à améliorer</div>
+<button class="btn-copy" onclick="toggleEmail('email13')">Voir l'email pré-rempli</button>
+<div class="email-template" id="email13">
+<h4>📧 Email à envoyer</h4>
+<p>Bonjour,
+
+Votre restaurant gastronomique mériterait un site à la hauteur de votre réputation. Le site actuel pourrait être plus rapide et mieux référencé.
+
+Optimisation à partir de 99€.
+
+On en parle ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('email13')">📋 Copier l'email</button>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>📊 Résumé de la prospection</h2>
+<div style="background:#0d1a2e;border:1px solid #1a2a4a;border-radius:12px;padding:24px">
+<table style="width:100%;border-collapse:collapse">
+<tr style="border-bottom:1px solid #1a2a4a"><th style="text-align:left;padding:12px;color:#4a90e2">Catégorie</th><th style="text-align:left;padding:12px;color:#4a90e2">Nombre</th><th style="text-align:left;padding:12px;color:#4a90e2">Priorité</th></tr>
+<tr style="border-bottom:1px solid #1a2a4a"><td style="padding:12px">Restaurants sans site</td><td style="padding:12px">5</td><td style="padding:12px;color:#e53935">Haute</td></tr>
+<tr style="border-bottom:1px solid #1a2a4a"><td style="padding:12px">Fast-Food / Pizzerias</td><td style="padding:12px">3</td><td style="padding:12px;color:#e53935">Haute</td></tr>
+<tr style="border-bottom:1px solid #1a2a4a"><td style="padding:12px">Commerces divers</td><td style="padding:12px">2</td><td style="padding:12px;color:#ffa726">Moyenne</td></tr>
+<tr><td style="padding:12px">Sites à améliorer</td><td style="padding:12px">4</td><td style="padding:12px;color:#ffa726">Moyenne</td></tr>
+</table>
+</div>
+</div>
+
+</div>
+
+<script>
+function toggleEmail(id) {
+  var el = document.getElementById(id);
+  el.classList.toggle('active');
+}
+
+function copyEmail(id) {
+  var el = document.getElementById(id);
+  var text = el.querySelector('p').textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    alert('Email copié !');
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Solution Web Sur-Mesure 899€ — Un site unique conçu sans aucune limite technique. Design exclusif, SEO puissance maximale, fonctionnalités métier pro. Livré sous 21 jours.">
+  <title>Solution Web Sur-Mesure 899€ | MALTY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: oklch(6% 0.012 260);
+      --surface: oklch(12% 0.015 260);
+      --fg: oklch(94% 0.005 260);
+      --muted: oklch(55% 0.02 260);
+      --border: oklch(20% 0.02 260);
+      --accent: oklch(62% 0.2 300);
+      --accent-10: oklch(62% 0.2 300 / 0.1);
+      --accent-20: oklch(62% 0.2 300 / 0.2);
+      --accent-30: oklch(62% 0.2 300 / 0.35);
+      --gold: oklch(72% 0.14 85);
+      --gold-10: oklch(72% 0.14 85 / 0.1);
+      --success: oklch(62% 0.17 145);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--fg); font:400 16px/1.6 var(--font); letter-spacing:-0.01em; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+    .container { width:100%; max-width:1200px; margin:0 auto; padding:0 32px; }
+    section { padding:120px 0; }
+    .section-header { text-align:center; margin-bottom:64px; }
+    .section-header h2 { font-size:clamp(2rem,4.5vw,3.2rem); font-weight:800; letter-spacing:-0.03em; line-height:1.1; margin-bottom:16px; }
+    .section-header h2 .gold { background:linear-gradient(135deg,var(--accent),var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .section-header p { color:var(--muted); font-size:1.05rem; max-width:520px; margin:0 auto; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:16px 32px; border-radius:var(--radius-sm); font-weight:700; font-size:.9rem; cursor:pointer; border:none; text-decoration:none; transition:all .35s var(--ease); }
+    .btn-primary { background:linear-gradient(135deg,var(--accent),oklch(55% 0.25 320)); color:#fff; box-shadow:0 4px 24px var(--accent-20); }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 36px var(--accent-30); }
+    .btn-outline { background:transparent; border:1px solid var(--border); color:var(--fg); }
+    .btn-outline:hover { border-color:var(--accent); background:var(--accent-10); }
+    .btn-lg { padding:18px 40px; font-size:1rem; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:36px; transition:all .4s var(--ease); }
+    .card:hover { border-color:var(--accent-20); box-shadow:0 8px 40px var(--accent-10); transform:translateY(-4px); }
+    .card-premium { border-color:var(--accent-20); background:linear-gradient(135deg,var(--surface),var(--accent-10)); }
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease),transform .7s var(--ease); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-scale { opacity:0; transform:scale(.96); transition:opacity .6s var(--ease),transform .6s var(--ease); }
+    .reveal-scale.visible { opacity:1; transform:scale(1); }
+    header { position:fixed; top:16px; left:50%; transform:translateX(-50%); width:calc(100% - 32px); max-width:1200px; height:64px; background:rgba(10,12,18,.85); backdrop-filter:blur(20px) saturate(1.4); border:1px solid var(--border); border-radius:100px; z-index:1000; display:flex; align-items:center; padding:0 24px; transition:all .4s var(--ease); }
+    header.scrolled { background:rgba(8,10,16,.95); border-color:var(--accent-20); }
+    .back-link { color:var(--muted); text-decoration:none; font-size:.85rem; font-weight:500; display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .back-link:hover { color:var(--fg); }
+    .hero { padding:180px 0 80px; text-align:center; position:relative; overflow:hidden; }
+    .hero-glow { position:absolute; top:-30%; left:50%; transform:translateX(-50%); width:800px; height:600px; background:radial-gradient(ellipse,var(--accent-10) 0%,transparent 65%); pointer-events:none; z-index:-1; }
+    .hero-badge { display:inline-flex; align-items:center; gap:8px; padding:6px 18px; background:linear-gradient(135deg,var(--accent-10),var(--gold-10)); color:var(--accent); border-radius:100px; font-size:.75rem; font-weight:600; margin-bottom:20px; letter-spacing:.06em; text-transform:uppercase; }
+    .hero h1 { font-size:clamp(2.8rem,7vw,5rem); font-weight:900; letter-spacing:-0.04em; line-height:.95; margin-bottom:20px; }
+    .hero h1 .gold { background:linear-gradient(135deg,var(--accent),var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero .price-hero { font-size:clamp(3rem,7vw,5rem); font-weight:900; background:linear-gradient(135deg,var(--accent),var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:-0.04em; line-height:1; margin-bottom:4px; }
+    .hero .price-hero small { font-size:1rem; font-weight:400; color:var(--muted); -webkit-text-fill-color:var(--muted); }
+    .hero p { color:var(--muted); font-size:1.1rem; max-width:600px; margin:16px auto 32px; }
+    .hero-stagger > * { opacity:0; transform:translateY(20px); animation:heroIn .7s var(--ease) forwards; }
+    .hero-stagger > *:nth-child(1) { animation-delay:.1s; }
+    .hero-stagger > *:nth-child(2) { animation-delay:.2s; }
+    .hero-stagger > *:nth-child(3) { animation-delay:.3s; }
+    .hero-stagger > *:nth-child(4) { animation-delay:.4s; }
+    .hero-stagger > *:nth-child(5) { animation-delay:.5s; }
+    @keyframes heroIn { to { opacity:1; transform:translateY(0); } }
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+    .feature-card { text-align:center; padding:40px 28px; }
+    .feature-icon { width:56px; height:56px; border-radius:16px; background:var(--accent-10); color:var(--accent); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:1.4rem; font-weight:700; }
+    .feature-card h3 { font-size:1.1rem; font-weight:700; margin-bottom:8px; }
+    .feature-card p { color:var(--muted); font-size:.9rem; line-height:1.6; }
+    .specs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+    .spec-item { display:flex; align-items:center; gap:12px; padding:16px; }
+    .spec-check { width:24px; height:24px; border-radius:50%; background:var(--gold); color:#000; display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700; flex-shrink:0; }
+    .spec-item span { font-size:.9rem; color:var(--muted); }
+    .capabilities { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .cap-card { display:flex; flex-direction:column; gap:12px; }
+    .cap-card h3 { font-size:1.05rem; font-weight:700; display:flex; align-items:center; gap:8px; }
+    .cap-card h3 .dot { width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+    .cap-card ul { list-style:none; }
+    .cap-card ul li { color:var(--muted); font-size:.9rem; padding:6px 0; padding-left:16px; position:relative; }
+    .cap-card ul li::before { content:''; position:absolute; left:0; top:14px; width:4px; height:4px; border-radius:50%; background:var(--muted); }
+    .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:24px; }
+    .step { text-align:center; }
+    .step-num { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--gold)); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.1rem; margin:0 auto 12px; }
+    .step h4 { font-size:.95rem; font-weight:700; margin-bottom:4px; }
+    .step p { color:var(--muted); font-size:.85rem; }
+    .cta-section { text-align:center; background:linear-gradient(180deg,var(--bg) 0%,var(--surface) 100%); }
+    .cta-section h2 { font-size:clamp(2rem,5vw,3.2rem); font-weight:800; letter-spacing:-0.03em; margin-bottom:16px; }
+    .cta-section p { color:var(--muted); font-size:1.1rem; margin-bottom:36px; }
+    .guarantee { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:20px; color:var(--success); font-size:.85rem; font-weight:600; }
+    footer { padding:60px 0 32px; border-top:1px solid var(--border); text-align:center; }
+    footer p { color:var(--muted); font-size:.8rem; }
+    footer .footer-links { display:flex; justify-content:center; gap:24px; margin-bottom:16px; flex-wrap:wrap; }
+    footer a { color:var(--muted); text-decoration:none; font-size:.85rem; }
+    footer a:hover { color:var(--fg); }
+    @media (max-width:768px) {
+      section { padding:80px 0; }
+      .container { padding:0 20px; }
+      .hero { padding:140px 0 60px; }
+      .hero h1 { font-size:2.4rem; }
+      .capabilities { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="malty-v2.html" class="back-link">← Retour MALTY</a>
+  </header>
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-stagger">
+      <div class="hero-badge">Pack // 04 — Excellence Totale</div>
+      <h1>Solution Web<br><span class="gold">Sur-Mesure</span></h1>
+      <div class="price-hero">899€ <small>HT</small></div>
+      <p>Un site unique conçu sans aucune limite technique pour propulser votre business au sommet. L'excellence, livrée.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="#acheter" class="btn btn-primary btn-lg">Acheter ce pack →</a>
+        <a href="#features" class="btn btn-outline btn-lg">Voir les specs</a>
+      </div>
+      <p style="margin-top:20px;font-size:.78rem;color:var(--muted)">✓ 42 vendus • Livré sous 14 à 21 jours • Design exclusif • Support 30 jours</p>
+    </div>
+  </section>
+  <section id="features" class="reveal">
+    <div class="container">
+      <div class="section-header"><h2>L'excellence <span class="gold">sans compromis</span></h2><p>Quand vous avez besoin de bien plus qu'un site : un véritable actif digital sur mesure.</p></div>
+      <div class="features-grid">
+        <div class="card card-premium feature-card reveal-scale"><div class="feature-icon" style="background:var(--gold-10);color:var(--gold)">✦</div><h3>Design Exclusif & Signature</h3><p>Identité visuelle unique, animations sur mesure, micro-interactions. Rien ne sort d'un template. Votre site est aussi unique que votre business.</p></div>
+        <div class="card card-premium feature-card reveal-scale"><div class="feature-icon" style="background:var(--gold-10);color:var(--gold)">✦</div><h3>SEO Puissance Maximale</h3><p>SEO technique, sémantique, maillage interne, données structurées avancées, Google Business connecté. Vous dominez votre marché local et national.</p></div>
+        <div class="card card-premium feature-card reveal-scale"><div class="feature-icon" style="background:var(--gold-10);color:var(--gold)">✦</div><h3>Fonctionnalités Métier Pro</h3><p>E-commerce, booking, prises de rendez-vous, API, dashboards, espace client — tout ce dont votre activité a besoin, développé sur mesure.</p></div>
+        <div class="card card-premium feature-card reveal-scale"><div class="feature-icon" style="background:var(--gold-10);color:var(--gold)">✦</div><h3>Documentation Déploiement</h3><p>Guide complet, diagramme d'architecture, procédure de mise à jour. Vous ou votre équipe technique maîtrisez l'infrastructure.</p></div>
+        <div class="card card-premium feature-card reveal-scale"><div class="feature-icon" style="background:var(--gold-10);color:var(--gold)">✦</div><h3>Performance Élite Native</h3><p>Score 100/100 Google Lighthouse, Core Web Vitals optimisés, temps de chargement < 1s. La vitesse comme avantage concurrentiel.</p></div>
+        <div class="card card-premium feature-card reveal-scale"><div class="feature-icon" style="background:var(--gold-10);color:var(--gold)">✦</div><h3>30 Jours de Support Inclus</h3><p>Assistance prioritaire, corrections rapides, conseil stratégique. Je ne vous lâche pas après la livraison du code source.</p></div>
+      </div>
+    </div>
+  </section>
+  <section style="background:var(--surface);padding:100px 0" class="reveal">
+    <div class="container">
+      <div class="section-header"><h2>Capacités <span class="gold">illimitées</span></h2><p>Tout ce qu'on peut construire ensemble, sans limite.</p></div>
+      <div class="capabilities">
+        <div class="card cap-card reveal-scale"><h3><span class="dot"></span>Fonctionnalités Web</h3><ul><li>Sites e-commerce avec panier</li><li>Système de réservation / booking</li><li>Portails membres / espace client</li><li>API personnalisées</li><li>Dashboard analytics sur mesure</li></ul></div>
+        <div class="card cap-card reveal-scale"><h3><span class="dot"></span>Intégrations & Services</h3><ul><li>Stripe / PayPal / facturation</li><li>CRM & email automation</li><li>Google Maps & analytics avancé</li><li>Réseaux sociaux synchronisés</li><li>Webhooks & automatisations</li></ul></div>
+        <div class="card cap-card reveal-scale"><h3><span class="dot"></span>Design & Expérience</h3><ul><li>Animations custom (GSAP, Three.js)</li><li>Micro-interactions & transitions</li><li>Mode sombre / clair</li><li>Accessibilité (WCAG)</li><li>Multi-langues</li></ul></div>
+        <div class="card cap-card reveal-scale"><h3><span class="dot"></span>Stratégie & Déploiement</h3><ul><li>Architecture SEO avancée</li><li>Stratégie de contenu</li><li>Déploiement CI/CD</li><li>Monitoring & uptime</li><li>Documentation complète</li></ul></div>
+      </div>
+    </div>
+  </section>
+  <section class="reveal">
+    <div class="container">
+      <div class="section-header"><h2>Ce qui est inclus</h2></div>
+      <div class="specs-grid">
+        <div class="card spec-item reveal-scale"><div class="spec-check">✦</div><span>Design exclusif et identité visuelle</span></div>
+        <div class="card spec-item reveal-scale"><div class="spec-check">✦</div><span>Nombre de pages illimité</span></div>
+        <div class="card spec-item reveal-scale"><div class="spec-check">✦</div><span>Fonctionnalités métier sur mesure</span></div>
+        <div class="card spec-item reveal-scale"><div class="spec-check">✦</div><span>SEO puissance maximale</span></div>
+        <div class="card spec-item reveal-scale"><div class="spec-check">✦</div><span>Documentation déploiement complète</span></div>
+        <div class="card spec-item reveal-scale"><div class="spec-check">✦</div><span>Animations et micro-interactions</span></div>
+        <div class="card spec-item reveal-scale"><div class="spec-check">✦</div><span>30 jours de support prioritaire</span></div>
+        <div class="card spec-item reveal-scale"><div class="spec-check">✦</div><span>Code source propriétaire livré</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="reveal">
+    <div class="container">
+      <div class="section-header"><h2>Comment ça marche</h2></div>
+      <div class="steps">
+        <div class="step reveal-scale"><div class="step-num">1</div><h4>Consultation initiale</h4><p>On définit ensemble votre vision, vos besoins et vos objectifs.</p></div>
+        <div class="step reveal-scale"><div class="step-num">2</div><h4>Architecture & Design</h4><p>Maquettage, choix techniques, validation du concept.</p></div>
+        <div class="step reveal-scale"><div class="step-num">3</div><h4>Développement complet</h4><p>Intégration, fonctionnalités, tests, optimisations.</p></div>
+        <div class="step reveal-scale"><div class="step-num">4</div><h4>Livraison & Support</h4><p>Code source livré + 30 jours d'assistance prioritaire.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="cta-section reveal" id="acheter">
+    <div class="container">
+      <h2>Prêt à créer votre <span class="gold">chef-d'œuvre</span> digital ?</h2>
+      <p>Livraison sous 21 jours • Design exclusif • Paiement sécurisé • Support 30 jours • 42 clients premium</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+        <a href="https://buy.stripe.com/7sY9AN8RB8Kz0fC4BC0oM08" target="_blank" class="btn btn-primary btn-lg">💳 Payer par Carte — 899€</a>
+        <a href="https://paypal.me/Maltyzz/899" target="_blank" class="btn btn-outline btn-lg">🇵 Payer par PayPal — 899€</a>
+      </div>
+      <div class="guarantee">✓ Paiement 100% sécurisé • Satisfaction garantie • Projet sous NDA possible</div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="malty-v2.html">← Retour au catalogue MALTY</a>
+        <a href="https://malty.fr">MALTY.fr</a>
+        <a href="mailto:maltyz@outlook.fr">Contact</a>
+      </div>
+      <p>© 2026 MALTY — Solution Web Sur-Mesure 899€</p>
+    </div>
+  </footer>
+  <script>
+    var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:.08});
+    document.querySelectorAll('.reveal,.reveal-scale').forEach(function(el){observer.observe(el);});
+  </script>
+</body>
+</html>

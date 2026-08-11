@@ -1,0 +1,9 @@
+{
+  "name": "malty-api",
+  "version": "1.0.0",
+  "description": "API serverless pour MALTY — Stripe Checkout, Webhooks & Email Rappels",
+  "dependencies": {
+    "nodemailer": "^6.9.0",
+    "stripe": "^14.0.0"
+  }
+}

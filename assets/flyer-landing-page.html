@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flyer Pack Landing Page | MALTY</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0f1a; font-family: 'Segoe UI', Arial, sans-serif; }
+
+/* A4 Portrait */
+.flyer {
+  width: 794px;
+  height: 1123px;
+  background: linear-gradient(180deg, #0a0f1a 0%, #0d1a2e 50%, #0a0f1a 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glow */
+.glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0,102,255,0.15) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  pointer-events: none;
+}
+
+.glow2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0,200,255,0.1) 0%, transparent 70%);
+  bottom: -50px;
+  left: -50px;
+  pointer-events: none;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.badge {
+  background: rgba(0,102,255,0.2);
+  border: 1px solid rgba(0,102,255,0.4);
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a9eff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.logo svg {
+  height: 48px;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 52px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  background: linear-gradient(180deg, #fff 50%, #4a9eff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: #8ab4f8;
+  margin-bottom: 32px;
+  line-height: 1.4;
+}
+
+/* Price */
+.price-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.price-old {
+  font-size: 24px;
+  color: #666;
+  text-decoration: line-through;
+}
+
+.price-new {
+  font-size: 72px;
+  font-weight: 900;
+  color: #00cc66;
+  letter-spacing: -3px;
+}
+
+/* Features */
+.features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  color: #b0c4de;
+}
+
+.feature-icon {
+  width: 28px;
+  height: 28px;
+  background: rgba(0,204,102,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00cc66;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* For who */
+.for-who {
+  background: rgba(0,102,255,0.1);
+  border: 1px solid rgba(0,102,255,0.2);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.for-who h3 {
+  font-size: 14px;
+  color: #4a9eff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.for-who p {
+  font-size: 15px;
+  color: #b0c4de;
+  line-height: 1.6;
+}
+
+/* Steps */
+.steps {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.step {
+  flex: 1;
+  text-align: center;
+}
+
+.step-num {
+  width: 32px;
+  height: 32px;
+  background: #0066ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 auto 8px;
+}
+
+.step p {
+  font-size: 13px;
+  color: #b0c4de;
+}
+
+/* CTA */
+.cta {
+  background: linear-gradient(135deg, #0066ff 0%, #0055dd 100%);
+  color: #fff;
+  padding: 18px 36px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 700;
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,102,255,0.4);
+  margin-bottom: 24px;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  position: relative;
+  z-index: 2;
+}
+
+.footer-left {
+  font-size: 14px;
+  color: #666;
+}
+
+.footer-right {
+  text-align: right;
+}
+
+.footer-right a {
+  display: block;
+  color: #4a9eff;
+  text-decoration: none;
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="flyer">
+  <div class="glow"></div>
+  <div class="glow2"></div>
+  
+  <div class="header">
+    <div class="badge">Pack #01</div>
+    <div class="logo">
+      <svg viewBox="0 0 100 90" height="48"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#bae6fd"/><stop offset="20%" stop-color="#7dd3fc"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="80%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0284c7"/></linearGradient><linearGradient id="lg2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="20%" stop-color="#0ea5e9"/><stop offset="50%" stop-color="#0284c7"/><stop offset="80%" stop-color="#0369a1"/><stop offset="100%" stop-color="#075985"/></linearGradient><linearGradient id="lg3" x1="50%" y1="0%" x2="50%" y2="100%"><stop offset="0%" stop-color="#0c4a6e"/><stop offset="40%" stop-color="#082f49"/><stop offset="100%" stop-color="#0c1929"/></linearGradient><linearGradient id="lg4" x1="0%" y1="0%" x2="60%" y2="100%"><stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.7"/><stop offset="100%" stop-color="#bae6fd" stop-opacity="0.1"/></linearGradient></defs><polygon points="8,82 8,14 28,6 50,36 28,48 8,58" fill="url(#lg)"/><polygon points="8,14 28,6 33,16 13,24" fill="url(#lg4)"/><polygon points="92,82 92,14 72,6 50,36 72,48 92,58" fill="url(#lg2)"/><polygon points="92,14 72,6 67,16 87,24" fill="url(#lg4)" opacity="0.7"/><polygon points="28,48 50,36 72,48 50,72" fill="url(#lg3)"/><line x1="8" y1="14" x2="28" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.5"/><line x1="92" y1="14" x2="72" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.4"/><line x1="28" y1="6" x2="50" y2="36" stroke="#bae6fd" stroke-width="1" opacity="0.3"/><line x1="72" y1="6" x2="50" y2="36" stroke="#bae6fd" stroke-width="1" opacity="0.25"/></svg>
+    </div>
+  </div>
+  
+  <div class="main">
+    <div class="icon">🚀</div>
+    <h1 class="title">Landing Page<br>Vendeuse</h1>
+    <p class="subtitle">Une page unique qui transforme<br>vos visiteurs en clients</p>
+    
+    <div class="price-box">
+      <span class="price-old">299€</span>
+      <span class="price-new">99€</span>
+    </div>
+    
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">✓</div>
+        <span>Design moderne</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✓</div>
+        <span>Optimisée Google</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✓</div>
+        <span>Compatible mobile</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✓</div>
+        <span>Formulaire intégré</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✓</div>
+        <span>Livrée en 5 jours</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✓</div>
+        <span>Code source inclus</span>
+      </div>
+    </div>
+    
+    <div class="for-who">
+      <h3>Pour qui ?</h3>
+      <p>Artisans • Commerçants • Professionnels • Entrepreneurs</p>
+    </div>
+    
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <p>Décrivez votre projet</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <p>Je crée votre page</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <p>Vous recevez le code</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <p>Mise en ligne</p>
+      </div>
+    </div>
+    
+    <a href="#" class="cta">Commander maintenant →</a>
+  </div>
+  
+  <div class="footer">
+    <div class="footer-left">
+      <span>maltyshop.vercel.app</span>
+    </div>
+    <div class="footer-right">
+      <a href="mailto:maltyz@outlook.fr">maltyz@outlook.fr</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5a6a7a"/>
+      <stop offset="50%" stop-color="#7a8a9a"/>
+      <stop offset="100%" stop-color="#4a5a6a"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="50%" y1="30%" x2="50%" y2="70%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#0088cc" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="faceTopLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00ccff"/>
+      <stop offset="100%" stop-color="#0088dd"/>
+    </linearGradient>
+    <linearGradient id="faceTopRight" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00bbff"/>
+      <stop offset="100%" stop-color="#0066cc"/>
+    </linearGradient>
+    <linearGradient id="faceMidLeft" x1="0%" y1="0%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#00aaff"/>
+      <stop offset="100%" stop-color="#0077ee"/>
+    </linearGradient>
+    <linearGradient id="faceMidRight" x1="100%" y1="0%" x2="0%" y2="50%">
+      <stop offset="0%" stop-color="#0099ff"/>
+      <stop offset="100%" stop-color="#0055cc"/>
+    </linearGradient>
+    <linearGradient id="faceBottom" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#004488"/>
+      <stop offset="100%" stop-color="#001133"/>
+    </linearGradient>
+    <linearGradient id="faceLeftLeg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0099ee"/>
+      <stop offset="100%" stop-color="#0066aa"/>
+    </linearGradient>
+    <linearGradient id="faceRightLeg" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0088dd"/>
+      <stop offset="100%" stop-color="#004488"/>
+    </linearGradient>
+    <linearGradient id="edgeLight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#66ddff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#00aaff" stop-opacity="0.2"/>
+    </linearGradient>
+    <filter id="softglow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="innerShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+      <feComposite in="SourceGraphic" in2="offset" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="1000" fill="url(#bg)"/>
+
+  <!-- Blue glow behind M -->
+  <ellipse cx="400" cy="450" rx="250" ry="300" fill="url(#glow)" filter="url(#softglow)"/>
+
+  <!-- M Logo Group -->
+  <g transform="translate(400, 420)" filter="url(#softglow)">
+    
+    <!-- Left vertical leg -->
+    <polygon points="-160,180 -160,-180 -60,-220 -60,180" fill="url(#faceLeftLeg)"/>
+    
+    <!-- Right vertical leg -->
+    <polygon points="160,180 160,-180 60,-220 60,180" fill="url(#faceRightLeg)"/>
+    
+    <!-- Left top face -->
+    <polygon points="-160,-180 -60,-220 0,-100 -80,-60" fill="url(#faceTopLeft)"/>
+    
+    <!-- Right top face -->
+    <polygon points="160,-180 60,-220 0,-100 80,-60" fill="url(#faceTopRight)"/>
+    
+    <!-- Center V face (dark) -->
+    <polygon points="-80,-60 0,-100 80,-60 0,40" fill="url(#faceBottom)"/>
+    
+    <!-- Left mid face -->
+    <polygon points="-160,-180 -80,-60 -60,20 -160,60" fill="url(#faceMidLeft)"/>
+    
+    <!-- Right mid face -->
+    <polygon points="160,-180 80,-60 60,20 160,60" fill="url(#faceMidRight)"/>
+    
+    <!-- Top edge highlight left -->
+    <line x1="-160" y1="-180" x2="-60" y2="-220" stroke="#88eeff" stroke-width="2" opacity="0.7"/>
+    
+    <!-- Top edge highlight right -->
+    <line x1="160" y1="-180" x2="60" y2="-220" stroke="#88eeff" stroke-width="2" opacity="0.5"/>
+    
+    <!-- Inner V edge highlight -->
+    <line x1="-60" y1="-220" x2="0" y2="-100" stroke="#aaeeff" stroke-width="1.5" opacity="0.4"/>
+    <line x1="60" y1="-220" x2="0" y2="-100" stroke="#aaeeff" stroke-width="1.5" opacity="0.3"/>
+    
+    <!-- Left outer edge -->
+    <line x1="-160" y1="-180" x2="-160" y2="180" stroke="#44aadd" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Right outer edge -->
+    <line x1="160" y1="-180" x2="160" y2="180" stroke="#44aadd" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Bottom reflection -->
+    <ellipse cx="0" cy="200" rx="120" ry="15" fill="#00aaff" opacity="0.15"/>
+    
+  </g>
+</svg>

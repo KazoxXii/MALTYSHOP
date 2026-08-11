@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="description" content="Connectez-vous à votre espace MALTY.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0a0e15">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Connexion — MALTY</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#06070a;--surface:#0e1016;--surface2:#14161e;--fg:#e8eaf0;--muted:#8b93a3;--accent:#2563eb;--accent2:#1d4ed8;--accent-10:rgba(37,99,235,.12);--accent-20:rgba(37,99,235,.2);--success:#16a34a;--danger:#ef4444;--border:#1e2230;--radius:16px;--radius-sm:10px;--font:'Inter',sans-serif;--ease:cubic-bezier(0.16,1,0.3,1)}
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+    body{background:var(--bg);color:var(--fg);font-family:var(--font);min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:visible}
+
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:48px 40px;max-width:440px;width:100%;position:relative;z-index:1;box-shadow:0 24px 80px rgba(0,0,0,.4)}
+    .logo-center{text-align:center;margin-bottom:32px}
+    .logo-center svg{height:56px;width:auto}
+    .logo-center h1{font-size:1.5rem;font-weight:800;margin-top:12px;letter-spacing:-0.02em}
+    .logo-center p{color:var(--muted);font-size:.85rem;margin-top:4px}
+
+    .form-group{margin-bottom:20px}
+    .form-group label{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+    .form-group input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg);font-family:var(--font);font-size:1rem;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+    .form-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10)}
+    .form-group input::placeholder{color:var(--muted);opacity:.5}
+
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px 24px;border-radius:var(--radius-sm);font-weight:700;font-size:1rem;cursor:pointer;border:none;transition:all .2s;font-family:var(--font);-webkit-appearance:none}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+    .btn-primary:active{transform:scale(.98)}
+    .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+    .error-msg{background:rgba(255,51,51,.1);border:1px solid rgba(255,51,51,.3);border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:.85rem;color:var(--danger);display:none}
+
+    .divider{text-align:center;margin:24px 0;position:relative;color:var(--muted);font-size:.8rem}
+    .divider::before,.divider::after{content:'';position:absolute;top:50%;width:calc(50% - 60px);height:1px;background:var(--border)}
+    .divider::before{left:0}
+    .divider::after{right:0}
+
+    .signup-link{text-align:center;margin-top:24px;font-size:.85rem;color:var(--muted)}
+    .signup-link a{color:var(--accent);text-decoration:none;font-weight:600;transition:color .2s}
+
+    .guest-link{text-align:center;margin-top:12px}
+    .guest-link a{color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .2s}
+
+    @media(max-width:480px){
+      body{align-items:flex-start;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+      body::before{display:none}
+      .card{border:none;border-radius:0;padding:24px 20px;margin:0;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center}
+      .logo-center{margin-bottom:28px}
+      .logo-center svg{height:48px}
+      .logo-center h1{font-size:1.35rem}
+      .form-group{margin-bottom:16px}
+      .form-group label{font-size:.7rem;margin-bottom:6px}
+      .form-group input{padding:16px;font-size:1rem;border-radius:14px}
+      .btn{padding:18px;font-size:1rem;border-radius:14px}
+      .signup-link{margin-top:20px;font-size:.82rem}
+      .guest-link{margin-top:16px}
+      .guest-link a{font-size:.85rem;padding:8px;display:inline-block}
+    }
+
+    @media(max-width:360px){
+      .card{padding:20px 16px}
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo-center">
+      <svg viewBox="0 0 100 90" height="56"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#bae6fd"/><stop offset="20%" stop-color="#7dd3fc"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="80%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0284c7"/></linearGradient><linearGradient id="lg2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="20%" stop-color="#0ea5e9"/><stop offset="50%" stop-color="#0284c7"/><stop offset="80%" stop-color="#0369a1"/><stop offset="100%" stop-color="#075985"/></linearGradient><linearGradient id="lg3" x1="50%" y1="0%" x2="50%" y2="100%"><stop offset="0%" stop-color="#0c4a6e"/><stop offset="40%" stop-color="#082f49"/><stop offset="100%" stop-color="#0c1929"/></linearGradient><linearGradient id="lg4" x1="0%" y1="0%" x2="60%" y2="100%"><stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.7"/><stop offset="100%" stop-color="#bae6fd" stop-opacity="0.1"/></linearGradient></defs><polygon points="8,82 8,14 28,6 50,36 28,48 8,58" fill="url(#lg)"/><polygon points="8,14 28,6 33,16 13,24" fill="url(#lg4)"/><polygon points="92,82 92,14 72,6 50,36 72,48 92,58" fill="url(#lg2)"/><polygon points="92,14 72,6 67,16 87,24" fill="url(#lg4)" opacity="0.7"/><polygon points="28,48 50,36 72,48 50,72" fill="url(#lg3)"/><line x1="8" y1="14" x2="28" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.5"/><line x1="92" y1="14" x2="72" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.4"/><line x1="28" y1="6" x2="50" y2="36" stroke="#bae6fd" stroke-width="1" opacity="0.3"/><line x1="72" y1="6" x2="50" y2="36" stroke="#bae6fd" stroke-width="1" opacity="0.25"/></svg>
+      <h1>Connexion</h1>
+      <p>Accédez à votre espace MALTY</p>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="votre@email.com" required autocomplete="email" inputmode="email">
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+      <div style="text-align:right;margin-top:-12px;margin-bottom:20px">
+        <a href="forgot-password.html" style="color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .2s">Mot de passe oublié ?</a>
+      </div>
+      <button type="submit" class="btn btn-primary" id="submitBtn">Se connecter</button>
+    </form>
+
+    <p class="signup-link">Pas encore de compte ? <a href="signup.html">Créer un compte</a></p>
+    <p class="guest-link"><a href="index.html" onclick="localStorage.setItem('malty_guest','1')">Continuer sans compte →</a></p>
+    <p class="guest-link" style="margin-top:10px"><a href="admin.html">🔐 Espace Admin</a></p>
+    <p class="guest-link"><a href="manager.html">🛠️ Espace Manager</a></p>
+  </div>
+
+  <script>
+    var token = localStorage.getItem('malty_token');
+    var userEmail = localStorage.getItem('malty_email');
+    if (token && userEmail) { window.location.href = 'index.html'; }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('submitBtn');
+      var errorEl = document.getElementById('errorMsg');
+      btn.disabled = true;
+      btn.textContent = 'Connexion...';
+      errorEl.style.display = 'none';
+
+      fetch('/api/auth', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'login', email: this.email.value, password: this.password.value }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.ok) {
+          localStorage.setItem('malty_token', d.token);
+          localStorage.setItem('malty_email', d.user.email);
+          localStorage.setItem('malty_user', JSON.stringify(d.user));
+          localStorage.removeItem('malty_guest');
+          window.location.href = 'index.html';
+        } else {
+          errorEl.textContent = d.error || 'Erreur de connexion';
+          errorEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Se connecter';
+        }
+      })
+      .catch(function() {
+        errorEl.textContent = 'Erreur réseau. Vérifiez votre connexion.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Se connecter';
+      });
+    });
+  </script>
+</body>
+</html>

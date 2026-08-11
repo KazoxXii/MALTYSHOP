@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prospects Internationaux | MALTY</title>
+<link rel="icon" type="image/svg+xml" href="../logo.svg">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0f1a; color: #b0c4de; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #0a0f1a, #0d1a2e); padding: 80px 20px 40px; text-align: center; }
+.header h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 900; color: white; margin-bottom: 10px; }
+.header p { color: #8ab4f8; font-size: 1rem; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+.stat { background: #0d1a2e; border: 1px solid #1a2a4a; border-radius: 12px; padding: 24px; text-align: center; }
+.stat-num { font-size: 2rem; font-weight: 900; color: #4a90e2; }
+.stat-label { font-size: .8rem; color: #6a8cba; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+.country-section { margin-bottom: 50px; }
+.country-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #1a5ab8; }
+.country-flag { font-size: 2rem; }
+.country-name { font-size: 1.5rem; font-weight: 700; color: white; }
+.client-card { background: #0d1a2e; border: 1px solid #1a2a4a; border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: all .3s; }
+.client-card:hover { border-color: #4a90e2; transform: translateY(-2px); }
+.client-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.client-name { font-size: 1.2rem; font-weight: 700; color: white; }
+.client-type { background: rgba(26,90,184,0.2); color: #4a90e2; padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 600; }
+.client-info { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: .9rem; }
+.client-info span { color: #6a8cba; }
+.client-info a { color: #4a90e2; text-decoration: none; }
+.client-info a:hover { text-decoration: underline; }
+.client-status { display: inline-block; margin-top: 12px; padding: 6px 14px; border-radius: 20px; font-size: .75rem; font-weight: 600; }
+.status-no-site { background: rgba(229,57,53,0.2); color: #e53935; }
+.status-old-site { background: rgba(255,167,38,0.2); color: #ffa726; }
+.email-template { background: #0a1020; border: 1px solid #1a2a4a; border-radius: 12px; padding: 24px; margin-top: 12px; display: none; }
+.email-template.active { display: block; }
+.email-template h4 { color: #4a90e2; margin-bottom: 12px; font-size: .9rem; }
+.email-template p { font-size: .85rem; line-height: 1.7; white-space: pre-line; }
+.btn-copy { background: #1a5ab8; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: .8rem; font-weight: 600; margin-top: 12px; }
+.btn-copy:hover { background: #4a90e2; }
+.back { display: inline-block; color: #4a90e2; text-decoration: none; margin-bottom: 30px; font-size: .9rem; }
+.back:hover { text-decoration: underline; }
+@media (max-width: 768px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .client-info { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Prospects Internationaux</h1>
+<p>Restaurants, bars et commerces dans le monde</p>
+</div>
+<div class="container">
+<a href="../index.html" class="back">← Retour au site</a>
+
+<div class="stats">
+<div class="stat"><div class="stat-num">12</div><div class="stat-label">Pays ciblés</div></div>
+<div class="stat"><div class="stat-num">25</div><div class="stat-label">Prospects identifiés</div></div>
+<div class="stat"><div class="stat-num">15</div><div class="stat-label">Sans site web</div></div>
+<div class="stat"><div class="stat-num">10</div><div class="stat-label">Site à améliorer</div></div>
+</div>
+
+<!-- FRANCE -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇫🇷</span>
+<span class="country-name">France</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Brasserie 1755</div>
+<div class="client-type">Restaurant</div>
+</div>
+<div class="client-info">
+<span>📍 Bourgoin-Jallieu, 38300</span>
+<span>🌐 Pas de site web</span>
+<span>📧 Via Google</span>
+<span>📞 Via Pages Jaunes</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('fr1')">Voir l'email</button>
+<div class="email-template" id="fr1">
+<h4>📧 Email</h4>
+<p>Bonjour,
+
+Votre brasserie n'a pas de site web. 80% de vos clients potentiels vous cherchent en ligne.
+
+Je propose des sites web professionnels à partir de 99€. Livré en 5 jours, sans abonnement.
+
+Intéressé ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('fr1')">📋 Copier</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Chez Acchiardo</div>
+<div class="client-type">Restaurant Niçois</div>
+</div>
+<div class="client-info">
+<span>📍 38 Rue Droite, Nice 06300</span>
+<span>🌐 Pas de site web</span>
+<span>📧 Via Google</span>
+<span>📞 Via Pages Jaunes</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('fr2')">Voir l'email</button>
+<div class="email-template" id="fr2">
+<h4>📧 Email</h4>
+<p>Bonjour,
+
+Chez Acchiardo est une institution à Nice depuis 1927. Un site web mettrait en valeur votre héritage.
+
+Site pro à partir de 99€. Design moderne, optimisé Google.
+
+On en discute ?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('fr2')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- ITALIE -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇮🇹</span>
+<span class="country-name">Italie</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Mostò Wine Bar</div>
+<div class="client-type">Bar à vins</div>
+</div>
+<div class="client-info">
+<span>📍 Viale Pinturicchio, 32, Rome</span>
+<span>🌐 Pas de site web</span>
+<span>📧 Via Instagram</span>
+<span>📞 Via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('it1')">Voir l'email</button>
+<div class="email-template" id="it1">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+Mostò is a reference point for natural wine in Rome. A professional website would help you reach more wine lovers.
+
+I create websites starting at €99. Modern design, Google optimized, delivered in 5 days.
+
+Interested?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('it1')">📋 Copier</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Antica Latteria</div>
+<div class="client-type">Cocktail Bar</div>
+</div>
+<div class="client-info">
+<span>📍 Vicolo del Gallo, 4, Rome</span>
+<span>🌐 anticalatteriaroma.it (basique)</span>
+<span>📧 Via site</span>
+<span>📞 +39 375 8614350</span>
+</div>
+<div class="client-status status-old-site">⚠️ Site basique</div>
+<button class="btn-copy" onclick="toggleEmail('it2')">Voir l'email</button>
+<div class="email-template" id="it2">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+Your cocktail bar in Rome deserves a website as elegant as your drinks. The current site could be faster and more modern.
+
+I can help — websites from €99, delivered in 5 days.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('it2')">📋 Copier</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Ruvido Roma</div>
+<div class="client-type">Natural Wine Bar</div>
+</div>
+<div class="client-info">
+<span>📍 Via Apulia 11, Rome</span>
+<span>🌐 ruvidoroma.com (basique)</span>
+<span>📧 ruvidoroma@gmail.com</span>
+<span>📞 +39 06 97619059</span>
+</div>
+<div class="client-status status-old-site">⚠️ Site à améliorer</div>
+<button class="btn-copy" onclick="toggleEmail('it3')">Voir l'email</button>
+<div class="email-template" id="it3">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+Ruvido's brutalist style is unique. Your website should reflect that. The current site could be more modern and faster.
+
+I create custom websites from €99. Interested?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('it3')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- ESPAGNE -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇪🇸</span>
+<span class="country-name">Espagne</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Los Gabrieles</div>
+<div class="client-type">Restaurant / Taberna</div>
+</div>
+<div class="client-info">
+<span>📍 Calle Echegaray, Madrid</span>
+<span>🌐 losgabrieles.es (basique)</span>
+<span>📧 Via site</span>
+<span>📞 Via Google</span>
+</div>
+<div class="client-status status-old-site">⚠️ Site basique</div>
+<button class="btn-copy" onclick="toggleEmail('es1')">Voir l'email</button>
+<div class="email-template" id="es1">
+<h4>📧 Email (Español)</h4>
+<p>Hola,
+
+Los Gabrieles es un mito de Madrid desde 1907. Su sitio web debería reflejar esa historia.
+
+Creo sitios web profesionales desde 99€. Diseño moderno, optimizado para Google, entregado en 5 días.
+
+¿Interesado?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('es1')">📋 Copier</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">K'era Georgian Cantine</div>
+<div class="client-type">Restaurant Géorgien</div>
+</div>
+<div class="client-info">
+<span>📍 Calle San Lucas 11, Madrid</span>
+<span>🌐 keramadrid.com (basique)</span>
+<span>📧 contacto@keramadrid.com</span>
+<span>📞 +34 925 458 756</span>
+</div>
+<div class="client-status status-old-site">⚠️ Site à améliorer</div>
+<button class="btn-copy" onclick="toggleEmail('es2')">Voir l'email</button>
+<div class="email-template" id="es2">
+<h4>📧 Email (Español)</h4>
+<p>Hola,
+
+K'era apuesta por la cocina georgiana auténtica. Un sitio web moderno ayudaría a más madrileños a descubrirlos.
+
+Sitio web desde 99€. Entregado en 5 días.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('es2')">📋 Copier</button>
+</div>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Taberna La Rox</div>
+<div class="client-type">Neo-Taberna</div>
+</div>
+<div class="client-info">
+<span>📍 Barrio de Retiro, Madrid</span>
+<span>🌐 Pas de site web</span>
+<span>📧 Via Instagram</span>
+<span>📞 Via Google</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('es3')">Voir l'email</button>
+<div class="email-template" id="es3">
+<h4>📧 Email (Español)</h4>
+<p>Hola,
+
+La Rox tiene el Solete Repsol y un barrio que la adora. Un sitio web haría crecer su reputación.
+
+Sitio web desde 99€. Diseño moderno, optimizado Google.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('es3')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- ALLEMAGNE -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇩🇪</span>
+<span class="country-name">Allemagne</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Chez P!ppo</div>
+<div class="client-type">Wine Bar / Café</div>
+</div>
+<div class="client-info">
+<span>📍 Frankfurter Allee 17, Berlin</span>
+<span>🌐 chez-pippo.de (basique)</span>
+<span>📧 Via site</span>
+<span>📞 Via Google</span>
+</div>
+<div class="client-status status-old-site">⚠️ Site basique</div>
+<button class="btn-copy" onclick="toggleEmail('de1')">Voir l'email</button>
+<div class="email-template" id="de1">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+Chez P!ppo's terrace on Frankfurter Allee deserves a website that captures its charm. The current site could be more modern.
+
+I create websites from €99. Fast delivery, Google optimized.
+
+Interested?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('de1')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- PORTUGAL -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇵🇹</span>
+<span class="country-name">Portugal</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Café A Brasileira</div>
+<div class="client-type">Café Historique</div>
+</div>
+<div class="client-info">
+<span>📍 Rua Garrett, Lisbonne</span>
+<span>🌐 Pas de site web</span>
+<span>📧 Via Google</span>
+<span>📞 Via Pages Jaunes</span>
+</div>
+<div class="client-status status-no-site">❌ Pas de site web</div>
+<button class="btn-copy" onclick="toggleEmail('pt1')">Voir l'email</button>
+<div class="email-template" id="pt1">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+Café A Brasileira is a Lisbon landmark. A professional website would showcase its history and attract more visitors.
+
+Websites from €99. Delivered in 5 days.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('pt1')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- ROYAUME-UNI -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇬🇧</span>
+<span class="country-name">Royaume-Uni</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">The Fresh Site</div>
+<div class="client-type">Agence Web (Concurrence)</div>
+</div>
+<div class="client-info">
+<span>📍 Paignton, Torbay, UK</span>
+<span>🌐 thefreshsite.com</span>
+<span>📧 Via site</span>
+<span>📞 Via site</span>
+</div>
+<div class="client-status status-old-site">⚠️ Concurrent potentiel</div>
+<button class="btn-copy" onclick="toggleEmail('uk1')">Voir l'email</button>
+<div class="email-template" id="uk1">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+I noticed your web design services in the UK. Would you be interested in a partnership for French-speaking clients?
+
+I can handle the French market, you handle the UK market.
+
+Let's discuss?
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('uk1')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- POLOGNE -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇵🇱</span>
+<span class="country-name">Pologne</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">ChceDoInternetu</div>
+<div class="client-type">Agence Web</div>
+</div>
+<div class="client-info">
+<span>📍 Rumia, Pologne</span>
+<span>🌐 chcedointernetu.pl</span>
+<span>📧 Via site</span>
+<span>📞 Via site</span>
+</div>
+<div class="client-status status-old-site">⚠️ Concurrent potentiel</div>
+<button class="btn-copy" onclick="toggleEmail('pl1')">Voir l'email</button>
+<div class="email-template" id="pl1">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+I see you're an AI-native web agency from Poland. Would you be interested in partnering for French-speaking markets?
+
+I can handle France, you handle Poland/Eastern Europe.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('pl1')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- ESTONIE -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇪🇪</span>
+<span class="country-name">Estonie</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Kardely</div>
+<div class="client-type">Web Designer</div>
+</div>
+<div class="client-info">
+<span>📍 Estonie</span>
+<span>🌐 kardely.com</span>
+<span>📧 Via site</span>
+<span>📞 WhatsApp</span>
+</div>
+<div class="client-status status-old-site">⚠️ Concurrent potentiel</div>
+<button class="btn-copy" onclick="toggleEmail('ee1')">Voir l'email</button>
+<div class="email-template" id="ee1">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+I see you offer €40/mo websites from Estonia. Would you like to partner for French-speaking clients?
+
+I handle France, you handle Baltic/Eastern Europe.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('ee1')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- ALLEMAGNE -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇩🇪</span>
+<span class="country-name">Allemagne</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Mihajlo Systems</div>
+<div class="client-type">Web Developer</div>
+</div>
+<div class="client-info">
+<span>📍 Berlin, Allemagne</span>
+<span>🌐 mihajlostanojevic.com</span>
+<span>📧 Via site</span>
+<span>📞 Via site</span>
+</div>
+<div class="client-status status-old-site">⚠️ Concurrent potentiel</div>
+<button class="btn-copy" onclick="toggleEmail('de2')">Voir l'email</button>
+<div class="email-template" id="de2">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+I see you build custom websites in Berlin. Would you like to partner for French-speaking markets?
+
+I handle France, you handle Germany/Austria/Switzerland.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('de2')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- ESTONIE -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇪🇪</span>
+<span class="country-name">Estonie</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">Velsio</div>
+<div class="client-type">Agence Web</div>
+</div>
+<div class="client-info">
+<span>📍 Estonie</span>
+<span>🌐 velsio.ee</span>
+<span>📧 Via site</span>
+<span>📞 Via site</span>
+</div>
+<div class="client-status status-old-site">⚠️ Concurrent potentiel</div>
+<button class="btn-copy" onclick="toggleEmail('ee2')">Voir l'email</button>
+<div class="email-template" id="ee2">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+I see you build WordPress websites in Estonia. Would you like to partner for French-speaking markets?
+
+I handle France, you handle Baltic/Eastern Europe.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('ee2')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+<!-- PAYS-BAS -->
+<div class="country-section">
+<div class="country-header">
+<span class="country-flag">🇳🇱</span>
+<span class="country-name">Pays-Bas</span>
+</div>
+
+<div class="client-card">
+<div class="client-header">
+<div class="client-name">OneDayWeb</div>
+<div class="client-type">Web Developer</div>
+</div>
+<div class="client-info">
+<span>📍 Pays-Bas</span>
+<span>🌐 onedayweb.eu</span>
+<span>📧 Via site</span>
+<span>📞 Via site</span>
+</div>
+<div class="client-status status-old-site">⚠️ Concurrent potentiel</div>
+<button class="btn-copy" onclick="toggleEmail('nl1')">Voir l'email</button>
+<div class="email-template" id="nl1">
+<h4>📧 Email (English)</h4>
+<p>Hi,
+
+I see you deliver websites in 24-48 hours. Would you like to partner for French-speaking markets?
+
+I handle France, you handle Benelux.
+
+MALTY — maltyshop.vercel.app</p>
+<button class="btn-copy" onclick="copyEmail('nl1')">📋 Copier</button>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+function toggleEmail(id) {
+  var el = document.getElementById(id);
+  el.classList.toggle('active');
+}
+
+function copyEmail(id) {
+  var el = document.getElementById(id);
+  var text = el.querySelector('p').textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    alert('Email copié !');
+  });
+}
+</script>
+</body>
+</html>

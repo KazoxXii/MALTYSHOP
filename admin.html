@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin — MALTY</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06070a;--surface:#0e1016;--surface2:#14161e;--fg:#e8eaf0;--muted:#8b93a3;--border:#1e2230;--accent:#2563eb;--accent2:#1d4ed8;--accent-light:#7ea2ff;--accent-10:rgba(37,99,235,.12);--accent-20:rgba(37,99,235,.2);--accent-50:rgba(37,99,235,.5);--success:#16a34a;--warning:#f59e0b;--danger:#ef4444;--radius:16px;--radius-sm:10px;--ease:cubic-bezier(0.16,1,0.3,1)}
+html{-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh}
+a{color:inherit}
+
+/* ---------- LOGIN ---------- */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;position:relative}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:44px 36px;max-width:400px;width:100%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.35)}
+.login-brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
+.login-brand img{height:44px;width:auto}
+.login-brand b{font-size:1.3rem;font-weight:900;letter-spacing:-.03em}
+.login-brand b span{color:var(--accent)}
+.login-shield{width:56px;height:56px;border-radius:16px;background:var(--accent-10);border:1px solid var(--accent-20);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 18px}
+.login-box h1{font-size:1.6rem;font-weight:800;margin-bottom:8px;letter-spacing:-0.03em}
+.login-box .login-desc{color:var(--muted);font-size:.85rem;margin-bottom:28px;line-height:1.6}
+.field{text-align:left;margin-bottom:16px}
+.field label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;color:var(--muted)}
+.field input{width:100%;padding:13px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg);font:400 .95rem 'Inter',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10)}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:48px}
+.password-toggle{position:absolute;top:50%;right:8px;transform:translateY(-50%);width:34px;height:34px;border:none;background:transparent;color:var(--muted);font-size:1rem;cursor:pointer;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.password-toggle:hover{color:var(--fg);background:var(--surface2)}
+.login-error{color:var(--danger);font-size:.82rem;font-weight:600;min-height:18px;margin-bottom:12px}
+.login-hint{margin-top:20px;font-size:.72rem;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* ---------- LAYOUT ---------- */
+.app{display:none}
+.app.active{display:flex;min-height:100vh}
+.sidebar{width:248px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:20px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.sidebar-brand{display:flex;align-items:center;gap:10px;padding:4px 10px 20px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.sidebar-brand img{height:34px;width:auto}
+.sidebar-brand b{font-size:1.15rem;font-weight:900;letter-spacing:-.03em}
+.sidebar-brand b span{color:var(--accent)}
+.sidebar-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--radius-sm);font-size:.88rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;border:1px solid transparent;text-decoration:none}
+.nav-item:hover{color:var(--fg);background:var(--surface2)}
+.nav-item.active{color:#fff;background:var(--accent);border-color:var(--accent)}
+.sidebar-footer{padding-top:16px;border-top:1px solid var(--border)}
+.sidebar-time{font-size:.72rem;color:var(--muted);text-align:center;margin-bottom:12px;line-height:1.5}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:28px 32px 0;flex-wrap:wrap}
+.topbar-title h1{font-size:1.6rem;font-weight:900;letter-spacing:-.03em;line-height:1.2}
+.topbar-title p{color:var(--muted);font-size:.88rem;margin-top:4px}
+.topbar-actions{display:flex;align-items:center;gap:12px}
+.content{flex:1;padding:24px 32px 48px;max-width:1400px;width:100%}
+.tab-content{display:none}
+.tab-content.active{display:block;animation:tabIn .3s var(--ease) both}
+@keyframes tabIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ---------- CARDS / STATS ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s}
+.card-hover:hover{border-color:var(--accent-50);box-shadow:0 8px 32px var(--accent-20)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.card-title{font-size:1rem;font-weight:700}
+.stat-card{text-align:left;padding:26px;display:flex;align-items:flex-start;gap:16px}
+.stat-icon{width:48px;height:48px;border-radius:14px;background:var(--accent-10);border:1px solid var(--accent-20);display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0}
+.stat-body{flex:1;min-width:0}
+.stat-value{font-size:2rem;font-weight:800;color:var(--fg);letter-spacing:-.03em;line-height:1.1}
+.stat-value span{font-size:1rem;color:var(--muted);font-weight:600}
+.stat-label{font-size:.78rem;color:var(--muted);margin-top:4px}
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+
+/* ---------- BADGES ---------- */
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600;white-space:nowrap}
+.badge-success{background:rgba(22,163,74,.15);color:var(--success)}
+.badge-warning{background:rgba(245,158,11,0.15);color:var(--warning)}
+.badge-danger{background:rgba(239,68,68,0.15);color:var(--danger)}
+.badge-info{background:var(--accent-10);color:var(--accent-light)}
+
+/* ---------- TABLE ---------- */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:12px 16px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:.88rem}
+tr:hover{background:var(--accent-10)}
+
+/* ---------- BUTTONS ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:var(--radius-sm);font-weight:600;font-size:.85rem;cursor:pointer;border:none;text-decoration:none;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--fg)}
+.btn-outline:hover{border-color:var(--accent-50);background:var(--accent-10)}
+.btn-sm{padding:6px 14px;font-size:.78rem}
+.btn-block{width:100%}
+
+/* ---------- FORM ---------- */
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;color:var(--muted)}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg);font:400 .92rem 'Inter',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10)}
+.form-group textarea{min-height:120px;resize:vertical}
+
+/* ---------- MODAL ---------- */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.modal-header h3{font-size:1.2rem;font-weight:800}
+.modal-close{background:none;border:none;color:var(--muted);font-size:1.6rem;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--fg)}
+
+/* ---------- LOADING ---------- */
+.loading{text-align:center;padding:60px;color:var(--muted)}
+.loading::after{content:'';display:block;width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:16px auto 0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- TOAST ---------- */
+.toast{position:fixed;top:20px;right:20px;padding:16px 24px;border-radius:var(--radius);font-weight:600;z-index:300;box-shadow:0 12px 40px rgba(0,0,0,.4);animation:slideIn .3s ease}
+.toast-success{background:var(--success);color:#fff}
+.toast-error{background:var(--danger);color:#fff}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:900px){
+  .app.active{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:static;flex-direction:row;align-items:center;gap:12px;padding:12px 16px}
+  .sidebar-brand{border-bottom:none;padding:0;margin:0}
+  .sidebar-brand img{height:30px}
+  .sidebar-nav{flex-direction:row;overflow-x:auto;gap:6px;flex:1;scrollbar-width:none}
+  .sidebar-nav::-webkit-scrollbar{display:none}
+  .nav-item{white-space:nowrap;padding:9px 14px;font-size:.8rem}
+  .sidebar-footer{display:none}
+  .topbar{padding:20px 16px 0}
+  .content{padding:20px 16px 40px}
+  .panel-grid{grid-template-columns:1fr}
+  .topbar-time{display:none}
+}
+@media(max-width:520px){
+  .stat-value{font-size:1.6rem}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-shield">🔐</div>
+    <h1>Espace Admin</h1>
+    <p class="login-desc">Accès strictement réservé au propriétaire. Connectez-vous avec votre identifiant et votre mot de passe sécurisé.</p>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="username">Identifiant</label>
+        <input type="text" id="username" placeholder="Votre identifiant" autocomplete="username" autofocus required>
+      </div>
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <div class="password-wrap">
+          <input type="password" id="password" placeholder="Votre mot de passe" autocomplete="current-password" required>
+          <button type="button" class="password-toggle" onclick="togglePassword()" aria-label="Afficher / masquer le mot de passe">👁</button>
+        </div>
+      </div>
+      <p class="login-error" id="loginError" role="alert"></p>
+      <button type="submit" class="btn btn-primary btn-block" id="loginBtn">Se connecter</button>
+    </form>
+    <p class="login-hint"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Accès sécurisé — réservé à MALTY</p>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div class="app" id="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="logo.svg" alt="MALTY">
+      <b>MALTY <span>Admin</span></b>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <a class="nav-item active" data-tab="overview"><span>📊</span> Vue d'ensemble</a>
+      <a class="nav-item" data-tab="subscriptions"><span>💳</span> Abonnements</a>
+      <a class="nav-item" data-tab="customers"><span>👤</span> Clients</a>
+      <a class="nav-item" data-tab="invoices"><span>🧾</span> Factures</a>
+      <a class="nav-item" data-tab="requests"><span>📝</span> Demandes</a>
+      <a class="nav-item" data-tab="users"><span>👥</span> Utilisateurs</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="manager.html" class="nav-item" style="justify-content:center;margin-bottom:8px">🛠️ Espace Manager</a>
+      <div class="sidebar-time" id="adminTime"></div>
+      <button class="btn btn-outline btn-block" onclick="logout()">Déconnexion</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1 id="pageTitle">Vue d'ensemble</h1>
+        <p id="pageSubtitle">Les indicateurs clés de votre activité.</p>
+      </div>
+      <div class="topbar-actions">
+        <span class="topbar-time" id="adminTime2" style="font-size:.8rem;color:var(--muted)"></span>
+        <button class="btn btn-outline btn-sm" onclick="logout()">Déconnexion</button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- OVERVIEW -->
+      <section class="tab-content active" id="overview">
+        <div class="grid">
+          <div class="card stat-card">
+            <div class="stat-icon">💳</div>
+            <div class="stat-body">
+              <div class="stat-value" id="statActiveSubs">—</div>
+              <div class="stat-label">Abonnements actifs</div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-body">
+              <div class="stat-value" id="statRevenue">—</div>
+              <div class="stat-label">Revenu total</div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon">👤</div>
+            <div class="stat-body">
+              <div class="stat-value" id="statCustomers">—</div>
+              <div class="stat-label">Clients</div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-body">
+              <div class="stat-value" id="statRequests">—</div>
+              <div class="stat-label">Demandes reçues</div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-grid">
+          <div class="card card-hover">
+            <div class="card-header">
+              <span class="card-title">📋 Dernières factures</span>
+              <button class="btn btn-sm btn-outline" onclick="switchTab('invoices')">Voir tout</button>
+            </div>
+            <div id="recentInvoices"><div class="loading">Chargement...</div></div>
+          </div>
+          <div class="card card-hover">
+            <div class="card-header">
+              <span class="card-title">📝 Dernières demandes</span>
+              <button class="btn btn-sm btn-outline" onclick="switchTab('requests')">Voir tout</button>
+            </div>
+            <div id="recentRequests"><div class="loading">Chargement...</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUBSCRIPTIONS -->
+      <section class="tab-content" id="subscriptions">
+        <div class="card card-hover">
+          <div class="card-header">
+            <span class="card-title">💳 Abonnements actifs</span>
+            <button class="btn btn-sm btn-outline" onclick="loadSubscriptions()">🔄 Actualiser</button>
+          </div>
+          <div id="subList"><div class="loading">Chargement...</div></div>
+        </div>
+      </section>
+
+      <!-- CUSTOMERS -->
+      <section class="tab-content" id="customers">
+        <div class="card card-hover">
+          <div class="card-header">
+            <span class="card-title">👤 Tous les clients</span>
+            <button class="btn btn-sm btn-outline" onclick="loadCustomers()">🔄 Actualiser</button>
+          </div>
+          <div id="customerList"><div class="loading">Chargement...</div></div>
+        </div>
+      </section>
+
+      <!-- INVOICES -->
+      <section class="tab-content" id="invoices">
+        <div class="card card-hover">
+          <div class="card-header">
+            <span class="card-title">🧾 Toutes les factures</span>
+            <button class="btn btn-sm btn-outline" onclick="loadInvoices()">🔄 Actualiser</button>
+          </div>
+          <div id="invoiceList"><div class="loading">Chargement...</div></div>
+        </div>
+      </section>
+
+      <!-- USERS -->
+      <section class="tab-content" id="users">
+        <div class="grid" style="margin-bottom:24px">
+          <div class="card stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-body">
+              <div class="stat-value" id="statUsers">—</div>
+              <div class="stat-label">Utilisateurs inscrits</div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon">📞</div>
+            <div class="stat-body">
+              <div class="stat-value" id="statUsersWithPhone">—</div>
+              <div class="stat-label">Avec téléphone</div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-hover">
+          <div class="card-header">
+            <span class="card-title">👥 Tous les utilisateurs</span>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-sm btn-danger" onclick="deleteAllUsers()">🗑️ Tout supprimer</button>
+              <button class="btn btn-sm btn-outline" onclick="loadUsers()">🔄 Actualiser</button>
+            </div>
+          </div>
+          <div id="userList"><div class="loading">Chargement...</div></div>
+        </div>
+      </section>
+
+      <!-- REQUESTS -->
+      <section class="tab-content" id="requests">
+        <div class="card card-hover" style="margin-bottom:24px">
+          <div class="card-header">
+            <span class="card-title">📨 Répondre à un client</span>
+          </div>
+          <input type="hidden" id="respRequestId" value="">
+          <input type="hidden" id="respClientMsg" value="">
+          <div class="form-group">
+            <label>Email du client</label>
+            <input type="email" id="respEmail" placeholder="client@email.com">
+          </div>
+          <div class="form-group">
+            <label>Nom du client</label>
+            <input type="text" id="respName" placeholder="Jean Dupont">
+          </div>
+          <div class="form-group">
+            <label>Type de demande</label>
+            <select id="respRequestType">
+              <option value="Support technique">🛠️ Support technique</option>
+              <option value="Maintenance">🔧 Maintenance</option>
+              <option value="Brief — Landing Page">📋 Brief Landing Page</option>
+              <option value="Abonnement">💳 Abonnement</option>
+              <option value="Demande de devis">📋 Demande de devis</option>
+              <option value="Autre">📝 Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Statut</label>
+            <select id="respType">
+              <option value="accepted">✅ Acceptée</option>
+              <option value="in_progress">🔄 En cours</option>
+              <option value="completed">✅ Terminée</option>
+              <option value="rejected">❌ Refusée</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap">
+              <textarea id="respMessage" placeholder="Votre réponse au client..." style="flex:1;min-width:220px"></textarea>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <button class="btn btn-sm btn-outline" onclick="generateAIReply()" id="aiBtn" style="white-space:nowrap;min-height:44px;">✨ IA</button>
+                <select id="aiTone" style="padding:6px 8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--fg);font-size:.75rem;min-height:36px;">
+                  <option value="pro">🤖 Pro</option>
+                  <option value="amical">😊 Amical</option>
+                  <option value="formel">🎩 Formel</option>
+                </select>
+              </div>
+            </div>
+            <p id="aiStatus" style="font-size:.75rem;color:var(--muted);margin-top:6px;display:none;">⏳ Génération en cours...</p>
+          </div>
+          <button class="btn btn-primary" onclick="sendResponse()">📨 Envoyer la réponse</button>
+        </div>
+
+        <div class="card card-hover">
+          <div class="card-header">
+            <span class="card-title">📋 Demandes reçues</span>
+            <button class="btn btn-sm btn-outline" onclick="loadRequests()">🔄 Actualiser</button>
+          </div>
+          <div id="requestsList"><div class="loading">Chargement...</div></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- ============ MODAL ============ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Détails</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script src="auth-guard.js"></script>
+<script>
+const API_BASE = '/api/admin';
+
+const TABS = {
+  overview: { title: 'Vue d\'ensemble', subtitle: 'Les indicateurs clés de votre activité.' },
+  subscriptions: { title: 'Abonnements', subtitle: 'Gérez les abonnements de vos clients.' },
+  customers: { title: 'Clients', subtitle: 'Tous vos clients Stripe.' },
+  invoices: { title: 'Factures', subtitle: 'Toutes les factures émises.' },
+  requests: { title: 'Demandes', subtitle: 'Répondez aux demandes reçues.' },
+  users: { title: 'Utilisateurs', subtitle: 'Les comptes créés sur le site.' }
+};
+
+// ---------- LOGIN ----------
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  login();
+});
+
+function togglePassword() {
+  var el = document.getElementById('password');
+  var btn = document.querySelector('.password-toggle');
+  if (el.type === 'password') { el.type = 'text'; btn.textContent = '🙈'; }
+  else { el.type = 'password'; btn.textContent = '👁'; }
+  el.focus();
+}
+
+async function checkSession() {
+  try {
+    const res = await fetch(API_BASE + '?action=check', { credentials: 'include' });
+    if (res.ok) {
+      showDashboard();
+      loadStats();
+      loadSubscriptions();
+      loadCustomers();
+      loadInvoices();
+      loadUsers();
+      loadRequests();
+    }
+  } catch (err) {
+    // Not authenticated
+  }
+}
+checkSession();
+
+async function login() {
+  var username = document.getElementById('username').value.trim();
+  var pwd = document.getElementById('password').value;
+  var err = document.getElementById('loginError');
+  var btn = document.getElementById('loginBtn');
+
+  if (!username || !pwd) { err.textContent = 'Renseignez votre identifiant et votre mot de passe.'; return; }
+  err.textContent = '';
+  btn.disabled = true;
+  btn.textContent = 'Connexion...';
+
+  try {
+    const res = await fetch(API_BASE + '?action=login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ username: username, password: pwd })
+    });
+
+    if (res.ok) {
+      document.getElementById('password').value = '';
+      showDashboard();
+      loadStats();
+      loadSubscriptions();
+      loadCustomers();
+      loadInvoices();
+      loadUsers();
+      loadRequests();
+    } else {
+      var data = {};
+      try { data = await res.json(); } catch (e) {}
+      err.textContent = data.error || 'Identifiant ou mot de passe incorrect.';
+    }
+  } catch (err2) {
+    err.textContent = 'Erreur de connexion. Réessayez dans un instant.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Se connecter';
+  }
+}
+
+function showDashboard() {
+  document.getElementById('loginScreen').style.display = 'none';
+  var dash = document.getElementById('dashboard');
+  dash.classList.add('active');
+}
+
+async function logout() {
+  try {
+    await fetch(API_BASE + '?action=logout', { method: 'POST', credentials: 'include' });
+  } catch (e) {}
+  var dash = document.getElementById('dashboard');
+  dash.classList.remove('active');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+  document.getElementById('loginError').textContent = '';
+}
+
+// ---------- TABS ----------
+document.querySelectorAll('.nav-item').forEach(function(item) {
+  item.addEventListener('click', function() { switchTab(item.dataset.tab); });
+});
+
+function switchTab(tabId) {
+  document.querySelectorAll('.nav-item').forEach(function(n) {
+    n.classList.toggle('active', n.dataset.tab === tabId);
+  });
+  document.querySelectorAll('.tab-content').forEach(function(c) {
+    c.classList.remove('active');
+  });
+  document.getElementById(tabId).classList.add('active');
+  var t = TABS[tabId];
+  if (t) {
+    document.getElementById('pageTitle').textContent = t.title;
+    document.getElementById('pageSubtitle').textContent = t.subtitle;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ---------- API ----------
+async function apiCall(action, method = 'GET', body = null) {
+  const opts = {
+    method: method,
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API_BASE + '?action=' + action, opts);
+  if (res.status === 401) {
+    logout();
+    throw new Error('Session expirée');
+  }
+  if (!res.ok) throw new Error('Erreur ' + res.status);
+  return await res.json();
+}
+
+// ---------- STATS ----------
+async function loadStats() {
+  try {
+    const data = await apiCall('stats');
+    document.getElementById('statActiveSubs').textContent = data.activeSubscriptions || 0;
+    document.getElementById('statRevenue').textContent = (data.totalRevenue || 0) + '€';
+    document.getElementById('statCustomers').textContent = data.totalCustomers || 0;
+  } catch (err) {
+    console.error('Stats error:', err);
+  }
+  try {
+    const rData = await apiCall('requests');
+    var rList = rData.requests || [];
+    document.getElementById('statRequests').textContent = rList.length;
+    var recent = document.getElementById('recentRequests');
+    if (rList.length === 0) {
+      recent.innerHTML = '<p style="color:var(--muted);text-align:center;padding:24px">Aucune demande.</p>';
+    } else {
+      var statusColors = { pending: '#f59e0b', accepted: '#22c55e', in_progress: '#f59e0b', completed: '#3d6bff', rejected: '#ef4444' };
+      var html = '<div style="display:flex;flex-direction:column;gap:8px;">';
+      rList.slice(0, 5).forEach(function(r) {
+        var color = statusColors[r.status] || '#f59e0b';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);">';
+        html += '<div><strong style="color:#fff;font-size:.85rem;">' + (r.nom || 'N/A') + '</strong> <span style="color:var(--muted);font-size:.75rem;">' + (r.type || '') + '</span></div>';
+        html += '<span style="background:' + color + ';color:#fff;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600;">' + (r.status || 'pending') + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+      recent.innerHTML = html;
+    }
+  } catch (err) {
+    console.error('Requests stats error:', err);
+  }
+}
+
+// ---------- SUBSCRIPTIONS ----------
+async function loadSubscriptions() {
+  try {
+    const data = await apiCall('subscriptions');
+    const list = document.getElementById('subList');
+    if (!data.subscriptions || data.subscriptions.length === 0) {
+      list.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px">Aucun abonnement.</p>';
+      return;
+    }
+    list.innerHTML = '<div class="table-wrap"><table>' +
+      '<tr><th>Client</th><th>Email</th><th>Formule</th><th>Montant</th><th>Statut</th><th>Début</th><th>Fin</th></tr>' +
+      data.subscriptions.map(function(s) {
+        return '<tr>' +
+          '<td><strong>' + s.name + '</strong></td>' +
+          '<td><a href="mailto:' + s.email + '" style="color:var(--accent)">' + s.email + '</a></td>' +
+          '<td>' + s.plan + '</td>' +
+          '<td><strong>' + s.amount + '€</strong></td>' +
+          '<td><span class="badge ' + (s.status === 'active' ? 'badge-success' : 'badge-danger') + '">' + (s.status === 'active' ? '✅ Actif' : '❌ ' + s.status) + '</span></td>' +
+          '<td>' + s.startDate + '</td>' +
+          '<td>' + s.currentPeriodEnd + '</td>' +
+        '</tr>';
+      }).join('') +
+      '</table></div>';
+  } catch (err) {
+    document.getElementById('subList').innerHTML = '<p style="color:var(--danger)">Erreur de chargement.</p>';
+  }
+}
+
+// ---------- CUSTOMERS ----------
+async function loadCustomers() {
+  try {
+    const data = await apiCall('customers');
+    const list = document.getElementById('customerList');
+    if (!data.customers || data.customers.length === 0) {
+      list.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px">Aucun client.</p>';
+      return;
+    }
+    list.innerHTML = '<div class="table-wrap"><table>' +
+      '<tr><th>Nom</th><th>Email</th><th>Inscrit le</th><th>Action</th></tr>' +
+      data.customers.map(function(c) {
+        return '<tr>' +
+          '<td><strong>' + c.name + '</strong></td>' +
+          '<td><a href="mailto:' + c.email + '" style="color:var(--accent)">' + c.email + '</a></td>' +
+          '<td>' + c.created + '</td>' +
+          '<td><button class="btn btn-sm btn-outline" onclick="openResponseModal(\'' + c.name + '\',\'' + c.email + '\')">Répondre</button></td>' +
+        '</tr>';
+      }).join('') +
+      '</table></div>';
+  } catch (err) {
+    document.getElementById('customerList').innerHTML = '<p style="color:var(--danger)">Erreur de chargement.</p>';
+  }
+}
+
+// ---------- INVOICES ----------
+async function loadInvoices() {
+  try {
+    const data = await apiCall('invoices');
+    const list = document.getElementById('invoiceList');
+    const recent = document.getElementById('recentInvoices');
+    const invoices = data.invoices || [];
+
+    if (invoices.length === 0) {
+      list.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px">Aucune facture.</p>';
+      if (recent) recent.innerHTML = '<p style="color:var(--muted);text-align:center;padding:24px">Aucune facture.</p>';
+      return;
+    }
+
+    const row = function(inv) {
+      return '<tr>' +
+        '<td><strong>' + (inv.number || inv.id.substring(0, 12)) + '</strong></td>' +
+        '<td>' + inv.name + '</td>' +
+        '<td><a href="mailto:' + inv.email + '" style="color:var(--accent)">' + inv.email + '</a></td>' +
+        '<td><strong>' + inv.amount + '€</strong></td>' +
+        '<td><span class="badge ' + (inv.status === 'paid' ? 'badge-success' : inv.status === 'open' ? 'badge-warning' : 'badge-danger') + '">' + (inv.status === 'paid' ? '✅ Payé' : inv.status === 'open' ? '⏳ En attente' : '❌ ' + inv.status) + '</span></td>' +
+        '<td>' + inv.date + '</td>' +
+        '<td>' + (inv.url ? '<a href="' + inv.url + '" target="_blank" class="btn btn-sm btn-outline">Voir</a>' : '—') + '</td>' +
+      '</tr>';
+    };
+
+    list.innerHTML = '<div class="table-wrap"><table>' +
+      '<tr><th>Numéro</th><th>Client</th><th>Email</th><th>Montant</th><th>Statut</th><th>Date</th><th>Lien</th></tr>' +
+      invoices.map(row).join('') +
+      '</table></div>';
+
+    if (recent) {
+      recent.innerHTML = '<div class="table-wrap"><table>' +
+        '<tr><th>Client</th><th>Montant</th><th>Statut</th><th>Date</th></tr>' +
+        invoices.slice(0, 5).map(function(inv) {
+          return '<tr>' +
+            '<td><strong>' + inv.name + '</strong></td>' +
+            '<td>' + inv.amount + '€</td>' +
+            '<td><span class="badge ' + (inv.status === 'paid' ? 'badge-success' : 'badge-warning') + '">' + (inv.status === 'paid' ? '✅ Payé' : '⏳') + '</span></td>' +
+            '<td>' + inv.date + '</td>' +
+          '</tr>';
+        }).join('') +
+        '</table></div>';
+    }
+  } catch (err) {
+    document.getElementById('invoiceList').innerHTML = '<p style="color:var(--danger)">Erreur de chargement.</p>';
+  }
+}
+
+// ---------- USERS ----------
+async function loadUsers() {
+  try {
+    const data = await apiCall('users');
+    const list = document.getElementById('userList');
+    const users = data.users || [];
+
+    document.getElementById('statUsers').textContent = users.length;
+    document.getElementById('statUsersWithPhone').textContent = users.filter(function(u) { return u.phone; }).length;
+
+    if (users.length === 0) {
+      list.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px">Aucun utilisateur inscrit.</p>';
+      return;
+    }
+
+    list.innerHTML = '<div class="table-wrap"><table>' +
+      '<tr><th>Nom</th><th>Email</th><th>Téléphone</th><th>Plan</th><th>Inscrit le</th><th>Action</th></tr>' +
+      users.map(function(u) {
+        return '<tr>' +
+          '<td><strong>' + u.nom + '</strong></td>' +
+          '<td><a href="mailto:' + u.email + '" style="color:var(--accent)">' + u.email + '</a></td>' +
+          '<td>' + (u.phone ? '<a href="tel:' + u.phone + '" style="color:var(--fg)">' + u.phone + '</a>' : '<span style="color:var(--muted)">—</span>') + '</td>' +
+          '<td>' + (u.plan ? '<span class="badge badge-info">' + u.plan + '</span>' : '<span style="color:var(--muted)">Aucun</span>') + '</td>' +
+          '<td>' + (u.createdAt !== 'N/A' ? new Date(u.createdAt).toLocaleDateString('fr-FR') : '—') + '</td>' +
+          '<td><button class="btn btn-sm btn-danger" onclick="deleteUser(\'' + u.email + '\')">🗑️</button></td>' +
+        '</tr>';
+      }).join('') +
+      '</table></div>';
+  } catch (err) {
+    document.getElementById('userList').innerHTML = '<p style="color:var(--danger)">Erreur de chargement.</p>';
+  }
+}
+
+async function deleteUser(email) {
+  if (!confirm('Supprimer le compte ' + email + ' ?')) return;
+  try {
+    await apiCall('deleteUser', 'POST', { email: email });
+    showToast('Utilisateur supprimé');
+    loadUsers();
+  } catch (err) {
+    showToast('Erreur: ' + err.message, 'error');
+  }
+}
+
+async function deleteAllUsers() {
+  if (!confirm('Supprimer TOUS les utilisateurs ? Cette action est irréversible.')) return;
+  if (!confirm('Dernière chance — Tout supprimer ?')) return;
+  try {
+    const result = await apiCall('deleteAllUsers', 'POST');
+    showToast(result.deleted + ' utilisateurs supprimés');
+    loadUsers();
+  } catch (err) {
+    showToast('Erreur: ' + err.message, 'error');
+  }
+}
+
+// ---------- RESPONSE ----------
+function openResponseModal(name, email) {
+  document.getElementById('respName').value = name;
+  document.getElementById('respEmail').value = email;
+  document.getElementById('respRequestId').value = '';
+  switchTab('requests');
+}
+
+function replyToRequest(r) {
+  document.getElementById('respEmail').value = r.email;
+  document.getElementById('respName').value = r.nom;
+  document.getElementById('respRequestId').value = r.id;
+  document.getElementById('respClientMsg').value = r.message || '';
+  var sel = document.getElementById('respRequestType');
+  for (var i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].value === r.type) { sel.selectedIndex = i; break; }
+  }
+  document.getElementById('respMessage').value = '';
+  document.getElementById('respMessage').focus();
+}
+
+async function acceptRequest(requestId) {
+  if (!confirm('Accepter cette demande ? Un email sera envoyé au client (prêt sous 24h).')) return;
+  try {
+    await apiCall('acceptRequest', 'POST', { requestId: requestId });
+    showToast('Demande acceptée ! Email envoyé au client.');
+    loadRequests();
+    loadStats();
+  } catch (err) {
+    showToast('Erreur: ' + err.message, 'error');
+  }
+}
+
+async function generateAIReply() {
+  var name = document.getElementById('respName').value;
+  var type = document.getElementById('respRequestType').value;
+  var clientMsg = document.getElementById('respClientMsg').value;
+  var tone = document.getElementById('aiTone').value;
+  var btn = document.getElementById('aiBtn');
+  var status = document.getElementById('aiStatus');
+
+  if (!clientMsg) {
+    showToast('Pas de message client à analyser', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳';
+  status.style.display = 'block';
+
+  try {
+    var res = await fetch(API_BASE + '?action=ai-reply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clientName: name, requestType: type, clientMessage: clientMsg, tone: tone })
+    });
+    var data = await res.json();
+    if (data.response) {
+      document.getElementById('respMessage').value = data.response;
+      showToast('Réponse IA générée ! Vérifie et envoie.');
+    } else {
+      showToast('Erreur: ' + (data.error || 'Réponse vide'), 'error');
+    }
+  } catch (err) {
+    showToast('Erreur IA: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✨ IA';
+    status.style.display = 'none';
+  }
+}
+
+async function loadRequests() {
+  try {
+    var data = await apiCall('requests');
+    var list = data.requests || [];
+    var container = document.getElementById('requestsList');
+    if (list.length === 0) {
+      container.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:16px;">Aucune demande pour le moment.</p>';
+      return;
+    }
+    var statusColors = { pending: '#f59e0b', accepted: '#22c55e', in_progress: '#f59e0b', completed: '#3d6bff', rejected: '#ef4444' };
+    var statusLabels = { pending: '⏳ En attente', accepted: '✅ Acceptée', in_progress: '🔄 En cours', completed: '✅ Terminée', rejected: '❌ Refusée' };
+    var html = '';
+    list.forEach(function(r) {
+      var color = statusColors[r.status] || '#f59e0b';
+      var label = statusLabels[r.status] || r.status;
+      html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">';
+      html += '<div><strong style="color:#fff;">' + (r.nom || 'N/A') + '</strong> <span style="color:var(--muted);font-size:13px;">' + (r.email || '') + '</span></div>';
+      html += '<span style="background:' + color + ';color:#fff;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;">' + label + '</span>';
+      html += '</div>';
+      html += '<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">';
+      html += '<span style="background:var(--accent-10);padding:3px 10px;border-radius:8px;font-size:12px;color:var(--accent-light);">' + (r.type || 'N/A') + '</span>';
+      if (r.site) html += '<span style="background:var(--accent-10);padding:3px 10px;border-radius:8px;font-size:12px;color:var(--accent-light);">' + r.site + '</span>';
+      html += '<span style="color:var(--muted);font-size:12px;">📅 ' + (r.date || '') + '</span>';
+      html += '</div>';
+      html += '<p style="color:var(--muted);font-size:14px;margin:0 0 12px;line-height:1.5;">' + (r.message || '').substring(0, 200) + ((r.message || '').length > 200 ? '...' : '') + '</p>';
+      if (r.response) {
+        html += '<div style="background:var(--surface);border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-bottom:12px;">';
+        html += '<p style="margin:0;font-size:13px;color:var(--accent-light);">📝 Réponse envoyée :</p>';
+        html += '<p style="margin:4px 0 0;font-size:13px;color:var(--muted);">' + r.response.substring(0, 200) + '</p>';
+        html += '</div>';
+      }
+      html += '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+      if (r.status === 'pending') {
+        html += '<button class="btn btn-sm btn-success" onclick="acceptRequest(\'' + r.id + '\')">✅ Accepter</button>';
+      }
+      html += '<button class="btn btn-sm btn-outline" onclick=\'replyToRequest(' + JSON.stringify(r).replace(/'/g, "&#39;") + ')\'>💬 Répondre</button>';
+      html += '</div>';
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  } catch (err) {
+    document.getElementById('requestsList').innerHTML = '<p style="color:#ef4444;font-size:.9rem;">Erreur de chargement</p>';
+  }
+}
+
+async function sendResponse() {
+  var email = document.getElementById('respEmail').value;
+  var name = document.getElementById('respName').value;
+  var type = document.getElementById('respType').value;
+  var message = document.getElementById('respMessage').value;
+  var requestId = document.getElementById('respRequestId').value;
+  var requestType = document.getElementById('respRequestType').value;
+
+  if (!email || !message) {
+    showToast('Remplis tous les champs', 'error');
+    return;
+  }
+
+  try {
+    await apiCall('respond', 'POST', { clientEmail: email, clientName: name, responseType: type, message: message, requestId: requestId, requestType: requestType });
+    showToast('Réponse envoyée ! Email envoyé à ' + email);
+    document.getElementById('respMessage').value = '';
+    document.getElementById('respRequestId').value = '';
+    loadRequests();
+  } catch (err) {
+    showToast('Erreur: ' + err.message, 'error');
+  }
+}
+
+// ---------- MODAL ----------
+function openModal(title, content) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = content;
+  document.getElementById('modal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+}
+
+// ---------- TOAST ----------
+function showToast(msg, type) {
+  if (!type) type = 'success';
+  var div = document.createElement('div');
+  div.className = 'toast toast-' + type;
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(function() { div.remove(); }, 3000);
+}
+
+// ---------- TIME ----------
+function updateTime() {
+  var now = new Date();
+  var str = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  var el1 = document.getElementById('adminTime');
+  var el2 = document.getElementById('adminTime2');
+  if (el1) el1.textContent = str;
+  if (el2) el2.textContent = str;
+}
+updateTime();
+setInterval(updateTime, 60000);
+</script>
+</body>
+</html>

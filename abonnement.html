@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Abonnement Maintenance — MALTY</title>
+<meta name="description" content="Souscrivez à un forfait maintenance pour votre site web. Essentiel 19€/mois ou Premium 39€/mois. Sans engagement.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06070a;--surface:#0e1016;--surface2:#14161e;--fg:#e8eaf0;--muted:#8b93a3;--border:#1e2230;--accent:#2563eb;--accent2:#1d4ed8;--accent-light:#7ea2ff;--accent-10:rgba(37,99,235,.1);--accent-20:rgba(37,99,235,.2);--accent-50:rgba(37,99,235,.5);--success:#16a34a;--warning:#f59e0b;--danger:#ef4444;--radius:16px;--radius-sm:10px;--ease:cubic-bezier(0.16,1,0.3,1)}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh}
+.container{max-width:900px;margin:0 auto;padding:32px 20px}
+.header{text-align:center;padding:80px 20px 40px}
+.header h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-0.04em;margin-bottom:12px}
+.header p{color:var(--muted);font-size:1.1rem;max-width:500px;margin:0 auto}
+.back{display:inline-block;color:var(--accent);text-decoration:none;font-size:.9rem;margin-bottom:24px}
+.back:hover{text-decoration:underline}
+
+/* Plan selector */
+.plan-selector{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:40px 0}
+.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;cursor:pointer;transition:all .3s var(--ease);position:relative}
+.plan-card:hover{border-color:var(--accent-50);transform:translateY(-4px);box-shadow:0 12px 40px var(--accent-10)}
+.plan-card.selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 12px 36px var(--accent-20)}
+.plan-card.popular{border-color:var(--accent-50)}
+.badge{position:absolute;top:16px;right:16px;background:var(--accent);color:#fff;padding:5px 14px;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border-radius:100px}
+.plan-name{font-size:1.3rem;font-weight:800;margin-bottom:8px;padding-right:80px}
+.plan-price{font-size:2.5rem;font-weight:900;color:var(--accent-light);margin-bottom:4px}
+.plan-price span{font-size:.9rem;font-weight:500;color:var(--muted)}
+.plan-desc{color:var(--muted);font-size:.85rem;margin-bottom:20px}
+.plan-features{list-style:none;margin-bottom:24px}
+.plan-features li{padding:8px 0;font-size:.9rem;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.plan-features li:last-child{border-bottom:none}
+.plan-features li::before{content:'✓';color:var(--success);font-weight:700;font-size:.85rem}
+.plan-radio{width:20px;height:20px;border:2px solid var(--border);border-radius:50%;margin-bottom:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.plan-card.selected .plan-radio{border-color:var(--accent);background:var(--accent)}
+.plan-card.selected .plan-radio::after{content:'';width:8px;height:8px;border-radius:50%;background:#fff}
+
+/* Form */
+.signup-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-top:32px;display:none}
+.signup-form.active{display:block}
+.form-title{font-size:1.2rem;font-weight:700;margin-bottom:24px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;color:var(--muted)}
+.form-group input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg);font:400 .95rem 'Inter',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10)}
+.form-group input::placeholder{color:var(--muted);opacity:.5}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 32px;border-radius:var(--radius-sm);font-weight:700;font-size:1rem;cursor:pointer;border:none;text-decoration:none;transition:all .3s;width:100%;font-family:'Inter',sans-serif}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--fg)}
+.btn-outline:hover{border-color:var(--accent-50);background:var(--accent-10)}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+
+/* Summary */
+.summary{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;margin:24px 0}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;font-size:.9rem}
+.summary-row.total{border-top:1px solid var(--border);margin-top:8px;padding-top:12px;font-weight:700;font-size:1rem}
+.summary-row .price{color:var(--accent);font-weight:600}
+
+/* Status */
+.status-card{text-align:center;padding:48px 32px}
+.status-icon{font-size:4rem;margin-bottom:16px}
+.status-title{font-size:1.5rem;font-weight:800;margin-bottom:8px}
+.status-text{color:var(--muted);margin-bottom:24px}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:48px 0}
+.step{text-align:center}
+.step-num{width:48px;height:48px;border-radius:50%;background:var(--accent-10);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;margin:0 auto 12px}
+.step h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.step p{color:var(--muted);font-size:.8rem}
+
+/* FAQ */
+.faq{margin:48px 0}
+.faq h2{font-size:1.3rem;font-weight:800;margin-bottom:24px;text-align:center}
+.faq-item{border-bottom:1px solid var(--border);padding:16px 0}
+.faq-q{font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-q::after{content:'+';font-size:1.3rem;color:var(--muted);transition:transform .2s}
+.faq-item.open .faq-q::after{transform:rotate(45deg);color:var(--accent)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s;color:var(--muted);font-size:.9rem}
+.faq-item.open .faq-a{max-height:200px;padding-top:12px}
+
+/* Security badges */
+.trust{display:flex;gap:24px;justify-content:center;margin:32px 0;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted)}
+
+/* Responsive */
+@media(max-width:600px){
+  .plan-selector{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back">← Retour au site</a>
+  
+  <div class="header">
+    <h1>Souscrire à un forfait</h1>
+    <p>Choisissez votre formule de maintenance et protégez votre site web dès maintenant.</p>
+  </div>
+
+  <!-- Plan Selection -->
+  <div class="plan-selector" id="planSelector">
+    <div class="plan-card" data-plan="essentiel" onclick="selectPlan('essentiel')">
+      <div class="plan-radio"></div>
+      <div class="plan-name">Essentiel</div>
+      <div class="plan-price">19€ <span>/mois</span></div>
+      <div class="plan-desc">Le minimum vital pour un site serein</div>
+      <ul class="plan-features">
+        <li>Mises à jour sécurité mensuelles</li>
+        <li>Sauvegardes hebdomadaires</li>
+        <li>Certificat SSL renouvelé</li>
+        <li>Monitoring uptime 24/7</li>
+        <li>Support par email (48h)</li>
+      </ul>
+    </div>
+    <div class="plan-card popular" data-plan="premium" onclick="selectPlan('premium')">
+      <div class="badge">Recommandé</div>
+      <div class="plan-radio"></div>
+      <div class="plan-name">Premium</div>
+      <div class="plan-price">39€ <span>/mois</span></div>
+      <div class="plan-desc">Le tout-en-un pour les pros</div>
+      <ul class="plan-features">
+        <li>Tout du pack Essentiel</li>
+        <li>2 modifications de contenu/mois</li>
+        <li>Optimisation performance trimestrielle</li>
+        <li>Rapport mensuel détaillé</li>
+        <li>Support prioritaire (24h)</li>
+        <li>Sauvegardes quotidiennes</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Signup Form -->
+  <div class="signup-form" id="signupForm">
+    <div class="form-title">📋 Vos informations</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Prénom</label>
+        <input type="text" id="firstName" placeholder="Jean">
+      </div>
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" id="lastName" placeholder="Dupont">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="jean@entreprise.fr">
+    </div>
+    <div class="form-group">
+      <label>Nom de domaine du site</label>
+      <input type="text" id="domain" placeholder="monsite.fr">
+    </div>
+
+    <div class="summary" id="summary">
+      <div class="summary-row">
+        <span>Formule</span>
+        <span id="summaryPlan">—</span>
+      </div>
+      <div class="summary-row">
+        <span>Prix</span>
+        <span class="price" id="summaryPrice">—</span>
+      </div>
+      <div class="summary-row">
+        <span>Engagement</span>
+        <span>Aucun — Résiliable à tout moment</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total mensuel</span>
+        <span class="price" id="summaryTotal">—</span>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="subscribeBtn" onclick="handleSubscribe()" disabled>
+      🔒 Souscrire et payer
+    </button>
+
+    <div class="trust">
+      <div class="trust-item">🔒 Paiement sécurisé Stripe</div>
+      <div class="trust-item">❌ Sans engagement</div>
+      <div class="trust-item">📧 Confirmation par email</div>
+    </div>
+  </div>
+
+  <!-- Success Status (hidden by default) -->
+  <div class="signup-form" id="successStatus">
+    <div class="status-card">
+      <div class="status-icon">✅</div>
+      <div class="status-title">Abonnement activé !</div>
+      <div class="status-text">Votre forfait <strong id="activePlanName">—</strong> est maintenant actif.<br>Vous recevrez un email de confirmation avec tous les détails.</div>
+
+      <div style="margin:24px 0;text-align:left;max-width:400px;margin-left:auto;margin-right:auto">
+        <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:16px">
+          <div style="background:var(--accent);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0">1</div>
+          <div>
+            <strong style="font-size:.9rem">Email de confirmation</strong>
+            <p style="color:var(--muted);font-size:.8rem;margin:2px 0 0">Récapitulatif de votre abonnement et accès à l'espace client.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:16px">
+          <div style="background:var(--accent);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0">2</div>
+          <div>
+            <strong style="font-size:.9rem">Configuration</strong>
+            <p style="color:var(--muted);font-size:.8rem;margin:2px 0 0">Je configure le monitoring et les sauvegardes de votre site.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:16px">
+          <div style="background:var(--accent);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0">3</div>
+          <div>
+            <strong style="font-size:.9rem">Votre site est protégé</strong>
+            <p style="color:var(--muted);font-size:.8rem;margin:2px 0 0">Monitoring 24/7, sauvegardes automatiques, support prioritaire.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:300px;margin:0 auto">
+        <a href="espace-client.html" class="btn btn-primary" style="width:100%">Accéder à mon espace client</a>
+        <a href="support.html" class="btn btn-outline" style="width:100%">💬 Poser une question</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://maltyshop.vercel.app" target="_blank" class="btn btn-outline" style="width:100%">📢 Partager MALTY sur Facebook</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Choisissez votre formule</h3>
+      <p>Sélectionnez Essentiel ou Premium selon vos besoins.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Payez en sécurité</h3>
+      <p>Paiement Stripe sécurisé. Carte bancaire acceptée.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Votre site est protégé</h3>
+      <p>Je configure le monitoring et les sauvegardes immédiatement.</p>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Questions fréquentes</h2>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Puis-je résilier à tout moment ?</div>
+      <div class="faq-a">Oui, aucun engagement. Vous pouvez annuler votre abonnement à tout moment depuis votre espace client. La résiliation prend effet à la fin de la période en cours.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Comment fonctionne le paiement ?</div>
+      <div class="faq-a">Le paiement est géré par Stripe, le leader mondial du paiement en ligne. Votre carte bancaire est débitée automatiquement chaque mois. Vous pouvez changer de carte depuis votre espace client.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Puis-je changer de formule ?</div>
+      <div class="faq-a">Oui, vous pouvez passer de l'Essentiel au Premium (ou inversement) à tout moment. Le changement prend effet immédiatement avec un prorata.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Que se passe-t-il si je ne paie pas ?</div>
+      <div class="faq-a">En cas de paiement échoué, Stripe relance automatiquement pendant 7 jours. Passé ce délai, la maintenance est suspendue jusqu'au règlement.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Mes données bancaires sont-elles sécurisées ?</div>
+      <div class="faq-a">Oui. Nous ne stockons aucune donnée bancaire. Tout est géré par Stripe, certifié PCI-DSS niveau 1 (le plus haut niveau de sécurité).</div>
+    </div>
+  </div>
+</div>
+
+<script src="auth-guard.js"></script>
+<script>
+let selectedPlan = null;
+
+function selectPlan(plan) {
+  selectedPlan = plan;
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`[data-plan="${plan}"]`).classList.add('selected');
+  
+  const form = document.getElementById('signupForm');
+  form.classList.add('active');
+  
+  const planName = plan === 'essentiel' ? 'Essentiel' : 'Premium';
+  const planPrice = plan === 'essentiel' ? '19€' : '39€';
+  
+  document.getElementById('summaryPlan').textContent = planName;
+  document.getElementById('summaryPrice').textContent = planPrice + '/mois';
+  document.getElementById('summaryTotal').textContent = planPrice + '/mois';
+  
+  validateForm();
+  form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function validateForm() {
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName = document.getElementById('lastName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const domain = document.getElementById('domain').value.trim();
+  const btn = document.getElementById('subscribeBtn');
+  
+  btn.disabled = !(firstName && lastName && email && domain && selectedPlan);
+}
+
+// Real-time validation
+['firstName', 'lastName', 'email', 'domain'].forEach(id => {
+  document.getElementById(id).addEventListener('input', validateForm);
+});
+
+async function handleSubscribe() {
+  const btn = document.getElementById('subscribeBtn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Redirection vers Stripe...';
+  
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName = document.getElementById('lastName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const domain = document.getElementById('domain').value.trim();
+  
+  try {
+    const response = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        plan: selectedPlan,
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        domain: domain
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.url) {
+      // Redirect to Stripe Checkout
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || 'Erreur de création du paiement');
+    }
+  } catch (error) {
+    btn.disabled = false;
+    btn.innerHTML = '🔒 Souscrire et payer';
+    alert('Erreur : ' + error.message + '\n\nVérifie que le serveur est déployé sur Vercel.');
+  }
+}
+
+function toggleFaq(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+
+<script src="tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mario Consulting — Conseil en stratégie exécutive pour dirigeants. Accompagnement personnalisé, méthodologie Impact 360, résultats mesurables.">
+  <title>Mario Consulting | Stratégie Exécutive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: oklch(97% 0.008 85);
+      --surface: oklch(100% 0 0);
+      --fg: oklch(18% 0.015 60);
+      --muted: oklch(48% 0.02 60);
+      --border: oklch(90% 0.008 70);
+      --accent: oklch(42% 0.06 70);
+      --accent-10: oklch(42% 0.06 70 / 0.1);
+      --accent-20: oklch(42% 0.06 70 / 0.2);
+      --gold: oklch(72% 0.12 85);
+      --gold-20: oklch(72% 0.12 85 / 0.2);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --radius: 12px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font: 400 16px/1.7 var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+    section { padding: 120px 0; }
+    .section-header { margin-bottom: 56px; }
+    .section-header h2 { font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 12px; }
+    .section-header p { color: var(--muted); font-size: 1.05rem; max-width: 520px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 16px 32px; border-radius: 0; font-weight: 600; font-size: .85rem; cursor: pointer; text-decoration: none; transition: all .4s var(--ease); letter-spacing: .03em; border: 1px solid var(--fg); background: transparent; color: var(--fg); }
+    .btn:hover { background: var(--fg); color: #fff; }
+    .btn-primary { background: var(--fg); color: #fff; border-color: var(--fg); }
+    .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+    .card { background: var(--surface); border: 1px solid var(--border); padding: 40px; transition: all .5s var(--ease); }
+    .card:hover { border-color: var(--accent-20); box-shadow: 0 12px 40px rgba(0,0,0,.04); }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(247,245,240,.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); transition: all .3s; }
+    header.scrolled { background: rgba(247,245,240,.98); box-shadow: 0 2px 20px rgba(0,0,0,.04); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+    .logo { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; text-decoration: none; color: var(--fg); letter-spacing: -0.3px; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .8rem; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; transition: color .2s; }
+    .nav-links a:hover { color: var(--fg); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 1.5px; background: var(--fg); transition: all .3s var(--ease); }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .hero { padding: 180px 0 100px; display: flex; align-items: center; gap: 80px; }
+    .hero-text { flex: 1; }
+    .hero-label { display: inline-block; font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .2em; color: var(--muted); margin-bottom: 20px; }
+    .hero h1 { font-family: var(--font-display); font-size: clamp(2.5rem, 5.5vw, 4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 20px; }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero p { color: var(--muted); font-size: 1.1rem; margin-bottom: 32px; max-width: 480px; line-height: 1.8; }
+    .hero-image { flex-shrink: 0; }
+    .hero-image .portrait { width: 340px; height: 340px; border-radius: 50%; object-fit: cover; box-shadow: 0 24px 60px rgba(0,0,0,.1); border: 4px solid var(--surface); transition: transform .6s var(--ease); }
+    .hero-image .portrait:hover { transform: scale(1.02); }
+
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stat-item { padding: 36px 24px; text-align: center; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 500; }
+
+    .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .method-card { position: relative; padding: 48px 36px 36px; }
+    .method-card .step-num { font-family: var(--font-display); font-size: 4rem; font-weight: 700; color: var(--accent-10); line-height: .8; margin-bottom: 12px; }
+    .method-card h3 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 12px; }
+    .method-card p { color: var(--muted); font-size: .9rem; line-height: 1.7; }
+    .method-card .arrow { margin-top: 20px; display: inline-block; color: var(--accent); font-size: 1.5rem; }
+
+    .expertise-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .expertise-card { padding: 36px; }
+    .expertise-card .icon { font-size: 2rem; margin-bottom: 16px; }
+    .expertise-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+    .expertise-card p { color: var(--muted); font-size: .9rem; }
+
+    .testi-card { max-width: 700px; margin: 0 auto; text-align: center; padding: 56px; }
+    .testi-card blockquote { font-family: var(--font-display); font-size: 1.3rem; font-style: italic; color: var(--fg); line-height: 1.7; margin-bottom: 24px; }
+    .testi-card .author { font-size: .85rem; color: var(--muted); }
+    .testi-card .author strong { color: var(--fg); }
+
+    .contact-section { background: var(--surface); border-top: 1px solid var(--border); }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .contact-info h3 { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: 16px; }
+    .contact-info p { color: var(--muted); font-size: .9rem; margin-bottom: 24px; }
+    .contact-info .detail { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: var(--muted); font-size: .9rem; }
+    .contact-info .detail svg { width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; }
+    .contact-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--gold-20); color: var(--accent); font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; border-radius: 0; margin-bottom: 24px; }
+    form { display: flex; flex-direction: column; gap: 16px; }
+    input, textarea { padding: 14px 16px; border: 1px solid var(--border); background: var(--bg); color: var(--fg); font: 400 .9rem var(--font-body); outline: none; transition: border-color .3s; }
+    input:focus, textarea:focus { border-color: var(--accent); }
+    textarea { height: 110px; resize: vertical; }
+    form .btn { align-self: flex-start; }
+
+    footer { padding: 56px 0; text-align: center; border-top: 1px solid var(--border); }
+    footer p { color: var(--muted); font-size: .8rem; margin-bottom: 4px; }
+    .footer-tagline { font-family: var(--font-display); font-size: .9rem; font-style: italic; color: var(--accent); margin-bottom: 16px; }
+
+    @media (max-width: 768px) {
+      .container { padding: 0 20px; }
+      section { padding: 80px 0; }
+      .hero { flex-direction: column; padding: 140px 0 60px; gap: 40px; text-align: center; }
+      .hero p { margin: 0 auto 32px; }
+      .hero h1 br { display: none; }
+      .hero h1 em br { display: inline; }
+      .hero-image .portrait { width: 200px; height: 200px; }
+      .hero-image { order: -1; }
+      .stats-row { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat-item:last-child { border-bottom: none; }
+      .method-grid { grid-template-columns: 1fr; }
+      .contact-inner { grid-template-columns: 1fr; gap: 32px; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 32px; gap: 16px; align-items: flex-start; }
+      .hamburger { display: flex; }
+    }
+    @media (min-width: 769px) { .hamburger { display: none; } }
+  </style>
+</head>
+<body>
+  <header id="header">
+    <div class="nav-inner">
+      <a href="#" class="logo">Mario Consulting</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#expertise">Expertise</a></li>
+        <li><a href="#method">Méthode</a></li>
+        <li><a href="#stats">Résultats</a></li>
+        <li><a href="#testimonials">Références</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text reveal">
+      <span class="hero-label">Conseil exécutif</span>
+      <h1>L'Excellence <em>Stratégique</em></h1>
+      <p>Accompagnement de haut niveau pour les dirigeants qui veulent passer à la vitesse supérieure. Une approche sur mesure, des résultats mesurables.</p>
+      <a href="#contact" class="btn btn-primary">Réserver une session</a>
+    </div>
+    <div class="hero-image reveal">
+      <svg class="portrait" viewBox="0 0 340 340" style="background:#f0ede7;">
+        <defs>
+          <clipPath id="circle"><circle cx="170" cy="170" r="160"/></clipPath>
+        </defs>
+        <g clip-path="url(#circle)">
+          <rect width="340" height="340" fill="#e8e4db"/>
+          <ellipse cx="170" cy="210" rx="80" ry="90" fill="#d4cfc0"/>
+          <circle cx="170" cy="120" r="55" fill="#c5beab"/>
+          <circle cx="152" cy="108" r="6" fill="#8a8473"/>
+          <circle cx="188" cy="108" r="6" fill="#8a8473"/>
+          <ellipse cx="170" cy="128" rx="14" ry="6" fill="#8a8473"/>
+          <rect x="130" y="150" width="80" height="14" rx="7" fill="#b0a898"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <section id="stats">
+    <div class="container">
+      <div class="stats-row reveal">
+        <div class="stat-item"><div class="stat-num" data-count="15">0</div><div class="stat-label">Années d'expérience</div></div>
+        <div class="stat-item"><div class="stat-num" data-count="200">0</div><div class="stat-label">Dirigeants accompagnés</div></div>
+        <div class="stat-item"><div class="stat-num" data-count="40">0</div><div class="stat-label">% croissance moyenne</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="expertise" style="background: var(--surface);">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Domaines d'expertise</h2>
+        <p>Un spectre complet au service de votre performance.</p>
+      </div>
+      <div class="expertise-grid">
+        <div class="card expertise-card reveal">
+          <div class="icon">📈</div>
+          <h3>Stratégie de Croissance</h3>
+          <p>Diagnostic de maturité, plan de développement, optimisation des processus et gouvernance.</p>
+        </div>
+        <div class="card expertise-card reveal">
+          <div class="icon">🏛️</div>
+          <h3>Gouvernance & Leadership</h3>
+          <p>Structure organisationnelle, comités exécutifs, culture d'entreprise et transformation managériale.</p>
+        </div>
+        <div class="card expertise-card reveal">
+          <div class="icon">💹</div>
+          <h3>Performance Financière</h3>
+          <p>Optimisation de la marge, structuration financière, levée de fonds et pilotage budgétaire.</p>
+        </div>
+        <div class="card expertise-card reveal">
+          <div class="icon">🔄</div>
+          <h3>Transformation Digitale</h3>
+          <p>Roadmap digitale, adoption technologique, cybersécurité et transformation des processus métier.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="method">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Méthodologie <em style="font-style:italic; color:var(--accent);">Impact 360</em></h2>
+        <p>Une approche structurée en trois phases pour des résultats durables.</p>
+      </div>
+      <div class="method-grid">
+        <div class="card method-card reveal">
+          <div class="step-num">01</div>
+          <h3>Diagnostic</h3>
+          <p>Analyse approfondie de votre organisation, de vos process et de votre marché. Nous identifions les freins et les leviers de croissance avec une cartographie précise.</p>
+          <div class="arrow">⟶</div>
+        </div>
+        <div class="card method-card reveal">
+          <div class="step-num">02</div>
+          <h3>Déploiement</h3>
+          <p>Mise en œuvre des leviers identifiés avec un plan d'action concret, des jalons mesurables et un accompagnement rapproché de vos équipes dirigeantes.</p>
+          <div class="arrow">⟶</div>
+        </div>
+        <div class="card method-card reveal">
+          <div class="step-num">03</div>
+          <h3>Optimisation</h3>
+          <p>Suivi en temps réel des KPIs, ajustement itératif et consolidation des acquis. Nous ne repartons qu'après avoir ancré les nouvelles pratiques.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials" style="background: var(--surface);">
+    <div class="container">
+      <div class="section-header reveal" style="text-align:center;">
+        <h2>Ce que disent nos dirigeants</h2>
+        <p style="margin:0 auto;">Des témoignages de dirigeants que nous accompagnons.</p>
+      </div>
+      <div class="testi-card card reveal">
+        <blockquote>"Une approche chirurgicale qui a radicalement changé notre trajectoire. Mario a su voir ce que personne d'autre n'avait vu dans notre organisation."</blockquote>
+        <div class="author"><strong>François D.</strong> — CEO, Groupe Altitude</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px;">
+        <div class="card testi-card reveal" style="padding:36px;">
+          <blockquote style="font-size:1rem;">"Un accompagnement exigeant mais bienveillant. Les résultats parlent d'eux-mêmes : +35% de chiffre d'affaires en 18 mois."</blockquote>
+          <div class="author" style="margin-top:16px;"><strong>Sophie M.</strong> — Directrice Générale, NovaTech</div>
+        </div>
+        <div class="card testi-card reveal" style="padding:36px;">
+          <blockquote style="font-size:1rem;">"La méthodologie Impact 360 a structuré notre croissance de manière durable. Je recommande à tout dirigeant ambitieux."</blockquote>
+          <div class="author" style="margin-top:16px;"><strong>Pierre L.</strong> — Fondateur, Equinox Partners</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Un entretien confidentiel</h2>
+        <p>Prenons le temps de comprendre vos enjeux. Aucun engagement, une rencontre pour échanger.</p>
+      </div>
+      <div class="contact-inner">
+        <div class="contact-info reveal">
+          <div class="contact-badge">🔒 Confidentialité absolue</div>
+          <h3>Parlons de votre vision</h3>
+          <p>Que vous soyez au début d'une réflexion stratégique ou face à un défi spécifique, je vous reçois pour un premier échange sans engagement.</p>
+          <div class="detail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Paris 16<sup>e</sup> — Londres EC2 — Genève 1204
+          </div>
+          <div class="detail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +33 (0)6 12 34 56 78
+          </div>
+          <div class="detail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            contact@marioconsulting.com
+          </div>
+        </div>
+        <form action="https://formspree.io/f/xredyerp" method="POST" class="reveal">
+          <input type="text" name="nom" placeholder="Nom du dirigeant" required>
+          <input type="email" name="email" placeholder="Email professionnel" required>
+          <input type="text" name="entreprise" placeholder="Entreprise / Organisation">
+          <textarea name="enjeu" placeholder="Décrivez brièvement votre enjeu stratégique..." required></textarea>
+          <button type="submit" class="btn btn-primary">Soumettre une demande d'entretien</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-tagline">"Accompagner les dirigeants vers l'excellence"</div>
+      <p>Mario Consulting — Paris · Londres · Genève</p>
+      <p>Expertise en stratégie exécutive depuis 2010.</p>
+      <p style="margin-top:16px;">© 2026 Mario Consulting. Confidentialité et discrétion garanties.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var header = document.getElementById('header');
+      var hamburger = document.getElementById('hamburger');
+      var navLinks = document.getElementById('navLinks');
+
+      if (hamburger) {
+        hamburger.addEventListener('click', function() {
+          hamburger.classList.toggle('open');
+          navLinks.classList.toggle('open');
+        });
+      }
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.nav-inner') && navLinks.classList.contains('open')) {
+          hamburger.classList.remove('open');
+          navLinks.classList.remove('open');
+        }
+      });
+      navLinks.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+          hamburger.classList.remove('open');
+          navLinks.classList.remove('open');
+        });
+      });
+
+      var scrollTimer;
+      window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function() {
+          header.classList.toggle('scrolled', window.scrollY > 40);
+        }, 20);
+      }, { passive: true });
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(function(el) {
+        observer.observe(el);
+      });
+
+      var countObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var el = entry.target;
+            var target = parseInt(el.getAttribute('data-count'), 10);
+            var current = 0;
+            var step = Math.ceil(target / 50);
+            var timer = setInterval(function() {
+              current += step;
+              if (current >= target) { current = target; clearInterval(timer); }
+              el.textContent = current + (target === 40 ? '%' : '+');
+            }, 25);
+            countObserver.unobserve(el);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      document.querySelectorAll('.stat-num[data-count]').forEach(function(el) {
+        countObserver.observe(el);
+      });
+    })();
+  </script>
+</body>
+</html>

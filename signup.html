@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="description" content="Créez votre compte MALTY et accédez à votre espace client.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0a0e15">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Inscription — MALTY</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#06070a;--surface:#0e1016;--surface2:#14161e;--fg:#e8eaf0;--muted:#8b93a3;--accent:#2563eb;--accent2:#1d4ed8;--accent-light:#7ea2ff;--accent-10:rgba(37,99,235,.12);--accent-20:rgba(37,99,235,.2);--accent-50:rgba(37,99,235,.5);--success:#16a34a;--danger:#ef4444;--border:#1e2230;--radius:16px;--radius-sm:10px;--font:'Inter',sans-serif;--ease:cubic-bezier(0.16,1,0.3,1)}
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+    body{background:var(--bg);color:var(--fg);font-family:var(--font);min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:visible}
+
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:48px 40px;max-width:440px;width:100%;position:relative;z-index:1;box-shadow:0 24px 80px rgba(0,0,0,.4)}
+    .logo-center{text-align:center;margin-bottom:32px}
+    .logo-center svg{height:56px;width:auto}
+    .logo-center h1{font-size:1.5rem;font-weight:800;margin-top:12px;letter-spacing:-0.02em}
+    .logo-center p{color:var(--muted);font-size:.85rem;margin-top:4px}
+
+    .form-group{margin-bottom:18px}
+    .form-group label{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+    .form-group input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg);font-family:var(--font);font-size:1rem;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;text-align:center}
+    .form-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10)}
+    .form-group input::placeholder{color:var(--muted);opacity:.5;text-align:center}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px 24px;border-radius:var(--radius-sm);font-weight:700;font-size:1rem;cursor:pointer;border:none;transition:all .2s;font-family:var(--font);-webkit-appearance:none}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+    .btn-primary:active{transform:scale(.98)}
+    .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--fg)}
+    .btn-outline:hover{border-color:var(--accent-50);background:var(--accent-10)}
+
+    .error-msg{background:rgba(255,51,51,.1);border:1px solid rgba(255,51,51,.3);border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:.85rem;color:var(--danger);display:none}
+    .success-msg{background:rgba(0,204,102,.1);border:1px solid rgba(0,204,102,.3);border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:.85rem;color:var(--success);display:none}
+
+    .login-link{text-align:center;margin-top:24px;font-size:.85rem;color:var(--muted)}
+    .login-link a{color:var(--accent);text-decoration:none;font-weight:600;transition:color .2s}
+
+    .terms{text-align:center;margin-top:16px;font-size:.75rem;color:var(--muted);line-height:1.5}
+
+    /* Verify step */
+    #verifyStep{display:none}
+    .verify-email{color:var(--accent);font-weight:600}
+    .verify-info{font-size:.85rem;color:var(--muted);margin-bottom:24px;line-height:1.6}
+    .code-input{font-size:1.5rem !important;letter-spacing:8px;font-weight:700;padding:20px !important}
+    .resend-link{text-align:center;margin-top:16px;font-size:.82rem;color:var(--muted)}
+    .resend-link a{color:var(--accent);text-decoration:none;font-weight:600;cursor:pointer}
+    .resend-link a:hover{text-decoration:underline}
+
+    @media(max-width:480px){
+      body{align-items:flex-start;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+      body::before{display:none}
+      .card{border:none;border-radius:0;padding:24px 20px;margin:0;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center}
+      .logo-center{margin-bottom:28px}
+      .logo-center svg{height:48px}
+      .logo-center h1{font-size:1.35rem}
+      .form-group{margin-bottom:16px}
+      .form-group label{font-size:.7rem;margin-bottom:6px}
+      .form-group input{padding:16px;font-size:1rem;border-radius:14px}
+      .form-row{grid-template-columns:1fr;gap:12px}
+      .btn{padding:18px;font-size:1rem;border-radius:14px}
+      .login-link{margin-top:20px;font-size:.82rem}
+      .terms{margin-top:12px;font-size:.72rem}
+      .code-input{font-size:1.3rem !important;letter-spacing:6px;padding:18px !important}
+    }
+
+    @media(max-width:360px){
+      .card{padding:20px 16px}
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <!-- STEP 1: Register form -->
+    <div id="registerStep">
+      <div class="logo-center">
+        <svg viewBox="0 0 100 90" height="56"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#bae6fd"/><stop offset="20%" stop-color="#7dd3fc"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="80%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0284c7"/></linearGradient><linearGradient id="lg2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="20%" stop-color="#0ea5e9"/><stop offset="50%" stop-color="#0284c7"/><stop offset="80%" stop-color="#0369a1"/><stop offset="100%" stop-color="#075985"/></linearGradient><linearGradient id="lg3" x1="50%" y1="0%" x2="50%" y2="100%"><stop offset="0%" stop-color="#0c4a6e"/><stop offset="40%" stop-color="#082f49"/><stop offset="100%" stop-color="#0c1929"/></linearGradient><linearGradient id="lg4" x1="0%" y1="0%" x2="60%" y2="100%"><stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.7"/><stop offset="100%" stop-color="#bae6fd" stop-opacity="0.1"/></linearGradient></defs><polygon points="8,82 8,14 28,6 50,36 28,48 8,58" fill="url(#lg)"/><polygon points="8,14 28,6 33,16 13,24" fill="url(#lg4)"/><polygon points="92,82 92,14 72,6 50,36 72,48 92,58" fill="url(#lg2)"/><polygon points="92,14 72,6 67,16 87,24" fill="url(#lg4)" opacity="0.7"/><polygon points="28,48 50,36 72,48 50,72" fill="url(#lg3)"/><line x1="8" y1="14" x2="28" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.5"/><line x1="92" y1="14" x2="72" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.4"/><line x1="28" y1="6" x2="50" y2="36" stroke="#bae6fd" stroke-width="1" opacity="0.3"/><line x1="72" y1="6" x2="50" y2="36" stroke="#bae6fd" stroke-width="1" opacity="0.25"/></svg>
+        <h1>Créer un compte</h1>
+        <p>Rejoignez MALTY en quelques secondes</p>
+      </div>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <form id="signupForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" name="nom" placeholder="Votre nom" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="tel" name="phone" placeholder="06 XX XX XX XX" inputmode="tel">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="votre@email.com" required autocomplete="email" inputmode="email">
+        </div>
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <input type="password" name="password" placeholder="Minimum 6 caractères" required minlength="6" autocomplete="new-password">
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Créer mon compte</button>
+      </form>
+
+      <p class="login-link">Déjà un compte ? <a href="login.html">Se connecter</a></p>
+      <p class="terms">En créant un compte, vous acceptez nos conditions d'utilisation.</p>
+    </div>
+
+    <!-- STEP 2: Verify code -->
+    <div id="verifyStep">
+      <div class="logo-center">
+        <svg viewBox="0 0 100 90" height="56"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#bae6fd"/><stop offset="20%" stop-color="#7dd3fc"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="80%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0284c7"/></linearGradient><linearGradient id="lg2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="20%" stop-color="#0ea5e9"/><stop offset="50%" stop-color="#0284c7"/><stop offset="80%" stop-color="#0369a1"/><stop offset="100%" stop-color="#075985"/></linearGradient><linearGradient id="lg3" x1="50%" y1="0%" x2="50%" y2="100%"><stop offset="0%" stop-color="#0c4a6e"/><stop offset="40%" stop-color="#082f49"/><stop offset="100%" stop-color="#0c1929"/></linearGradient><linearGradient id="lg4" x1="0%" y1="0%" x2="60%" y2="100%"><stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.7"/><stop offset="100%" stop-color="#bae6fd" stop-opacity="0.1"/></linearGradient></defs><polygon points="8,82 8,14 28,6 50,36 28,48 8,58" fill="url(#lg)"/><polygon points="8,14 28,6 33,16 13,24" fill="url(#lg4)"/><polygon points="92,82 92,14 72,6 50,36 72,48 92,58" fill="url(#lg2)"/><polygon points="92,14 72,6 67,16 87,24" fill="url(#lg4)" opacity="0.7"/><polygon points="28,48 50,36 72,48 50,72" fill="url(#lg3)"/><line x1="8" y1="14" x2="28" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.5"/><line x1="92" y1="14" x2="72" y2="6" stroke="#e0f2fe" stroke-width="1.5" opacity="0.4"/><line x1="28" y1="6" x2="50" y2="36" stroke="#bae6fd" stroke-width="1" opacity="0.3"/><line x1="72" y1="6" x2="50" y2="36" stroke="#bae6fd" stroke-width="1" opacity="0.25"/></svg>
+        <h1>Vérifiez votre email</h1>
+        <p>Un code a été envoyé</p>
+      </div>
+
+      <div class="error-msg" id="verifyError"></div>
+      <div class="success-msg" id="verifySuccess"></div>
+
+      <p class="verify-info">Nous avons envoyé un code de 6 chiffres à<br><span class="verify-email" id="verifyEmailDisplay">—</span></p>
+
+      <form id="verifyForm">
+        <div class="form-group">
+          <input type="text" id="codeInput" class="code-input" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" required autocomplete="one-time-code">
+        </div>
+        <button type="submit" class="btn btn-primary" id="verifyBtn">Vérifier mon email</button>
+      </form>
+
+      <p class="resend-link">Pas reçu le code ? <a onclick="resendCode()">Renvoyer le code</a></p>
+      <p class="resend-link" style="margin-top:8px"><a href="signup.html" style="font-weight:400;color:var(--muted)">← Changer d'adresse email</a></p>
+    </div>
+
+  </div>
+
+  <script>
+    var token = localStorage.getItem('malty_token');
+    var userEmail = localStorage.getItem('malty_email');
+    if (token && userEmail) { window.location.href = 'index.html'; }
+
+    var pendingEmail = '';
+
+    // STEP 1: Register
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('submitBtn');
+      var errorEl = document.getElementById('errorMsg');
+      btn.disabled = true;
+      btn.textContent = 'Envoi du code...';
+      errorEl.style.display = 'none';
+
+      pendingEmail = this.email.value.toLowerCase();
+
+      fetch('/api/auth', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'register',
+          nom: this.nom.value,
+          email: pendingEmail,
+          password: this.password.value,
+          phone: this.phone.value
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.ok && d.step === 'verify') {
+          document.getElementById('registerStep').style.display = 'none';
+          document.getElementById('verifyStep').style.display = 'block';
+          document.getElementById('verifyEmailDisplay').textContent = pendingEmail;
+          document.getElementById('codeInput').focus();
+        } else {
+          errorEl.textContent = d.error || 'Erreur lors de l\'inscription';
+          errorEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Créer mon compte';
+        }
+      })
+      .catch(function() {
+        errorEl.textContent = 'Erreur réseau. Vérifiez votre connexion.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Créer mon compte';
+      });
+    });
+
+    // STEP 2: Verify code
+    document.getElementById('verifyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('verifyBtn');
+      var errorEl = document.getElementById('verifyError');
+      var successEl = document.getElementById('verifySuccess');
+      btn.disabled = true;
+      btn.textContent = 'Vérification...';
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+
+      var code = document.getElementById('codeInput').value;
+
+      fetch('/api/auth', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'verify-email', email: pendingEmail, code: code }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.ok) {
+          localStorage.setItem('malty_token', d.token);
+          localStorage.setItem('malty_email', d.user.email);
+          localStorage.setItem('malty_user', JSON.stringify(d.user));
+          localStorage.removeItem('malty_guest');
+          window.location.href = 'index.html';
+        } else {
+          errorEl.textContent = d.error || 'Code incorrect';
+          errorEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Vérifier mon email';
+        }
+      })
+      .catch(function() {
+        errorEl.textContent = 'Erreur réseau.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Vérifier mon email';
+      });
+    });
+
+    // Auto-submit when 6 digits entered
+    document.getElementById('codeInput').addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '');
+      if (this.value.length === 6) {
+        document.getElementById('verifyForm').dispatchEvent(new Event('submit'));
+      }
+    });
+
+    // Resend code
+    function resendCode() {
+      var successEl = document.getElementById('verifySuccess');
+      var errorEl = document.getElementById('verifyError');
+      successEl.style.display = 'none';
+      errorEl.style.display = 'none';
+
+      fetch('/api/auth', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'resend-code', email: pendingEmail }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.ok) {
+          successEl.textContent = 'Nouveau code envoyé ! Vérifiez votre boîte mail.';
+          successEl.style.display = 'block';
+        } else {
+          errorEl.textContent = d.error || 'Erreur lors de l\'envoi';
+          errorEl.style.display = 'block';
+        }
+      })
+      .catch(function() {
+        errorEl.textContent = 'Erreur réseau.';
+        errorEl.style.display = 'block';
+      });
+    }
+  </script>
+</body>
+</html>

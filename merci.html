@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Merci — MALTY</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <style>
+    :root {
+      --bg: #06070a;
+      --surface: #0e1016;
+      --fg: #e8eaf0;
+      --muted: #8b93a3;
+      --border: #1e2230;
+      --accent: #2563eb;
+      --accent2: #1d4ed8;
+      --accent-light: #7ea2ff;
+      --accent-20: rgba(37, 99, 235, 0.2);
+      --accent-10: rgba(37, 99, 235, 0.1);
+      --success: #16a34a;
+      --font: 'Inter', -apple-system, sans-serif;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--bg);color:var(--fg);font-family:var(--font);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{max-width:520px;width:100%;padding:56px 40px;text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 24px 80px rgba(0,0,0,.4)}
+    .icon{width:80px;height:80px;border-radius:50%;background:rgba(22,163,74,.14);display:inline-flex;align-items:center;justify-content:center;font-size:2.5rem;margin-bottom:24px}
+    h1{font-size:2rem;font-weight:800;margin-bottom:12px;letter-spacing:-0.04em}
+    .subtitle{color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:32px}
+    .steps{text-align:left;margin:0 auto 32px;max-width:400px}
+    .step{display:flex;gap:16px;align-items:flex-start;margin-bottom:20px}
+    .step-num{background:var(--accent);color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0}
+    .step strong{display:block;font-size:.95rem;margin-bottom:2px}
+    .step p{color:var(--muted);font-size:.85rem;margin:0;line-height:1.6}
+    .divider{border-top:1px solid var(--border);margin:24px 0}
+    .actions{display:flex;flex-direction:column;gap:12px;max-width:400px;margin:0 auto 32px}
+    .btn{display:block;padding:14px 24px;border-radius:var(--radius-sm);text-decoration:none;font-weight:600;font-size:.9rem;transition:all .3s var(--ease);text-align:center}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--fg)}
+    .btn-outline:hover{border-color:var(--accent);background:var(--accent-10)}
+    .footer{color:var(--muted);font-size:.75rem;margin-top:24px;opacity:.7}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">✅</div>
+    <h1>Merci pour votre commande !</h1>
+    <p class="subtitle">Votre paiement a bien été reçu. Je vous envoie un email de confirmation dans les prochaines minutes.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <strong>Email de confirmation</strong>
+          <p>Vous recevez les détails de votre pack et le lien vers le brief.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <strong>Remplir le brief</strong>
+          <p>Quelques minutes pour me donner toutes les infos de votre projet.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <strong>Création de votre site</strong>
+          <p>Je commence la création sous 24h. Livraison en 3 à 5 jours.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="actions">
+      <a href="brief.html" class="btn btn-primary">📋 Remplir mon brief maintenant</a>
+      <a href="support.html" class="btn btn-outline">💬 Poser une question</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://maltyshop.vercel.app" target="_blank" class="btn btn-outline">📢 Partager MALTY sur Facebook</a>
+    </div>
+
+    <p class="footer">© 2026 MALTY — Créateur de Sites Web Professionnels</p>
+  </div>
+
+  <!-- Google Ads Conversion Tracking -->
+</body>
+</html>
