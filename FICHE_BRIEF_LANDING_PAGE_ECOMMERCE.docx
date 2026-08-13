@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:r><w:t>FICHE BRIEF LANDING PAGE E-COMMERCE</w:t></w:r></w:p>
+    <w:p><w:r><w:t>À remplir en appel client</w:t></w:r></w:p>
+    <w:p><w:r><w:br/></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>1. IDENTITÉ & ACTIVITÉ</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Nom commercial (exact) : ___________________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Nom du gérant / interlocuteur : _______________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Activité principale : _______________________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Description courte (2-3 phrases) : ____________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Différenciation (prix, qualité, rapidité, expertise, local, bio...) : _______________</w:t></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>2. CONTACT & LOCALISATION</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Téléphone (appel + WhatsApp) : _____________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Email pro : ______________________________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Adresse physique : ________________________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Zone d'intervention / livraison : _____________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Horaires d'ouverture : _____________________________________</w:t></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>3. OFFRE & TARIFS (pour la page)</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Produits/services phares (3-5 max) : __________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Prix affichés ou "Sur devis" ? : ______________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Durée moyenne prestation/livraison : __________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Capacité (ex: 10 cmd/jour, 5 créneaux/semaine) : ______________</w:t></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>4. RÉSERVATION / COMMANDE</w:t></w:r></w:p>
+    <w:p><w:r><w:t>Comment le client commande ?</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Appel direct        ☐ WhatsApp/SMS</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Formulaire page     ☐ Calendly/lien résa</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Paiement en ligne (Stripe ?) : _______________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>Système existant ? ____________________________________________</w:t></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>5. PREUVES SOCIALES & CONTENU</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Photos dispo (local, produits, équipe, réalisations) : OUI / NON</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Envoi par : WeTransfer / Google Photos / Autre : _______________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Avis clients (Google, FB, screenshots) : _____ avis, note ____/5</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Logos partenaires / certifications / labels : ___________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Vidéo courte (Reels, présentation) : OUI / NON</w:t></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>6. PRÉSENCE EN LIGNE EXISTANTE</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Instagram : @__________________    ☐ Facebook : ______________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Site web actuel : ___________________________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Google My Business : REVENDIQUÉ / NON</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Autres : ___________________________________________________</w:t></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>7. STYLE & PRÉFÉRENCES</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Couleurs : __________________________________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Ton : ☐ Pro/corporate  ☐ Chaleureux/artisanal  ☐ Moderne/minimal  ☐ Fun/décontracté</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Sites aimés (URL) : _________________________________________</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ À éviter : __________________________________________________</w:t></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>8. TECHNIQUE & LIVRAISON</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Domaine : DÉJÀ ACHETÉ (registrar: ______, accès DNS: OUI/NON) / À ACHETER</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Hébergement géré par MALTY (Vercel) : OUI</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Emails pro (contact@, commande@) : OUI / NON</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Délai souhaité : __________________ (standard 3-5j ouvrés)</w:t></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>9. BUDGET & VALIDATION</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Pack Landing Page : 99€ (paiement unique)</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Pack Application Mobile (iOS/Android) : 1 200€ (paiement unique)</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Acompte 50% à la commande, 50% à la livraison</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Contact facturation (si différent) : ____________________________</w:t></w:r></w:p>
+    
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>✅ CHECKLIST AVANT DE RACCROCHER</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Brief noté complet    ☐ Photos/logo reçus ou lien donné</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Domaine : accès DNS ou achat prévu    ☐ Acompte : lien envoyé / reçu</w:t></w:r></w:p>
+    <w:p><w:r><w:t>☐ Prochaine étape confirmée : "Je démarre demain, livraison 3-5j"</w:t></w:r></w:p>
+    
+    <w:p><w:r><w:br/></w:r></w:p>
+    <w:p><w:r><w:t>Date : ___________    Client : ___________    Commercial : ___________</w:t></w:r></w:p>
+  </w:body>
+</w:document>

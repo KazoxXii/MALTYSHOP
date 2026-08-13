@@ -55,6 +55,17 @@ window.MALTY_CONFIG = {
             stripe: 'https://buy.stripe.com/7sY9AN8RB8Kz0fC4BC0oM08',
             paypal: 'https://paypal.me/Maltyzz/899',
             ventes: 42
+        },
+        { 
+            id: 'mobile-app', 
+            nom: 'Application Mobile iOS / Android', 
+            prix: 1200, 
+            delai: '14 à 21 jours',
+            desc: 'Achetez votre application mobile native. Une app rapide, fluide et disponible sur l\'App Store et le Google Play Store.',
+            features: ['Design UI/UX Sur-Mesure', 'Déploiement iOS & Android', 'Notifications Push', 'Mode Hors-Ligne', 'Mises à Jour Incluses'],
+            stripe: '',
+            paypal: '',
+            ventes: 0
         }
     ],
 
@@ -77,7 +88,7 @@ window.MALTY_CONFIG = {
         },
         { 
             q: "Combien coûte réellement un site ?", 
-            a: "Mes prix sont forfaitaires pour la création et le code source : de 99€ pour une Landing Page à 899€ pour une solution Premium complète. Il n'y a pas d'abonnement caché car vous êtes propriétaire de votre code.",
+            a: "Mes prix sont forfaitaires pour la création et le code source : de 99€ pour une Landing Page à 899€ pour une solution Premium complète, et 1 200€ pour une application mobile iOS/Android. Il n'y a pas d'abonnement caché car vous êtes propriétaire de votre code.",
             keywords: ['prix', 'tarif', 'argent', 'cout', 'combien', 'payer', 'mensuel', 'abonnement']
         },
         { 

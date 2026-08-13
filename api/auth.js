@@ -21,49 +21,77 @@ function getRedis() {
 async function rGet(key) {
   const { url, token } = getRedis();
   if (!url || !token) throw new Error('Redis not configured');
-  const res = await fetch(url + '/get/' + encodeURIComponent(key), {
-    headers: { Authorization: 'Bearer ' + token }
-  });
-  const data = await res.json();
-  if (data.result === null || data.result === undefined) return null;
-  if (typeof data.result === 'string') {
-    try { return JSON.parse(data.result); } catch(e) { return data.result; }
+  try {
+    const res = await fetch(url + '/get/' + encodeURIComponent(key), {
+      headers: { Authorization: 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (data.result === null || data.result === undefined) return null;
+    if (typeof data.result === 'string') {
+      try { return JSON.parse(data.result); } catch(e) { return data.result; }
+    }
+    return data.result;
+  } catch (e) {
+    console.error('rGet error:', e.message);
+    throw e;
   }
-  return data.result;
 }
 
 async function rSet(key, value) {
   const { url, token } = getRedis();
   if (!url || !token) throw new Error('Redis not configured');
-  const serialized = typeof value === 'string' ? value : JSON.stringify(value);
-  const res = await fetch(url + '/set/' + encodeURIComponent(key), {
-    method: 'POST',
-    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'text/plain' },
-    body: serialized
-  });
-  return await res.json();
+  try {
+    const serialized = typeof value === 'string' ? value : JSON.stringify(value);
+    const res = await fetch(url + '/set/' + encodeURIComponent(key), {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'text/plain' },
+      body: serialized
+    });
+    return await res.json();
+  } catch (e) {
+    console.error('rSet error:', e.message);
+    throw e;
+  }
 }
 
 async function rDel(key) {
   const { url, token } = getRedis();
   if (!url || !token) return;
-  await fetch(url + '/del/' + encodeURIComponent(key), {
-    method: 'POST',
-    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
-    body: '{}'
-  });
+  try {
+    await fetch(url + '/del/' + encodeURIComponent(key), {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: '{}'
+    });
+  } catch (e) {
+    console.error('rDel error:', e.message);
+  }
 }
 
 async function rSetEx(key, value, seconds) {
   const { url, token } = getRedis();
   if (!url || !token) throw new Error('Redis not configured');
-  const serialized = typeof value === 'string' ? value : JSON.stringify(value);
-  const res = await fetch(url + '/setex/' + encodeURIComponent(key) + '/' + seconds, {
-    method: 'POST',
-    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'text/plain' },
-    body: serialized
-  });
-  return await res.json();
+  try {
+    const serialized = typeof value === 'string' ? value : JSON.stringify(value);
+    const res = await fetch(url + '/setex/' + encodeURIComponent(key) + '/' + seconds, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'text/plain' },
+      body: serialized
+    });
+    return await res.json();
+  } catch (e) {
+    console.error('rSetEx error:', e.message);
+    throw e;
+  }
+}
+
+async function safeRedis(fn) {
+  try {
+    return await fn();
+  } catch (e) {
+    console.error('Redis operation failed:', e.message);
+    return { error: e.message };
+  }
 }
 
 async function sendVerifyEmail(to, code) {
@@ -229,8 +257,8 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Token requis' });
     }
     var em = email.toLowerCase();
-    var u = await rGet('user:' + em);
-    if (!u || u.token !== token) {
+    var u = await safeRedis(() => rGet('user:' + em));
+    if (u.error || !u || u.token !== token) {
       return res.status(401).json({ error: 'Token invalide' });
     }
     return res.status(200).json({ ok: true, user: { prenom: u.prenom, nom: u.nom, email: u.email, phone: u.phone, entreprise: u.entreprise, plan: u.plan } });
@@ -240,8 +268,8 @@ module.exports = async function handler(req, res) {
   if (action === 'logout') {
     if (email) {
       var em = email.toLowerCase();
-      var u = await rGet('user:' + em);
-      if (u) { u.token = null; await rSet('user:' + em, u); }
+      var u = await safeRedis(() => rGet('user:' + em));
+      if (u && !u.error) { u.token = null; await safeRedis(() => rSet('user:' + em, u)); }
     }
     return res.status(200).json({ ok: true });
   }
@@ -252,8 +280,8 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Champs manquants' });
     }
     var em = email.toLowerCase();
-    var u = await rGet('user:' + em);
-    if (!u || u.token !== token) {
+    var u = await safeRedis(() => rGet('user:' + em));
+    if (u.error || !u || u.token !== token) {
       return res.status(401).json({ error: 'Non autorise' });
     }
     var newEm = b.newEmail.toLowerCase();
@@ -263,24 +291,24 @@ module.exports = async function handler(req, res) {
     var newEntreprise = b.newEntreprise || '';
 
     if (newEm !== em) {
-      var exists = await rGet('user:' + newEm);
-      if (exists) return res.status(409).json({ error: 'Cet email est deja utilise' });
+      var exists = await safeRedis(() => rGet('user:' + newEm));
+      if (exists && !exists.error) return res.status(409).json({ error: 'Cet email est deja utilise' });
       u.prenom = newPrenom; u.nom = newNom; u.email = newEm; u.phone = newPhone; u.entreprise = newEntreprise;
-      await rSet('user:' + newEm, u);
-      await rDel('user:' + em);
-      var listRaw = await rGet('user:emails');
-      var list = Array.isArray(listRaw) ? listRaw : [];
+      await safeRedis(() => rSet('user:' + newEm, u));
+      await safeRedis(() => rDel('user:' + em));
+      var listRaw = await safeRedis(() => rGet('user:emails'));
+      var list = (listRaw && !listRaw.error && Array.isArray(listRaw)) ? listRaw : [];
       var idx = list.indexOf(em);
       if (idx !== -1) list.splice(idx, 1);
       if (list.indexOf(newEm) === -1) list.push(newEm);
-      await rSet('user:emails', list);
+      await safeRedis(() => rSet('user:emails', list));
       var ntk = genToken(); u.token = ntk;
-      await rSet('user:' + newEm, u);
+      await safeRedis(() => rSet('user:' + newEm, u));
       return res.status(200).json({ ok: true, token: ntk, user: { prenom: newPrenom, nom: newNom, email: newEm, phone: newPhone, entreprise: newEntreprise } });
     }
 
     u.prenom = newPrenom; u.nom = newNom; u.phone = newPhone; u.entreprise = newEntreprise;
-    await rSet('user:' + em, u);
+    await safeRedis(() => rSet('user:' + em, u));
     return res.status(200).json({ ok: true, user: { prenom: newPrenom, nom: newNom, email: em, phone: newPhone, entreprise: newEntreprise } });
   }
 
@@ -290,12 +318,12 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Champs manquants' });
     }
     var em = email.toLowerCase();
-    var u = await rGet('user:' + em);
-    if (!u || u.token !== token) return res.status(401).json({ error: 'Non autorise' });
+    var u = await safeRedis(() => rGet('user:' + em));
+    if (u.error || !u || u.token !== token) return res.status(401).json({ error: 'Non autorise' });
     if (u.password !== hash(b.oldPassword)) return res.status(401).json({ error: 'Mot de passe actuel incorrect' });
     if (b.newPassword.length < 6) return res.status(400).json({ error: 'Minimum 6 caracteres' });
     u.password = hash(b.newPassword);
-    await rSet('user:' + em, u);
+    await safeRedis(() => rSet('user:' + em, u));
     notify('🔒 MOT DE PASSE CHANGÉ\n\nNom: ' + u.nom + '\nEmail: ' + em + '\nDate: ' + now);
     return res.status(200).json({ ok: true });
   }

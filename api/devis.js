@@ -77,6 +77,7 @@ function devisEmailToMalty(data) {
     'Portfolio': '🖼️',
     'Vitrine': '🏢',
     'Premium': '💎',
+    'Application Mobile': '📱',
     'Je ne sais pas encore': '🤔'
   };
 
@@ -118,6 +119,7 @@ function devisConfirmationToClient(data) {
     'Portfolio': 'Pack Portfolio — 249€',
     'Vitrine': 'Pack Site Vitrine — 449€',
     'Premium': 'Pack Sur-Mesure — 899€',
+    'Application Mobile': 'Application Mobile iOS/Android — 1 200€',
     'Je ne sais pas encore': 'Pack conseillé par MALTY'
   };
 
