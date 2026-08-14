@@ -26,7 +26,7 @@ Site web vitrine pour MALTY, freelance développeur web.
 ├── sitemap.xml             # Sitemap XML
 ├── assets/                 # Images, flyers, publications
 ├── blog/                   # Articles SEO
-├── sites/                  # Sites clients (Digital Flow, Mario Consulting, Shop Eco)
+├── sites/                  # Sites clients (Mario Consulting, Shop Eco)
 ├── emails/                 # Templates d'emails de prospection
 ├── docs/                   # Guides, scripts d'appel, prospects
 └── pikbowl/                # DossierProspection Pikbowl
