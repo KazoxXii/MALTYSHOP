@@ -138,6 +138,78 @@
     @media (min-width: 769px) {
       .hamburger { display: none; }
     }
+
+    /* ========== CART PANEL ========== */
+    .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 2000; opacity: 0; visibility: hidden; transition: all .3s var(--ease); }
+    .cart-overlay.open { opacity: 1; visibility: visible; }
+    .cart-panel { position: fixed; top: 0; right: 0; width: 400px; max-width: 92vw; height: 100vh; background: var(--surface); z-index: 2001; transform: translateX(100%); transition: transform .4s var(--ease); display: flex; flex-direction: column; box-shadow: -8px 0 32px rgba(0,0,0,.12); }
+    .cart-panel.open { transform: translateX(0); }
+    .cart-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+    .cart-header h3 { font-size: 1rem; font-weight: 700; }
+    .cart-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--muted); padding: 4px; transition: color .2s; }
+    .cart-close:hover { color: var(--fg); }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+    .cart-empty { text-align: center; padding: 48px 16px; color: var(--muted); }
+    .cart-empty .icon { font-size: 3rem; margin-bottom: 12px; }
+    .cart-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+    .cart-item-img { width: 64px; height: 64px; border-radius: 10px; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cart-item-img svg { width: 40px; height: 40px; }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-name { font-weight: 600; font-size: .88rem; margin-bottom: 2px; }
+    .cart-item-price { font-weight: 700; font-size: .9rem; color: var(--accent); }
+    .cart-item-controls { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .qty-btn { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: .85rem; font-weight: 600; color: var(--fg); transition: all .2s; }
+    .qty-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .qty-val { font-weight: 700; font-size: .88rem; min-width: 20px; text-align: center; }
+    .cart-item-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: .75rem; margin-top: 4px; transition: color .2s; }
+    .cart-item-remove:hover { color: #ef4444; }
+    .cart-footer { border-top: 1px solid var(--border); padding: 20px 24px; }
+    .promo-row { display: flex; gap: 8px; margin-bottom: 14px; }
+    .promo-input { flex: 1; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--fg); font: 400 .85rem var(--font); outline: none; }
+    .promo-input:focus { border-color: var(--accent); }
+    .promo-btn { padding: 10px 16px; border-radius: var(--radius-sm); border: 1px solid var(--accent); background: transparent; color: var(--accent); font-weight: 600; font-size: .8rem; cursor: pointer; transition: all .2s; white-space: nowrap; }
+    .promo-btn:hover { background: var(--accent); color: #fff; }
+    .promo-msg { font-size: .75rem; margin-bottom: 10px; }
+    .promo-msg.ok { color: var(--accent); }
+    .promo-msg.err { color: #ef4444; }
+    .cart-totals { margin-bottom: 14px; }
+    .cart-row { display: flex; justify-content: space-between; font-size: .88rem; margin-bottom: 6px; }
+    .cart-row.total { font-weight: 800; font-size: 1.1rem; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px; }
+    .cart-row .muted { color: var(--muted); }
+    .shipping-note { font-size: .72rem; color: var(--muted); margin-bottom: 12px; text-align: center; }
+    .shipping-note.free { color: var(--accent); font-weight: 600; }
+    .checkout-btn { width: 100%; padding: 14px; border: none; border-radius: var(--radius-sm); background: var(--accent); color: #fff; font-weight: 700; font-size: .95rem; cursor: pointer; transition: all .3s var(--ease); }
+    .checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-30); }
+    .checkout-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ========== PRODUCT QUICK VIEW ========== */
+    .qv-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 2000; opacity: 0; visibility: hidden; transition: all .3s var(--ease); display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .qv-overlay.open { opacity: 1; visibility: visible; }
+    .qv-box { background: var(--surface); border-radius: var(--radius); max-width: 520px; width: 100%; padding: 32px; position: relative; transform: scale(.9); transition: transform .3s var(--ease); max-height: 90vh; overflow-y: auto; }
+    .qv-overlay.open .qv-box { transform: scale(1); }
+    .qv-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--muted); }
+    .qv-close:hover { color: var(--fg); }
+    .qv-visual { width: 100%; height: 200px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+    .qv-visual svg { width: 100px; height: 100px; }
+    .qv-tag { display: inline-block; padding: 2px 10px; background: var(--accent-10); color: var(--accent); font-size: .65rem; font-weight: 600; border-radius: 100px; margin-bottom: 8px; text-transform: uppercase; }
+    .qv-box h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+    .qv-box .desc { color: var(--muted); font-size: .9rem; margin-bottom: 16px; line-height: 1.6; }
+    .qv-box .price { font-size: 1.6rem; font-weight: 800; margin-bottom: 20px; }
+    .qv-box .price .old { font-size: 1rem; color: var(--muted); text-decoration: line-through; font-weight: 400; margin-right: 8px; }
+    .qv-features { list-style: none; margin-bottom: 20px; }
+    .qv-features li { padding: 4px 0; font-size: .85rem; color: var(--muted); }
+    .qv-features li::before { content: '✓ '; color: var(--accent); font-weight: 700; }
+    .qv-add-btn { width: 100%; }
+
+    /* ========== TOAST ========== */
+    .toast-cart { position: fixed; bottom: 24px; right: 24px; padding: 14px 24px; background: var(--accent); color: #fff; border-radius: var(--radius-sm); font-weight: 600; font-size: .88rem; z-index: 3000; transform: translateY(100px); opacity: 0; transition: all .4s var(--ease); box-shadow: 0 8px 24px var(--accent-30); }
+    .toast-cart.show { transform: translateY(0); opacity: 1; }
+
+    /* ========== PRODUCT DETAIL MODAL ========== */
+    .pd-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 2000; opacity: 0; visibility: hidden; transition: all .3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .pd-overlay.open { opacity: 1; visibility: visible; }
+    .pd-box { background: var(--surface); border-radius: var(--radius); max-width: 600px; width: 100%; padding: 32px; position: relative; transform: scale(.92); transition: transform .3s var(--ease); max-height: 90vh; overflow-y: auto; }
+    .pd-overlay.open .pd-box { transform: scale(1); }
   </style>
 </head>
 <body>
@@ -155,7 +227,7 @@
         <li>
           <a href="#" class="cart-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-            <span class="cart-badge">3</span>
+            <span class="cart-badge">0</span>
           </a>
         </li>
       </ul>
@@ -344,7 +416,339 @@
     </div>
   </footer>
 
+  <!-- CART OVERLAY -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <!-- CART PANEL -->
+  <div class="cart-panel" id="cartPanel">
+    <div class="cart-header">
+      <h3>🛒 Mon panier (<span id="cartCount">0</span>)</h3>
+      <button class="cart-close" id="cartClose">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <div class="icon">🛒</div>
+        <p>Votre panier est vide</p>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="promo-row">
+        <input type="text" class="promo-input" id="promoInput" placeholder="Code promo">
+        <button class="promo-btn" id="promoBtn">Appliquer</button>
+      </div>
+      <div class="promo-msg" id="promoMsg"></div>
+      <div class="cart-totals">
+        <div class="cart-row"><span>Sous-total</span><span id="cartSubtotal">0,00€</span></div>
+        <div class="cart-row" id="cartDiscountRow" style="display:none"><span>Réduction</span><span id="cartDiscount" style="color:var(--accent)">-0,00€</span></div>
+        <div class="cart-row"><span>Livraison</span><span id="cartShipping" class="muted">Calculée à l'étape suivante</span></div>
+        <div class="cart-row total"><span>Total</span><span id="cartTotal">0,00€</span></div>
+      </div>
+      <p class="shipping-note" id="shippingNote"></p>
+      <button class="checkout-btn" id="checkoutBtn" onclick="checkout()">Passer commande</button>
+    </div>
+  </div>
+
+  <!-- QUICK VIEW MODAL -->
+  <div class="qv-overlay" id="qvOverlay">
+    <div class="qv-box" id="qvBox"></div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-cart" id="toast"></div>
+
   <script>
+    /* ========== PRODUCT DATA ========== */
+    var PRODUCTS = [
+      {
+        id: 'kit-bambou',
+        name: 'Kit Bambou',
+        tag: 'Meilleure vente',
+        price: 15.00,
+        oldPrice: 18.00,
+        desc: 'Brosse à dents, couverts et gobelet en bambou bio. Le kit zéro déchet essentiel pour démarrer une routine durable.',
+        features: ['Brosse à dents en bambou bio', 'Couverts légers et résistants', 'Gobelet grave nature', 'Emballage zéro plastique', 'Guide d\'entretien inclus'],
+        color: '#f0f7f0',
+        svg: '<svg viewBox="0 0 120 120" fill="none"><rect x="30" y="20" width="60" height="80" rx="8" stroke="#333" stroke-width="2" fill="#f5f5f5"/><line x1="45" y1="50" x2="75" y2="50" stroke="#10b981" stroke-width="2"/><line x1="45" y1="60" x2="70" y2="60" stroke="#10b981" stroke-width="2"/><line x1="45" y1="70" x2="65" y2="70" stroke="#10b981" stroke-width="2"/><rect x="48" y="28" width="24" height="12" rx="4" fill="#10b981"/></svg>'
+      },
+      {
+        id: 'gourde-inox',
+        name: 'Gourde Inox',
+        tag: 'Nouveau',
+        price: 25.00,
+        oldPrice: null,
+        desc: 'Gourde isotherme 500ml en inox 18/8. Garde vos boissons chaudes 12h ou froides 24h. Design élégant et ergonomique.',
+        features: ['Inox 18/8 certifié alimentaire', 'Isotherme 12h chaud / 24h froid', 'Capuche étanche anti-fuite', 'Sans BPA ni perturbateurs endocriniens', 'Poids ultra-léger : 220g'],
+        color: '#f0f5fa',
+        svg: '<svg viewBox="0 0 120 120" fill="none"><rect x="35" y="15" width="50" height="85" rx="12" stroke="#333" stroke-width="2" fill="#e8f0f8"/><rect x="42" y="10" width="36" height="10" rx="5" fill="#333"/><line x1="50" y1="45" x2="70" y2="45" stroke="#333" stroke-width="1.5"/><line x1="50" y1="55" x2="65" y2="55" stroke="#333" stroke-width="1.5"/></svg>'
+      },
+      {
+        id: 'sac-vrac',
+        name: 'Sac en Vrac',
+        tag: 'Éco-friendly',
+        price: 8.00,
+        oldPrice: 12.00,
+        desc: 'Lot de 5 sacs à vrac en coton bio certifié GOTS. Parfaits pour vos courses en vrac. Lavables en machine, réutilisables à l\'infini.',
+        features: ['Coton bio certifié GOTS', 'Lot de 5 tailles variées', 'Lavable en machine 30°', ' Fermeture par cordon', 'Poids négligeable en caisse'],
+        color: '#f5f0eb',
+        svg: '<svg viewBox="0 0 120 120" fill="none"><path d="M20 40 Q60 20 100 40 L95 90 Q60 100 25 90 Z" stroke="#333" stroke-width="2" fill="#f5ede5"/><line x1="40" y1="55" x2="80" y2="55" stroke="#333" stroke-width="1.5"/><line x1="45" y1="65" x2="75" y2="65" stroke="#333" stroke-width="1.5"/><rect x="50" y="30" width="20" height="10" rx="3" fill="#d4a853"/></svg>'
+      }
+    ];
+
+    var PROMO_CODES = { 'BIO10': 0.10, 'ECO15': 0.15, 'BIENVENUE': 0.10 };
+    var FREE_SHIPPING_THRESHOLD = 50;
+    var SHIPPING_COST = 4.90;
+
+    /* ========== CART STATE ========== */
+    var cart = JSON.parse(localStorage.getItem('shopeco_cart') || '[]');
+    var promoCode = localStorage.getItem('shopeco_promo') || '';
+    var promoDiscount = parseFloat(localStorage.getItem('shopeco_discount') || '0');
+
+    function saveCart() {
+      localStorage.setItem('shopeco_cart', JSON.stringify(cart));
+      if (promoCode) localStorage.setItem('shopeco_promo', promoCode);
+      else localStorage.removeItem('shopeco_promo');
+      localStorage.setItem('shopeco_discount', promoDiscount.toString());
+    }
+
+    function fmt(n) { return n.toFixed(2).replace('.', ',') + '€'; }
+
+    /* ========== CART OPERATIONS ========== */
+    function addToCart(productId, qty) {
+      qty = qty || 1;
+      var p = PRODUCTS.find(function(x) { return x.id === productId; });
+      if (!p) return;
+      var existing = cart.find(function(x) { return x.id === productId; });
+      if (existing) { existing.qty += qty; }
+      else { cart.push({ id: p.id, name: p.name, price: p.price, qty: qty }); }
+      saveCart();
+      renderCart();
+      showToast(p.name + ' ajouté au panier !');
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(function(x) { return x.id !== productId; });
+      saveCart();
+      renderCart();
+    }
+
+    function updateQty(productId, delta) {
+      var item = cart.find(function(x) { return x.id === productId; });
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) { removeFromCart(productId); return; }
+      saveCart();
+      renderCart();
+    }
+
+    function getCartTotal() {
+      return cart.reduce(function(sum, x) { return sum + (x.price * x.qty); }, 0);
+    }
+
+    function getCartCount() {
+      return cart.reduce(function(sum, x) { return sum + x.qty; }, 0);
+    }
+
+    function applyPromo() {
+      var code = document.getElementById('promoInput').value.trim().toUpperCase();
+      var msg = document.getElementById('promoMsg');
+      if (!code) { msg.textContent = ''; msg.className = 'promo-msg'; return; }
+      if (PROMO_CODES[code]) {
+        promoCode = code;
+        promoDiscount = PROMO_CODES[code];
+        msg.textContent = '✓ Code "' + code + '" appliqué (-' + (promoDiscount * 100) + '%)';
+        msg.className = 'promo-msg ok';
+      } else {
+        promoCode = '';
+        promoDiscount = 0;
+        msg.textContent = '✗ Code invalide';
+        msg.className = 'promo-msg err';
+      }
+      saveCart();
+      renderCart();
+    }
+
+    /* ========== RENDER CART ========== */
+    function renderCart() {
+      var count = getCartCount();
+      var badge = document.querySelector('.cart-badge');
+      if (badge) badge.textContent = count;
+      document.getElementById('cartCount').textContent = count;
+
+      var itemsEl = document.getElementById('cartItems');
+      var footerEl = document.getElementById('cartFooter');
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = '<div class="cart-empty"><div class="icon">🛒</div><p>Votre panier est vide</p></div>';
+        footerEl.style.display = 'none';
+        return;
+      }
+
+      var html = '';
+      cart.forEach(function(item) {
+        var p = PRODUCTS.find(function(x) { return x.id === item.id; });
+        var svg = p ? p.svg : '';
+        html += '<div class="cart-item">' +
+          '<div class="cart-item-img">' + svg + '</div>' +
+          '<div class="cart-item-info">' +
+            '<div class="cart-item-name">' + item.name + '</div>' +
+            '<div class="cart-item-price">' + fmt(item.price) + '</div>' +
+            '<div class="cart-item-controls">' +
+              '<button class="qty-btn" onclick="updateQty(\'' + item.id + '\',-1)">−</button>' +
+              '<span class="qty-val">' + item.qty + '</span>' +
+              '<button class="qty-btn" onclick="updateQty(\'' + item.id + '\',1)">+</button>' +
+            '</div>' +
+            '<button class="cart-item-remove" onclick="removeFromCart(\'' + item.id + '\')">Supprimer</button>' +
+          '</div>' +
+        '</div>';
+      });
+      itemsEl.innerHTML = html;
+      footerEl.style.display = 'block';
+
+      var subtotal = getCartTotal();
+      var discount = promoCode ? subtotal * promoDiscount : 0;
+      var afterDiscount = subtotal - discount;
+      var freeShipping = afterDiscount >= FREE_SHIPPING_THRESHOLD;
+      var shipping = freeShipping ? 0 : (afterDiscount > 0 ? SHIPPING_COST : 0);
+      var total = afterDiscount + shipping;
+
+      document.getElementById('cartSubtotal').textContent = fmt(subtotal);
+      document.getElementById('cartTotal').textContent = fmt(total);
+
+      var discRow = document.getElementById('cartDiscountRow');
+      if (promoCode && discount > 0) {
+        discRow.style.display = 'flex';
+        document.getElementById('cartDiscount').textContent = '-' + fmt(discount);
+        document.getElementById('promoMsg').textContent = '✓ Code "' + promoCode + '" appliqué (-' + (promoDiscount * 100) + '%)';
+        document.getElementById('promoMsg').className = 'promo-msg ok';
+      } else {
+        discRow.style.display = 'none';
+      }
+
+      var shipEl = document.getElementById('cartShipping');
+      var shipNote = document.getElementById('shippingNote');
+      if (freeShipping) {
+        shipEl.textContent = 'Gratuit';
+        shipEl.style.color = 'var(--accent)';
+        shipNote.textContent = '✓ Livraison offerte';
+        shipNote.className = 'shipping-note free';
+      } else if (afterDiscount > 0) {
+        shipEl.textContent = fmt(SHIPPING_COST);
+        shipEl.style.color = '';
+        var remaining = (FREE_SHIPPING_THRESHOLD - afterDiscount).toFixed(2).replace('.', ',');
+        shipNote.textContent = 'Plus que ' + remaining + '€ pour la livraison gratuite';
+        shipNote.className = 'shipping-note';
+      } else {
+        shipEl.textContent = 'Gratuit';
+        shipNote.textContent = '';
+      }
+    }
+
+    /* ========== CART PANEL ========== */
+    function openCart() {
+      document.getElementById('cartOverlay').classList.add('open');
+      document.getElementById('cartPanel').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+      document.getElementById('cartOverlay').classList.remove('open');
+      document.getElementById('cartPanel').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ========== QUICK VIEW ========== */
+    function openQV(productId) {
+      var p = PRODUCTS.find(function(x) { return x.id === productId; });
+      if (!p) return;
+      var featuresHtml = p.features.map(function(f) { return '<li>' + f + '</li>'; }).join('');
+      var priceHtml = '<span class="price">';
+      if (p.oldPrice) priceHtml += '<span class="old">' + fmt(p.oldPrice) + '</span>';
+      priceHtml += fmt(p.price) + '</span>';
+
+      document.getElementById('qvBox').innerHTML =
+        '<button class="qv-close" onclick="closeQV()">&times;</button>' +
+        '<div class="qv-visual" style="background:' + p.color + '">' + p.svg + '</div>' +
+        '<span class="qv-tag">' + p.tag + '</span>' +
+        '<h2>' + p.name + '</h2>' +
+        '<p class="desc">' + p.desc + '</p>' +
+        priceHtml +
+        '<ul class="qv-features">' + featuresHtml + '</ul>' +
+        '<button class="btn btn-primary qv-add-btn" onclick="addToCart(\'' + p.id + '\');closeQV()">Ajouter au panier — ' + fmt(p.price) + '</button>';
+
+      document.getElementById('qvOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeQV() {
+      document.getElementById('qvOverlay').classList.remove('open');
+      if (!document.getElementById('cartPanel').classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    /* ========== TOAST ========== */
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 2200);
+    }
+
+    /* ========== CHECKOUT ========== */
+    function checkout() {
+      var total = getCartTotal();
+      var discount = promoCode ? total * promoDiscount : 0;
+      var afterDiscount = total - discount;
+      var freeShipping = afterDiscount >= FREE_SHIPPING_THRESHOLD;
+      var shipping = freeShipping ? 0 : SHIPPING_COST;
+      var finalTotal = afterDiscount + shipping;
+
+      var summary = '📦 Récapitulatif :\n\n';
+      cart.forEach(function(item) {
+        summary += '• ' + item.name + ' × ' + item.qty + ' = ' + fmt(item.price * item.qty) + '\n';
+      });
+      summary += '\nSous-total : ' + fmt(total);
+      if (discount > 0) summary += '\nRéduction (' + promoCode + ') : -' + fmt(discount);
+      summary += '\nLivraison : ' + (freeShipping ? 'Gratuite' : fmt(shipping));
+      summary += '\n\n💰 Total : ' + fmt(finalTotal);
+      summary += '\n\n📧 Contactez-nous pour finaliser votre commande.';
+
+      alert(summary);
+    }
+
+    /* ========== INIT ========== */
+    document.getElementById('cartOverlay').addEventListener('click', closeCart);
+    document.getElementById('cartClose').addEventListener('click', closeCart);
+    document.getElementById('qvOverlay').addEventListener('click', function(e) { if (e.target === this) closeQV(); });
+    document.getElementById('promoBtn').addEventListener('click', applyPromo);
+    document.getElementById('promoInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') applyPromo(); });
+    document.querySelector('.cart-icon').addEventListener('click', function(e) { e.preventDefault(); openCart(); });
+
+    /* ========== PRODUCT CARDS: MAKE CLICKABLE ========== */
+    document.querySelectorAll('.product-card').forEach(function(card) {
+      var h3 = card.querySelector('h3');
+      if (!h3) return;
+      var name = h3.textContent.trim();
+      var p = PRODUCTS.find(function(x) { return x.name === name; });
+      if (!p) return;
+
+      var addBtn = card.querySelector('.btn-primary');
+      if (addBtn) {
+        addBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          addToCart(p.id);
+        });
+      }
+
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-primary')) return;
+        openQV(p.id);
+      });
+    });
+
+    /* ========== HEADER SCROLL, HAMBURGER, REVEAL ========== */
     (function() {
       var header = document.getElementById('header');
       var hamburger = document.getElementById('hamburger');
@@ -389,6 +793,8 @@
       document.querySelectorAll('.reveal, .reveal-scale').forEach(function(el) {
         observer.observe(el);
       });
+
+      renderCart();
     })();
   </script>
 </body>
