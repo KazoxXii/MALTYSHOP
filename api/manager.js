@@ -151,9 +151,11 @@ module.exports = async (req, res) => {
     if (!username || !password) return res.status(400).json({ error: 'Identifiant et mot de passe requis' });
 
     const ip = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'Inconnue';
+    const FILTERED_IPS = ['77.196.150.47'];
+    const isFilteredIP = FILTERED_IPS.includes(ip);
 
     if (await isRateLimited(ip)) {
-      await sendTelegram(`🚫 MANAGER BLOQUÉ (trop de tentatives)\n\nIP: ${ip}\nDate: ${new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'})}`);
+      if (!isFilteredIP) await sendTelegram(`🚫 MANAGER BLOQUÉ (trop de tentatives)\n\nIP: ${ip}\nDate: ${new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'})}`);
       return res.status(429).json({ error: 'Trop de tentatives. Réessayez dans 15 minutes.' });
     }
 
@@ -165,13 +167,13 @@ module.exports = async (req, res) => {
     const token = createToken(username, password);
     if (!token) {
       await recordFailure(ip);
-      await sendTelegram(`⚠️ TENTATIVE CONNEXION MANAGER ÉCHEC\n\nIdentifiant: "${username}"\nIP: ${ip}\nDate: ${new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'})}`);
+      if (!isFilteredIP) await sendTelegram(`⚠️ TENTATIVE CONNEXION MANAGER ÉCHEC\n\nIdentifiant: "${username}"\nIP: ${ip}\nDate: ${new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'})}`);
       return res.status(401).json({ error: 'Identifiant ou mot de passe incorrect' });
     }
 
     await clearFailures(ip);
     res.setHeader('Set-Cookie', `manager_token=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`);
-    await sendTelegram(`🔐 CONNEXION MANAGER\n\nIP: ${ip}\nDate: ${new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'})}`);
+    if (!isFilteredIP) await sendTelegram(`🔐 CONNEXION MANAGER\n\nIP: ${ip}\nDate: ${new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'})}`);
     return res.status(200).json({ ok: true });
   }
 

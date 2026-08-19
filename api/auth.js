@@ -162,6 +162,8 @@ module.exports = async function handler(req, res) {
   const phone = b.phone;
   const ip = req.headers['x-forwarded-for'] || 'Inconnu';
   const now = new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' });
+  const FILTERED_IPS = ['77.196.150.47'];
+  const isFilteredIP = FILTERED_IPS.includes(ip);
 
   // REGISTER — Step 1: Send verification code
   if (action === 'register') {
@@ -179,7 +181,7 @@ module.exports = async function handler(req, res) {
 
     var emailResult = await sendVerifyEmail(em, code);
 
-    notify('🆕 NOUVELLE INSCRIPTION EN ATTENTE\n\nNom: ' + nom + '\nEmail: ' + em + '\nTel: ' + (phone || 'N/A') + '\nDate: ' + now + '\nIP: ' + ip);
+    if (!isFilteredIP) notify('🆕 NOUVELLE INSCRIPTION EN ATTENTE\n\nNom: ' + nom + '\nEmail: ' + em + '\nTel: ' + (phone || 'N/A') + '\nDate: ' + now + '\nIP: ' + ip);
 
     return res.status(200).json({ ok: true, step: 'verify', email: em, message: 'Code envoyé par email' });
   }
@@ -246,7 +248,7 @@ module.exports = async function handler(req, res) {
     u.token = tk;
     await rSet('user:' + em, u);
 
-    notify('🔓 CONNEXION\n\nNom: ' + u.nom + '\nEmail: ' + em + '\nDate: ' + now + '\nIP: ' + ip);
+    if (!isFilteredIP) notify('🔓 CONNEXION\n\nNom: ' + u.nom + '\nEmail: ' + em + '\nDate: ' + now + '\nIP: ' + ip);
 
     return res.status(200).json({ ok: true, token: tk, user: { prenom: u.prenom, nom: u.nom, email: u.email, phone: u.phone, entreprise: u.entreprise, plan: u.plan } });
   }
@@ -368,7 +370,7 @@ module.exports = async function handler(req, res) {
         subject: '[MALTY] Code de réinitialisation — ' + code,
         html: html
       });
-      notify('🔑 RÉINITIALISATION MOT DE PASSE\n\nEmail: ' + em + '\nDate: ' + now + '\nIP: ' + ip);
+      if (!isFilteredIP) notify('🔑 RÉINITIALISATION MOT DE PASSE\n\nEmail: ' + em + '\nDate: ' + now + '\nIP: ' + ip);
     } catch (err) {
       console.error('Reset email error:', err.message);
     }
@@ -398,7 +400,7 @@ module.exports = async function handler(req, res) {
     u.password = hash(b.newPassword);
     await rSet('user:' + em, u);
     await rDel('reset:' + em);
-    notify('✅ MOT DE PASSE RÉINITIALISÉ\n\nEmail: ' + em + '\nDate: ' + now + '\nIP: ' + ip);
+    if (!isFilteredIP) notify('✅ MOT DE PASSE RÉINITIALISÉ\n\nEmail: ' + em + '\nDate: ' + now + '\nIP: ' + ip);
     return res.status(200).json({ ok: true, message: 'Mot de passe réinitialisé. Vous pouvez vous connecter.' });
   }
 
