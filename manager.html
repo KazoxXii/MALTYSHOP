@@ -147,6 +147,46 @@ tr:hover{background:var(--accent-10)}
 .toast-error{background:var(--danger);color:#fff}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 
+/* ---------- ANALYTICS ---------- */
+.analytics-highlight{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.highlight-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;position:relative;overflow:hidden;transition:all .3s}
+.highlight-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-light));opacity:0;transition:opacity .3s}
+.highlight-card:hover{border-color:var(--accent-50);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.highlight-card:hover::before{opacity:1}
+.highlight-icon{font-size:1.8rem;margin-bottom:8px}
+.highlight-value{font-size:1.8rem;font-weight:800;color:var(--fg);letter-spacing:-.03em}
+.highlight-label{font-size:.75rem;color:var(--muted);margin-top:4px}
+.highlight-trend{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:700;margin-top:8px;padding:3px 8px;border-radius:20px}
+.trend-up{background:rgba(22,163,74,.12);color:var(--success)}
+.trend-down{background:rgba(239,68,68,.12);color:var(--danger)}
+.chart-container{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px}
+.chart-title{font-size:1rem;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:180px;padding:0 4px}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.chart-bar{width:100%;border-radius:6px 6px 0 0;transition:all .4s var(--ease);position:relative;min-height:4px;cursor:pointer}
+.chart-bar:hover{filter:brightness(1.2)}
+.chart-bar-label{font-size:.65rem;color:var(--muted);white-space:nowrap}
+.chart-bar-value{font-size:.7rem;font-weight:700;color:var(--fg);opacity:0;transition:opacity .2s}
+.chart-bar-wrap:hover .chart-bar-value{opacity:1}
+.chart-legend{display:flex;gap:20px;margin-top:16px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--muted)}
+.legend-dot{width:10px;height:10px;border-radius:3px}
+.activity-list{list-style:none}
+.activity-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.activity-text{flex:1;font-size:.88rem}
+.activity-text strong{color:var(--fg)}
+.activity-time{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.top-pages{list-style:none}
+.top-page-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.top-page-item:last-child{border-bottom:none}
+.top-page-rank{width:28px;height:28px;border-radius:8px;background:var(--accent-10);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--accent);flex-shrink:0}
+.top-page-name{flex:1;font-size:.88rem;font-weight:500}
+.top-page-views{font-size:.85rem;font-weight:700;color:var(--accent-light)}
+.top-page-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:6px}
+.top-page-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-light));border-radius:4px;transition:width .6s var(--ease)}
+
 /* ---------- RESPONSIVE ---------- */
 @media(max-width:900px){
   .app.active{flex-direction:column}
@@ -202,7 +242,8 @@ tr:hover{background:var(--accent-10)}
       <b>MALTY <span>Manager</span></b>
     </div>
     <nav class="sidebar-nav" id="sidebarNav">
-      <a class="nav-item active" data-tab="overview"><span>📊</span> Vue d'ensemble</a>
+      <a class="nav-item" data-tab="overview"><span>📊</span> Vue d'ensemble</a>
+      <a class="nav-item" data-tab="analytics"><span>📈</span> Analytique</a>
       <a class="nav-item" data-tab="requests"><span>📝</span> Demandes <span class="nav-badge" id="badgePending" style="display:none">0</span></a>
       <a class="nav-item" data-tab="customers"><span>👤</span> Clients</a>
     </nav>
@@ -258,6 +299,62 @@ tr:hover{background:var(--accent-10)}
             <button class="btn btn-sm btn-outline" onclick="switchTab('requests')">Voir tout</button>
           </div>
           <div id="recentRequests"><div class="loading">Chargement...</div></div>
+        </div>
+      </section>
+
+      <!-- ANALYTICS -->
+      <section class="tab-content" id="analytics">
+        <div class="analytics-highlight">
+          <div class="highlight-card">
+            <div class="highlight-icon">👁️</div>
+            <div class="highlight-value" id="aViews">2 847</div>
+            <div class="highlight-label">Vues totales</div>
+            <div class="highlight-trend trend-up">↑ +12.4%</div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-icon">🖱️</div>
+            <div class="highlight-value" id="aClicks">1 203</div>
+            <div class="highlight-label">Clics total</div>
+            <div class="highlight-trend trend-up">↑ +8.7%</div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-icon">👥</div>
+            <div class="highlight-value" id="aVisitors">892</div>
+            <div class="highlight-label">Visiteurs uniques</div>
+            <div class="highlight-trend trend-up">↑ +15.2%</div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-icon">⏱️</div>
+            <div class="highlight-value" id="aBounce">34%</div>
+            <div class="highlight-label">Taux de rebond</div>
+            <div class="highlight-trend trend-down">↓ -3.1%</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:24px">
+          <div class="chart-container">
+            <div class="chart-title">📊 Vues des 7 derniers jours</div>
+            <div class="chart-bars" id="viewsChart"></div>
+            <div class="chart-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Vues</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--accent-light)"></div> Clics</div>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div class="chart-title">🏆 Pages les plus vues</div>
+            <ul class="top-pages" id="topPages"></ul>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div class="chart-container">
+            <div class="chart-title">📡 Sources de trafic</div>
+            <div id="trafficSources"></div>
+          </div>
+          <div class="chart-container">
+            <div class="chart-title">⚡ Activité récente</div>
+            <ul class="activity-list" id="activityList"></ul>
+          </div>
         </div>
       </section>
 
@@ -345,6 +442,7 @@ const API_BASE = '/api/manager';
 
 const TABS = {
   overview: { title: 'Vue d\'ensemble', subtitle: 'Le suivi du support et de la clientèle.' },
+  analytics: { title: 'Analytique', subtitle: 'Vues, clics, trafic etactivité du site.' },
   requests: { title: 'Demandes', subtitle: 'Répondez aux demandes des clients.' },
   customers: { title: 'Clients', subtitle: 'La liste des clients.' }
 };
@@ -488,6 +586,7 @@ function switchTab(tabId) {
     document.getElementById('pageSubtitle').textContent = t.subtitle;
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (tabId === 'analytics') initAnalytics();
 }
 
 // ---------- API ----------
@@ -782,6 +881,95 @@ function stopAutoRefresh() {
     clearInterval(autoRefreshInterval);
     autoRefreshInterval = null;
   }
+}
+
+/* ---------- ANALYTICS ---------- */
+function initAnalytics() {
+  renderViewsChart();
+  renderTopPages();
+  renderTrafficSources();
+  renderActivityList();
+}
+
+function renderViewsChart() {
+  var days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  var views = [420, 380, 510, 470, 620, 290, 340];
+  var clicks = [180, 160, 230, 200, 280, 120, 140];
+  var max = Math.max.apply(null, views);
+  var container = document.getElementById('viewsChart');
+  if (!container) return;
+  container.innerHTML = days.map(function(d, i) {
+    var hV = (views[i] / max) * 100;
+    var hC = (clicks[i] / max) * 100;
+    return '<div class="chart-bar-wrap">' +
+      '<div class="chart-bar-value">' + views[i] + '</div>' +
+      '<div style="display:flex;gap:3px;align-items:flex-end;height:100%">' +
+        '<div class="chart-bar" style="height:' + hV + '%;background:var(--accent);width:18px"></div>' +
+        '<div class="chart-bar" style="height:' + hC + '%;background:var(--accent-light);width:18px;opacity:.7"></div>' +
+      '</div>' +
+      '<div class="chart-bar-label">' + d + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderTopPages() {
+  var pages = [
+    { name: 'index.html', views: 1243, pct: 100 },
+    { name: 'sites/shopeco.html', views: 687, pct: 55 },
+    { name: 'sites/marioconsulting.html', views: 412, pct: 33 },
+    { name: 'brief.html', views: 298, pct: 24 },
+    { name: 'support.html', views: 207, pct: 17 }
+  ];
+  var list = document.getElementById('topPages');
+  if (!list) return;
+  list.innerHTML = pages.map(function(p, i) {
+    return '<li class="top-page-item">' +
+      '<div class="top-page-rank">' + (i + 1) + '</div>' +
+      '<div style="flex:1"><div class="top-page-name">' + p.name + '</div>' +
+      '<div class="top-page-bar"><div class="top-page-fill" style="width:' + p.pct + '%"></div></div></div>' +
+      '<div class="top-page-views">' + p.views.toLocaleString() + '</div>' +
+    '</li>';
+  }).join('');
+}
+
+function renderTrafficSources() {
+  var sources = [
+    { name: 'Direct', pct: 42, color: 'var(--accent)' },
+    { name: 'Google', pct: 28, color: '#22c55e' },
+    { name: 'Instagram', pct: 18, color: '#e1306c' },
+    { name: 'Facebook', pct: 8, color: '#1877f2' },
+    { name: 'Autres', pct: 4, color: 'var(--muted)' }
+  ];
+  var container = document.getElementById('trafficSources');
+  if (!container) return;
+  var barHtml = '<div style="display:flex;height:12px;border-radius:6px;overflow:hidden;margin-bottom:16px">' +
+    sources.map(function(s) { return '<div style="width:' + s.pct + '%;background:' + s.color + '"></div>'; }).join('') +
+    '</div>';
+  var legendHtml = sources.map(function(s) {
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">' +
+      '<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:' + s.color + '"></div><span style="font-size:.85rem">' + s.name + '</span></div>' +
+      '<span style="font-size:.85rem;font-weight:700">' + s.pct + '%</span></div>';
+  }).join('');
+  container.innerHTML = barHtml + legendHtml;
+}
+
+function renderActivityList() {
+  var activities = [
+    { color: 'var(--success)', text: '<strong>Nouveau devis</strong> — Pack Vitrine ( Marie C. )', time: 'Il y a 12 min' },
+    { color: 'var(--accent)', text: '<strong>Brief reçu</strong> — Landing Page ( Thomas P. )', time: 'Il y a 34 min' },
+    { color: 'var(--warning)', text: '<strong>Demande support</strong> — Problème hébergement', time: 'Il y a 1h' },
+    { color: 'var(--success)', text: '<strong>Paiement confirmé</strong> — Pack Premium 899€', time: 'Il y a 2h' },
+    { color: 'var(--danger)', text: '<strong>Abonnement annulé</strong> — Client #482', time: 'Il y a 3h' }
+  ];
+  var list = document.getElementById('activityList');
+  if (!list) return;
+  list.innerHTML = activities.map(function(a) {
+    return '<li class="activity-item">' +
+      '<div class="activity-dot" style="background:' + a.color + '"></div>' +
+      '<div class="activity-text">' + a.text + '</div>' +
+      '<div class="activity-time">' + a.time + '</div>' +
+    '</li>';
+  }).join('');
 }
 </script>
 </body>
