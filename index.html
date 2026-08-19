@@ -998,7 +998,7 @@
           '<div class="price">' + f.prix + '€</div>' +
           '<div class="sales">✓ ' + f.ventes + '+ vendus</div>' +
           '<ul>' + f.features.map(function(ft) { return '<li>' + ft + '</li>'; }).join('') + '</ul>' +
-           '<button class="btn btn-primary" style="width:100%" data-plan="' + f.nom + '">Commander ce pack</button>' +
+           '<a href="brief.html?pack=' + f.id + '" class="btn btn-primary" style="width:100%;text-align:center;display:block;text-decoration:none">Commander ce pack</a>' +
           '<p style="font-size:.7rem;color:var(--muted);text-align:center;margin-top:10px">Livré sous ' + f.delai + '</p>' +
         '</div>';
       }).join('');

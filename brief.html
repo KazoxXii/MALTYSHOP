@@ -555,7 +555,35 @@
       .catch(() => alert('Erreur réseau. Réessayez.'));
     });
 
+    const packData = {
+      'landing': { name: 'Pack Landing Page Vendeuse', desc: 'Page unique • Prise de RDV • Photos • Mobile-first • SEO', price: '99€', emoji: '🚀' },
+      'portfolio': { name: 'Pack Portfolio d\'Image', desc: 'Galeries • Design Cinématique • SEO Image • Code Ultra-Léger', price: '249€', emoji: '🎨' },
+      'vitrine': { name: 'Pack Site Vitrine Business', desc: 'Multi-pages • SEO Puissant • Blog • CRM • Code Source Complet', price: '449€', emoji: '🏢' },
+      'premium': { name: 'Solution Web Sur-Mesure', desc: 'Design Exclusif • SEO Max • Fonctionnalités Métier • Doc Pro', price: '899€', emoji: '💎' },
+      'mobile-app': { name: 'Application Mobile iOS / Android', desc: 'App Native • UI/UX Pro • API Backend • Store Ready', price: '1200€', emoji: '📱' }
+    };
+
+    function applyPackFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const packId = params.get('pack');
+      if (packId && packData[packId]) {
+        const p = packData[packId];
+        const recap = document.querySelector('[data-step="6"] .card[style*="border-color"]');
+        if (recap) {
+          recap.innerHTML = '<h2 style="color:var(--accent)">📦 Votre pack</h2>' +
+            '<div style="display:flex;align-items:center;gap:16px;margin:16px 0;padding:16px;background:var(--bg);border-radius:10px;">' +
+              '<div style="font-size:2rem">' + p.emoji + '</div>' +
+              '<div><strong>' + p.name + '</strong><p style="color:var(--muted);font-size:.85rem;margin:0">' + p.desc + '</p></div>' +
+              '<div style="margin-left:auto;text-align:right"><div style="font-size:1.5rem;font-weight:900;color:var(--accent)">' + p.price + '</div><div style="color:var(--muted);font-size:.75rem">Paiement unique</div></div>' +
+            '</div>' +
+            '<p style="color:var(--muted);font-size:.85rem">Livraison sous 3 à 21 jours selon le pack.</p>';
+        }
+        document.title = p.name + ' — Brief Client — MALTY';
+      }
+    }
+
     showStep(1);
+    applyPackFromURL();
   </script>
 </body>
 </html>
