@@ -307,27 +307,23 @@ tr:hover{background:var(--accent-10)}
         <div class="analytics-highlight">
           <div class="highlight-card">
             <div class="highlight-icon">👁️</div>
-            <div class="highlight-value" id="aViews">2 847</div>
+            <div class="highlight-value" id="aViews">—</div>
             <div class="highlight-label">Vues totales</div>
-            <div class="highlight-trend trend-up">↑ +12.4%</div>
           </div>
           <div class="highlight-card">
             <div class="highlight-icon">🖱️</div>
-            <div class="highlight-value" id="aClicks">1 203</div>
+            <div class="highlight-value" id="aClicks">—</div>
             <div class="highlight-label">Clics total</div>
-            <div class="highlight-trend trend-up">↑ +8.7%</div>
           </div>
           <div class="highlight-card">
             <div class="highlight-icon">👥</div>
-            <div class="highlight-value" id="aVisitors">892</div>
-            <div class="highlight-label">Visiteurs uniques</div>
-            <div class="highlight-trend trend-up">↑ +15.2%</div>
+            <div class="highlight-value" id="aVisitors">—</div>
+            <div class="highlight-label">Visiteurs aujourd'hui</div>
           </div>
           <div class="highlight-card">
-            <div class="highlight-icon">⏱️</div>
-            <div class="highlight-value" id="aBounce">34%</div>
-            <div class="highlight-label">Taux de rebond</div>
-            <div class="highlight-trend trend-down">↓ -3.1%</div>
+            <div class="highlight-icon">📄</div>
+            <div class="highlight-value" id="aBounce">—</div>
+            <div class="highlight-label">Vues aujourd'hui</div>
           </div>
         </div>
 
@@ -346,15 +342,20 @@ tr:hover{background:var(--accent-10)}
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
           <div class="chart-container">
             <div class="chart-title">📡 Sources de trafic</div>
             <div id="trafficSources"></div>
           </div>
           <div class="chart-container">
-            <div class="chart-title">⚡ Activité récente</div>
-            <ul class="activity-list" id="activityList"></ul>
+            <div class="chart-title">📱 Appareils</div>
+            <div id="deviceBreakdown"></div>
           </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-title">⚡ Éléments les plus cliqués</div>
+          <ul class="activity-list" id="activityList"></ul>
         </div>
       </section>
 
@@ -884,93 +885,115 @@ function stopAutoRefresh() {
 }
 
 /* ---------- ANALYTICS ---------- */
-function initAnalytics() {
-  renderViewsChart();
-  renderTopPages();
-  renderTrafficSources();
-  renderActivityList();
+async function initAnalytics() {
+  try {
+    var res = await fetch('/api/analytics?action=stats');
+    var data = await res.json();
+    renderAnalyticsCards(data);
+    renderViewsChart(data.viewsByDay || []);
+    renderTopPages(data.topPages || []);
+    renderTrafficSources(data.topReferrers || []);
+    renderDeviceBreakdown(data.deviceBreakdown || []);
+    renderTopClicks(data.topClicks || []);
+  } catch(e) {
+    console.error('Analytics load error:', e);
+  }
 }
 
-function renderViewsChart() {
-  var days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-  var views = [420, 380, 510, 470, 620, 290, 340];
-  var clicks = [180, 160, 230, 200, 280, 120, 140];
-  var max = Math.max.apply(null, views);
+function renderAnalyticsCards(data) {
+  var el = document.getElementById('aViews');
+  if (el) el.textContent = (data.totalViews || 0).toLocaleString('fr-FR');
+  el = document.getElementById('aClicks');
+  if (el) el.textContent = (data.totalClicks || 0).toLocaleString('fr-FR');
+  el = document.getElementById('aVisitors');
+  if (el) el.textContent = (data.todayVisitors || 0).toLocaleString('fr-FR');
+  el = document.getElementById('aBounce');
+  if (el) el.textContent = (data.todayViews || 0).toLocaleString('fr-FR');
+}
+
+function renderViewsChart(days) {
   var container = document.getElementById('viewsChart');
-  if (!container) return;
-  container.innerHTML = days.map(function(d, i) {
-    var hV = (views[i] / max) * 100;
-    var hC = (clicks[i] / max) * 100;
+  if (!container || !days.length) return;
+  var max = Math.max.apply(null, days.map(function(d) { return Math.max(d.views, d.clicks); })) || 1;
+  container.innerHTML = days.map(function(d) {
+    var label = new Date(d.date).toLocaleDateString('fr-FR', { weekday: 'short' });
+    var hV = (d.views / max) * 100;
+    var hC = (d.clicks / max) * 100;
     return '<div class="chart-bar-wrap">' +
-      '<div class="chart-bar-value">' + views[i] + '</div>' +
+      '<div class="chart-bar-value">' + d.views + '</div>' +
       '<div style="display:flex;gap:3px;align-items:flex-end;height:100%">' +
         '<div class="chart-bar" style="height:' + hV + '%;background:var(--accent);width:18px"></div>' +
         '<div class="chart-bar" style="height:' + hC + '%;background:var(--accent-light);width:18px;opacity:.7"></div>' +
       '</div>' +
-      '<div class="chart-bar-label">' + d + '</div>' +
+      '<div class="chart-bar-label">' + label + '</div>' +
     '</div>';
   }).join('');
 }
 
-function renderTopPages() {
-  var pages = [
-    { name: 'index.html', views: 1243, pct: 100 },
-    { name: 'sites/shopeco.html', views: 687, pct: 55 },
-    { name: 'sites/marioconsulting.html', views: 412, pct: 33 },
-    { name: 'brief.html', views: 298, pct: 24 },
-    { name: 'support.html', views: 207, pct: 17 }
-  ];
+function renderTopPages(pages) {
   var list = document.getElementById('topPages');
   if (!list) return;
+  if (!pages.length) { list.innerHTML = '<li style="padding:20px;color:var(--muted);text-align:center">Aucune donnée</li>'; return; }
+  var max = pages[0].views || 1;
   list.innerHTML = pages.map(function(p, i) {
     return '<li class="top-page-item">' +
       '<div class="top-page-rank">' + (i + 1) + '</div>' +
       '<div style="flex:1"><div class="top-page-name">' + p.name + '</div>' +
-      '<div class="top-page-bar"><div class="top-page-fill" style="width:' + p.pct + '%"></div></div></div>' +
-      '<div class="top-page-views">' + p.views.toLocaleString() + '</div>' +
+      '<div class="top-page-bar"><div class="top-page-fill" style="width:' + Math.round((p.views / max) * 100) + '%"></div></div></div>' +
+      '<div class="top-page-views">' + p.views.toLocaleString('fr-FR') + '</div>' +
     '</li>';
   }).join('');
 }
 
-function renderTrafficSources() {
-  var sources = [
-    { name: 'Direct', pct: 42, color: 'var(--accent)' },
-    { name: 'Google', pct: 28, color: '#22c55e' },
-    { name: 'Instagram', pct: 18, color: '#e1306c' },
-    { name: 'Facebook', pct: 8, color: '#1877f2' },
-    { name: 'Autres', pct: 4, color: 'var(--muted)' }
-  ];
+function renderTrafficSources(refs) {
   var container = document.getElementById('trafficSources');
   if (!container) return;
+  if (!refs.length) { container.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">Aucune donnée</p>'; return; }
+  var total = refs.reduce(function(a, b) { return a + b.count; }, 0) || 1;
+  var colors = ['var(--accent)', '#22c55e', '#e1306c', '#1877f2', '#f59e0b', 'var(--muted)'];
   var barHtml = '<div style="display:flex;height:12px;border-radius:6px;overflow:hidden;margin-bottom:16px">' +
-    sources.map(function(s) { return '<div style="width:' + s.pct + '%;background:' + s.color + '"></div>'; }).join('') +
-    '</div>';
-  var legendHtml = sources.map(function(s) {
+    refs.slice(0, 5).map(function(s, i) {
+      var pct = Math.round((s.count / total) * 100);
+      return '<div style="width:' + pct + '%;background:' + colors[i % colors.length] + '"></div>';
+    }).join('') + '</div>';
+  var legendHtml = refs.slice(0, 5).map(function(s, i) {
+    var pct = Math.round((s.count / total) * 100);
     return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">' +
-      '<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:' + s.color + '"></div><span style="font-size:.85rem">' + s.name + '</span></div>' +
-      '<span style="font-size:.85rem;font-weight:700">' + s.pct + '%</span></div>';
+      '<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:' + colors[i % colors.length] + '"></div><span style="font-size:.85rem">' + s.name + '</span></div>' +
+      '<span style="font-size:.85rem;font-weight:700">' + pct + '%</span></div>';
   }).join('');
   container.innerHTML = barHtml + legendHtml;
 }
 
-function renderActivityList() {
-  var activities = [
-    { color: 'var(--success)', text: '<strong>Nouveau devis</strong> — Pack Vitrine ( Marie C. )', time: 'Il y a 12 min' },
-    { color: 'var(--accent)', text: '<strong>Brief reçu</strong> — Landing Page ( Thomas P. )', time: 'Il y a 34 min' },
-    { color: 'var(--warning)', text: '<strong>Demande support</strong> — Problème hébergement', time: 'Il y a 1h' },
-    { color: 'var(--success)', text: '<strong>Paiement confirmé</strong> — Pack Premium 899€', time: 'Il y a 2h' },
-    { color: 'var(--danger)', text: '<strong>Abonnement annulé</strong> — Client #482', time: 'Il y a 3h' }
-  ];
+function renderDeviceBreakdown(devices) {
+  var container = document.getElementById('deviceBreakdown');
+  if (!container || !devices.length) return;
+  var colors = { mobile: '#22c55e', tablet: '#f59e0b', desktop: 'var(--accent)' };
+  var icons = { mobile: '📱', tablet: '📟', desktop: '💻' };
+  container.innerHTML = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">' +
+    devices.map(function(d) {
+      return '<div style="text-align:center;padding:16px;background:var(--bg);border-radius:10px">' +
+        '<div style="font-size:1.5rem;margin-bottom:4px">' + (icons[d.name] || '📊') + '</div>' +
+        '<div style="font-size:1.3rem;font-weight:800;color:' + (colors[d.name] || 'var(--fg)') + '">' + d.pct + '%</div>' +
+        '<div style="font-size:.75rem;color:var(--muted);margin-top:2px">' + d.name + '</div>' +
+      '</div>';
+    }).join('') + '</div>';
+}
+
+function renderTopClicks(clicks) {
   var list = document.getElementById('activityList');
   if (!list) return;
-  list.innerHTML = activities.map(function(a) {
+  if (!clicks.length) { list.innerHTML = '<li style="padding:20px;color:var(--muted);text-align:center">Aucune donnée</li>'; return; }
+  list.innerHTML = clicks.map(function(c, i) {
+    var colors = ['var(--success)', 'var(--accent)', 'var(--warning)', 'var(--danger)', '#e1306c'];
     return '<li class="activity-item">' +
-      '<div class="activity-dot" style="background:' + a.color + '"></div>' +
-      '<div class="activity-text">' + a.text + '</div>' +
-      '<div class="activity-time">' + a.time + '</div>' +
+      '<div class="activity-dot" style="background:' + colors[i % colors.length] + '"></div>' +
+      '<div class="activity-text"><strong>' + c.name + '</strong></div>' +
+      '<div class="activity-time">' + c.count + ' clics</div>' +
     '</li>';
   }).join('');
 }
+
 </script>
 </body>
 </html>
