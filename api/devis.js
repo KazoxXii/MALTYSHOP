@@ -115,10 +115,10 @@ function devisEmailToMalty(data) {
 
 function devisConfirmationToClient(data) {
   const formuleLabels = {
-    'Landing Page': 'Pack Landing Page — 99€',
-    'Portfolio': 'Pack Portfolio — 249€',
-    'Vitrine': 'Pack Site Vitrine — 449€',
-    'Premium': 'Pack Sur-Mesure — 899€',
+    'Landing Page': 'Pack Landing Page — 150€',
+    'Portfolio': 'Pack Portfolio — 350€',
+    'Vitrine': 'Pack Site Vitrine — 600€',
+    'Premium': 'Pack Sur-Mesure — 950€',
     'Application Mobile': 'Application Mobile iOS/Android — 1 200€',
     'Je ne sais pas encore': 'Pack conseillé par MALTY'
   };

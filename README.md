@@ -36,7 +36,7 @@ Site web vitrine pour MALTY, freelance développeur web.
 
 - Design dark mode (bleu/noir)
 - Navigation SPA (single page)
-- Catalogue de packs dynamique (de 99€ à 899€)
+- Catalogue de packs dynamique (de 150€ à 950€)
 - Formulaire de devis intégré
 - Paiement Stripe & PayPal
 - FAQ accordéon

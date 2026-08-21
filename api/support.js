@@ -163,7 +163,7 @@ function briefConfirmationToClient(data) {
       <table style="width:100%;border-collapse:collapse;">
         <tr><td style="padding:6px 0;color:#6a8cba;font-size:13px;width:120px;">Commerce</td><td style="padding:6px 0;font-weight:600;">${data.businessName || '—'}</td></tr>
         <tr><td style="padding:6px 0;color:#6a8cba;font-size:13px;">Activité</td><td style="padding:6px 0;">${data.activity || '—'}</td></tr>
-        <tr><td style="padding:6px 0;color:#6a8cba;font-size:13px;">Pack</td><td style="padding:6px 0;font-weight:600;color:#0066ff;">Landing Page — 99€</td></tr>
+        <tr><td style="padding:6px 0;color:#6a8cba;font-size:13px;">Pack</td><td style="padding:6px 0;font-weight:600;color:#0066ff;">Landing Page — 150€</td></tr>
       </table>
     </div>
 
