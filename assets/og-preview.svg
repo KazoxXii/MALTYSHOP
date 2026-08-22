@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff6b35"/>
+      <stop offset="100%" stop-color="#ff9f1c"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  
+  <!-- Subtle grid pattern -->
+  <g opacity="0.03">
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="600" x2="1200" y2="600" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="1000" x2="1200" y2="1000" stroke="white" stroke-width="1"/>
+    <line x1="200" y1="0" x2="200" y2="1200" stroke="white" stroke-width="1"/>
+    <line x1="400" y1="0" x2="400" y2="1200" stroke="white" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="1200" stroke="white" stroke-width="1"/>
+    <line x1="800" y1="0" x2="800" y2="1200" stroke="white" stroke-width="1"/>
+    <line x1="1000" y1="0" x2="1000" y2="1200" stroke="white" stroke-width="1"/>
+  </g>
+  
+  <!-- Glow effect -->
+  <circle cx="600" cy="500" r="400" fill="#ff6b35" opacity="0.05"/>
+  <circle cx="600" cy="500" r="250" fill="#ff9f1c" opacity="0.05"/>
+  
+  <!-- MALTY Logo text -->
+  <text x="600" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="72" font-weight="900" fill="white" letter-spacing="8">MALTY</text>
+  <text x="600" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#94a3b8" letter-spacing="6">CRÉATEUR DE SITES WEB PROFESSIONNELS</text>
+  
+  <!-- Price card -->
+  <rect x="200" y="320" width="800" height="500" rx="24" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+  
+  <!-- Accent bar -->
+  <rect x="200" y="320" width="800" height="6" rx="3" fill="url(#accent)"/>
+  
+  <!-- "À PARTIR DE" -->
+  <text x="600" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#94a3b8" letter-spacing="4">À PARTIR DE</text>
+  
+  <!-- Price -->
+  <text x="600" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="140" font-weight="900" fill="url(#accent)">150€</text>
+  <text x="600" y="580" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" fill="#94a3b8">TTC</text>
+  
+  <!-- Features -->
+  <text x="600" y="660" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#e2e8f0">Site vitrine • E-commerce • Landing page</text>
+  <text x="600" y="710" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#64748b">Design moderne • Livré en 5 jours • Zéro abonnement</text>
+  
+  <!-- Bottom features -->
+  <g transform="translate(280, 780)">
+    <rect x="0" y="0" width="200" height="80" rx="12" fill="#0f172a"/>
+    <text x="100" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#ff6b35">⚡</text>
+    <text x="100" y="60" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#94a3b8">Livré en 5 jours</text>
+  </g>
+  <g transform="translate(500, 780)">
+    <rect x="0" y="0" width="200" height="80" rx="12" fill="#0f172a"/>
+    <text x="100" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#ff6b35">🎯</text>
+    <text x="100" y="60" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#94a3b8">Zéro abonnement</text>
+  </g>
+  <g transform="translate(720, 780)">
+    <rect x="0" y="0" width="200" height="80" rx="12" fill="#0f172a"/>
+    <text x="100" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#ff6b35">💻</text>
+    <text x="100" y="60" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#94a3b8">Code source</text>
+  </g>
+  
+  <!-- CTA Button -->
+  <rect x="350" y="920" width="500" height="70" rx="35" fill="url(#accent)"/>
+  <text x="600" y="965" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="white">DEVIS GRATUIT →</text>
+  
+  <!-- Footer -->
+  <text x="600" y="1100" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#64748b">maltyshop.vercel.app</text>
+  <text x="600" y="1140" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#475569">Sites web professionnels à partir de 150€</text>
+</svg>
